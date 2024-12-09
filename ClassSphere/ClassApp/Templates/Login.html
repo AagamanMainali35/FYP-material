@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+       
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Responsive Login and Signup Form </title>
+        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+        <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>            
+    </head>
+    <body>
+        <section class="container forms">
+            <div class="form login">
+                <div class="form-content">
+                    <header>Welcome Back!</header>
+                    <p class="loginp">Please enter login details below.</p>
+                    <form action="#">
+                        <div class="field input-field">
+                            <input type="email" placeholder="Email" class="input">
+                        </div>
+
+                        <div class="field input-field">
+                            <input type="password" placeholder="Password" class="password">
+                            <i class='bx bx-hide eye-icon'></i>
+                        </div>
+
+                        <div class="checkbox-wrapper-12" style="margin-top: 20px;">
+                            <label style="margin-left:41px;color:#7f7f7f" for="remember-me">Remember me for 7 days</label>
+                            <div class="cbx">
+                              <input id="cbx-12" type="checkbox"/>
+                              <label for="cbx-12"></label>
+                              <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
+                                <path d="M2 8.36364L6.23077 12L13 2"></path>
+                              </svg>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                              <defs>
+                                <filter id="goo-12">
+                                  <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
+                                  <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
+                                  <feblend in="SourceGraphic" in2="goo-12"></feblend>
+                                </filter>
+                              </defs>
+                            </svg>
+                          </div>
+                          <style>
+                          </style>
+                        <div class="field button-field">
+                            <button style="width:50%">Login</button>
+                            <button style="width:48%">Forgot password? </button>
+                        </div>
+                    </form>
+
+                    <div class="form-link">
+                        <span>Don't have an account? <a href="#" class="link signup-link">Signup</a></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Signup Form -->
+
+            <div class="form signup">
+                <div class="form-content">
+                    <h2 style="text-align: center;">Let's Get Started!</h2>
+                    <p class="loginp">A world of opportunities . Join us today!</p>
+                
+                    <form action="#">
+                        <div class="field input-field">
+                            <select class="input" required>
+                                <option value="" hidden  selected>Signup as</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="student">Student</option>
+                            </select>
+
+                            <select class="input">
+                                    <option value="" hidden selected>Grade</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field input-field">
+                            <input type="email"required placeholder="Email" class="input" >
+                        </div>
+
+                        <div class="field input-field">
+                            <input type="password"required placeholder="Create password" class="password">
+                        </div>
+
+                        <div class="field input-field">
+                            <input type="password" placeholder="Confirm password" required class="password">
+                            <i class='bx bx-hide eye-icon'></i>
+                        </div>
+
+                        <div class="field button-field">
+                            <button>Signup</button>
+                        </div>
+                    </form>
+
+                    <div class="form-link">
+                        <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
+                    </div>
+                </div>
+
+            <div class="signupimg">
+                <img src="{% static 'images/LOginsrtudy.png' %}" alt="" style="height: 550px;">
+            </div>
+            </div>
+        </section>
+        <!-- JavaScript -->
+        <script src="{% static 'js/login.js' %}"></script>
+    </body>
+</html>
