@@ -25,3 +25,11 @@ links.forEach(link => {
        forms.classList.toggle("show-signup");
     })
 })
+
+setTimeout(function () {
+    const messageElement = document.getElementById("message");
+    if (messageElement) {
+        messageElement.innerHTML = "Please enter login details below.";  // Reset message text
+        messageElement.style.color = "#7f7f7f";  // Reset color
+    }
+}, 3000);  

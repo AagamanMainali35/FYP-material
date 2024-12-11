@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import  profile
 
-# Register your models here.
+@admin.register(profile)
+class profile(admin.ModelAdmin):
+    list_display = ('newprofile__id','newprofile__email','role','grade')  
+
