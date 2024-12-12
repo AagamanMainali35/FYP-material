@@ -24,8 +24,6 @@ def loginPage(request):
             password2 = request.POST.get('rpassword2')
             password = request.POST.get('rpassword')
             char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
-
-            # Password validation
             if len(password) < 10:
                 messages.error(request, "Use a stronger password")
             else:

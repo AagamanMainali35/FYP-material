@@ -21,15 +21,25 @@ pwShowHide.forEach(eyeIcon => {
 
 links.forEach(link => {
     link.addEventListener("click", e => {
-       e.preventDefault(); //preventing form submit
+       e.preventDefault(); 
        forms.classList.toggle("show-signup");
     })
 })
 
+
 setTimeout(function () {
     const messageElement = document.getElementById("message");
     if (messageElement) {
-        messageElement.innerHTML = "Please enter login details below.";  // Reset message text
-        messageElement.style.color = "#7f7f7f";  // Reset color
+        messageElement.innerHTML = "Please enter login details below.";  
+        messageElement.style.color = "#7f7f7f";  
     }
 }, 3000);  
+const backButton = document.querySelector("button[name='back']");
+backButton.addEventListener("click", (e) => {
+        e.preventDefault(); 
+        location.reload(); 
+
+});
+
+
+

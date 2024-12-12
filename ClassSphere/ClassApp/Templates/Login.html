@@ -84,14 +84,15 @@
                 <h2 style="text-align: center;">Let's Get Started!</h2>
                 <p class="loginp">A world of opportunities . Join us today!</p>
             
-                <form action="#">
+                <form method="post">
+                    {% csrf_token %}
                     <div class="field input-field">
-                        <select class="input" required>
-                            <option value="" hidden  selected>Signup as</option>
+                        <select class="input" name="role">
+                            <option value="" hidden selected>Signup as</option>
                             <option value="teacher">Teacher</option>
                             <option value="student">Student</option>
                         </select>
-                        <select class="input">
+                        <select class="input" name="Grade">
                             <option value="" hidden selected>Grade</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -105,23 +106,24 @@
                             <option value="10">10</option>
                         </select>
                     </div>
-                    <div class="field input-field">
-                        <input type="email"required placeholder="Email" class="input" >
+                    <div class="field input-field input">
+                        <input type="email" placeholder="Email" name="remail" class="input">
                     </div>
-                    <div class="field input-field">
-                        <input type="password"required placeholder="Create password" class="password">
+                    <div class="field input-field input">
+                        <input type="password" placeholder="Create password" name="rpassword" class="password">
                     </div>
-                    <div class="field input-field">
-                        <input type="password" placeholder="Confirm password" required class="password">
+                    <div class="field input-field input">
+                        <input type="password" placeholder="Confirm password" name="rpassword2" class="password">
                         <i class='bx bx-hide eye-icon'></i>
                     </div>
                     <div class="field button-field">
-                        <button>Signup</button>
-                        <button>Back</button>
+                        <button name="signup">Signup</button>
+                        <button type="button" name="back">Back</button>
                     </div>
                     <div class="form-link">
                         <span>Already have an account? <a href="#" class="link login-link">Login</a></span>
                     </div>
+                </form>
             </div>
         </div>
         <div class="signupimg">
