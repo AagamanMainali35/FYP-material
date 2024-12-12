@@ -73,9 +73,9 @@ def loginPage(request):
                         print(f"Error sending email: {e}")
                         messages.error(request, "Error sending OTP. Please try again.")
                 else:
-                    messages.error(request, "Invalid credentials.")
+                    messages.error(request, "Invalid Username or Password.")
             except User.DoesNotExist:
-                messages.error(request, "User not found. Please check your credentials.")
+                messages.error(request, "Invalid Username or Password.")
     return render(request, 'Login.html')
 
 
