@@ -16,7 +16,6 @@ def LandingPage(request):
 # Login page view
 def loginPage(request):
     if request.method == 'POST':
-        print('now checking the buttons ')
         if 'signup' in request.POST:
             role = request.POST.get('role')
             grade = request.POST.get('Grade')
@@ -41,7 +40,7 @@ def loginPage(request):
                     else:
                         if "@" in email:
                             username = email.split("@")[0]
-                        newuser = User.objects.create(username=username, email=email, password=password)
+                        newuser = User.objects.create_user(username=username, email=email, password=password)
                         user_profile = profile.objects.create(newprofile=newuser, role=role, grade=grade)
                         messages.success(request, "Account created successfully.")
                 else:

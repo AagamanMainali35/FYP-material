@@ -87,12 +87,12 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="field input-field">
-                        <select class="input" name="role">
+                        <select class="input" required name="role">
                             <option value="" hidden selected>Signup as</option>
                             <option value="teacher">Teacher</option>
                             <option value="student">Student</option>
                         </select>
-                        <select class="input" name="Grade">
+                        <select class="input" required name="Grade">
                             <option value="" hidden selected>Grade</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -107,13 +107,13 @@
                         </select>
                     </div>
                     <div class="field input-field input">
-                        <input type="email" placeholder="Email" name="remail" class="input">
+                        <input type="email" placeholder="Email" name="remail" required class="input">
                     </div>
                     <div class="field input-field input">
-                        <input type="password" placeholder="Create password" name="rpassword" class="password">
+                        <input type="password" placeholder="Create password" name="rpassword" required class="password">
                     </div>
                     <div class="field input-field input">
-                        <input type="password" placeholder="Confirm password" name="rpassword2" class="password">
+                        <input type="password" placeholder="Confirm password" name="rpassword2"  required class="password">
                         <i class='bx bx-hide eye-icon'></i>
                     </div>
                     <div class="field button-field">
