@@ -78,21 +78,6 @@ li:hover {
   background: #FFF;
 }
 
-.form.signup {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.forms.show-signup .form.signup {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.forms.show-signup .form.login {
-  opacity: 0;
-  pointer-events: none;
-}
-
 header {
   font-size: 28px;
   font-weight: 600;
@@ -188,7 +173,7 @@ select.input {
   border: 2px solid #7f7f7f;
 }
 
-.loginp {
+.loginp,.Forgetp {
   color: #7f7f7f;
   text-align: center;
   margin: 10px;

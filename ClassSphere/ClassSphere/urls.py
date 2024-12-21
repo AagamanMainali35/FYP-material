@@ -22,6 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.LandingPage,name='homepage'),
     path('login/',views.loginPage,name='login'),
+    path('register/',views.RegisterPage,name='register'),
     path('logout/',views.logouted,name='logout'),
-    path('ottp/',views.ottp,name="ottp")
+    path('ottp/',views.ottp,name="ottp"),
+    path('forget/',views.forgetpass,name='forgetpass'),
+    path('reset/',views.reset,name='reset')
 ]
