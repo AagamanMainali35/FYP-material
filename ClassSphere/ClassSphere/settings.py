@@ -64,6 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ClassSphere.wsgi.application'
 
+SESSION_COOKIE_AGE = 5*60
 
 DATABASES = {
     'default': {
@@ -101,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 

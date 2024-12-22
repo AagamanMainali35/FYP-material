@@ -7,7 +7,6 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import User, profile
 
-# Landing page view
 def LandingPage(request):
     if request.user.is_authenticated:
         return render(request, 'landingpage.html')
@@ -59,7 +58,14 @@ def loginPage(request):
         if request.method == 'POST':
             email = request.POST.get('loginemail')
             password = request.POST.get('loginpassword')
-            print(email, password)
+            remember = request.POST.get('rememberme')
+            print(f"Remember Me value: {remember}")
+            if remember:  
+                request.session.set_expiry(7 * 24 * 60 * 60)  
+                print("Expiry set to 7 days.")
+            else:
+                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+                print("Expiry set to default:", settings.SESSION_COOKIE_AGE)
             try:
                 userobj = User.objects.get(email=email)
                 check = authenticate(request, username=userobj.username, password=password)
@@ -150,14 +156,9 @@ def reset(request):
     if request.method == 'POST':  
         password2 = request.POST.get('rpassword2')
         password = request.POST.get('rpassword')
-        
-
         if password is None or password2 is None:
             messages.error(request, "Please enter both password fields.")
             return render(request, 'passwordreset.html')
-        
-        print(password, password2) 
-
         char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
         if len(password) < 10:
             messages.error(request, "Use a stronger password.")
@@ -167,7 +168,6 @@ def reset(request):
                 if i in char:
                     contains = True
                     break
-
             if not contains:
                 messages.error(request, "Use a stronger password.")
             elif password == password2:
