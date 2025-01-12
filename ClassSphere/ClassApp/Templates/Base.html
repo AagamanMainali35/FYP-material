@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/Landingpage.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+    body::-webkit-scrollbar{
+        display: none;
+
+    }
+</style>
+<body>
+     <div class="header">
+        <header class="header-content">
+            <a href="#logo" class="logo">
+                <img src="{% static './images/StudySyn.svg' %}" alt="logoImage" class="logo-icon" />
+                <span class="logo-text">ClassSphere</span>
+            </a>
+
+            <nav class="nav">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Events</a>
+                <a href="#pricing" class="nav-link">Exams</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#about" class="nav-link">AboutUs</a>
+            </nav>
+
+            <a href="#contact" class="contact-button">
+                Contact Us
+            </a>
+
+            <button type="button" class="menu-button">
+                <img src="{% static './images/Hamburger.svg' %}" alt="menuButton" class="menu-icon" />
+            </button>
+
+        </header>
+
+    </div>
+        {% block content %}
+        
+        {% endblock %}
+
+</body>
+</html>

@@ -131,56 +131,62 @@ def logouted(request):
     return redirect('login')
 
 def forgetpass(request):
-    if request.method=='POST':
-        email=request.POST.get('forgotemail')
-        request.session['workflow']='Forgetpassword'
-        otp = random.randint(100000, 999999)
-        request.session['ottp'] = otp  
-        request.session['email'] = email 
-        request.session['isloggedin?']=True
-        subject = "OTP for your ClassSphere Login"
-        message = f"Dear User, {otp} is your OTP for ClassSphere password Reset . For security reasons, do not share it with others. Best regards, ClassSphere."
-        from_email = settings.EMAIL_HOST_USER
-        recipient_list = [email]
-        try:
-                send_mail(subject, message, from_email, recipient_list)
-                messages.success(request, "OTP has been sent to your email!")
-                return redirect('ottp') 
-        except Exception as e:
-                print(f"Error sending email: {e}")
-                messages.error(request, "Error sending OTP. Please try again.")
-        return redirect('ottp')
-    return render(request,'ForgotPassword.html')
+    # if not request.session.get('isloggedin?',False):
+    #     return redirect('homepage')
+    # else:
+        if request.method=='POST':
+            email=request.POST.get('forgotemail')
+            request.session['workflow']='Forgetpassword'
+            otp = random.randint(100000, 999999)
+            request.session['ottp'] = otp  
+            request.session['email'] = email 
+            request.session['isloggedin?']=True
+            subject = "OTP for your ClassSphere Login"
+            message = f"Dear User, {otp} is your OTP for ClassSphere password Reset . For security reasons, do not share it with others. Best regards, ClassSphere."
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            try:
+                    send_mail(subject, message, from_email, recipient_list)
+                    messages.success(request, "OTP has been sent to your email!")
+                    return redirect('ottp') 
+            except Exception as e:
+                    print(f"Error sending email: {e}")
+                    messages.error(request, "Error sending OTP. Please try again.")
+            return redirect('ottp')
+        return render(request,'ForgotPassword.html')
 
 def reset(request):
-    if request.method == 'POST':  
-        password2 = request.POST.get('rpassword2')
-        password = request.POST.get('rpassword')
-        if password is None or password2 is None:
-            messages.error(request, "Please enter both password fields.")
-            return render(request, 'passwordreset.html')
-        char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
-        if len(password) < 10:
-            messages.error(request, "Use a stronger password.")
-        else:
-            contains = False
-            for i in password:
-                if i in char:
-                    contains = True
-                    break
-            if not contains:
+    if not request.session.get('isloggedin?',False):
+        return redirect('homepage')
+    else:
+        if request.method == 'POST':  
+            password2 = request.POST.get('rpassword2')
+            password = request.POST.get('rpassword')
+            if password is None or password2 is None:
+                messages.error(request, "Please enter both password fields.")
+                return render(request, 'passwordreset.html')
+            char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
+            if len(password) < 10:
                 messages.error(request, "Use a stronger password.")
-            elif password == password2:
-                email = request.session.get('email')
-                if email:
-                    try:
-                        userobj = User.objects.get(email=email) 
-                        userobj.set_password(password)  
-                        userobj.save()  
-                        messages.success(request, "Password successfully updated.")
-                        return redirect('login')
-                    except User.DoesNotExist:
-                        messages.error(request, "User not found.")
-                else:
-                    messages.error(request, "Session has expired. Please log in again.")
-    return render(request, 'passwordreset.html')
+            else:
+                contains = False
+                for i in password:
+                    if i in char:
+                        contains = True
+                        break
+                if not contains:
+                    messages.error(request, "Use a stronger password.")
+                elif password == password2:
+                    email = request.session.get('email')
+                    if email:
+                        try:
+                            userobj = User.objects.get(email=email) 
+                            userobj.set_password(password)  
+                            userobj.save()  
+                            messages.success(request, "Password successfully updated.")
+                            return redirect('login')
+                        except User.DoesNotExist:
+                            messages.error(request, "User not found.")
+                    else:
+                        messages.error(request, "Session has expired. Please log in again.")
+        return render(request, 'passwordreset.html')
