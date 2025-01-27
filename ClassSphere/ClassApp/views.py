@@ -1,11 +1,13 @@
 import random
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
 from .models import User, profile
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 def LandingPage(request):
     if request.user.is_authenticated:
@@ -125,7 +127,7 @@ def ottp(request):
                      return redirect('reset')
                 return redirect('forgetpass')
     return render(request, 'otp.html')
-     
+    
 def logouted(request):
     logout(request)
     return redirect('login')
@@ -190,3 +192,20 @@ def reset(request):
                     else:
                         messages.error(request, "Session has expired. Please log in again.")
         return render(request, 'passwordreset.html')
+
+@api_view(['POST'])
+def contact(request):
+    postdata = request.data
+    if postdata:
+        name = postdata.get('name')
+        email = postdata.get('email')
+        message = f"<b>From:</b> {postdata['email']} <br><b>Message:</b> <br>{postdata.get('message')}"
+        subject = postdata.get('subject')
+        email_message = EmailMessage(subject=subject,body=message,to=[settings.EMAIL_HOST_USER])
+        email_message.content_subtype = "html"
+        email_message.send()
+        response_data = {
+            "data": postdata,
+            "status": "mail sent successfully"
+        }
+        return JsonResponse(response_data, status=200)

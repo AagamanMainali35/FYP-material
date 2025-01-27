@@ -18,15 +18,6 @@ pwShowHide.forEach(eyeIcon => {
         
     })
 })      
-
-// links.forEach(link => {
-//     link.addEventListener("click", e => {
-//        e.preventDefault(); 
-//        forms.classList.toggle("show-signup");
-//     })
-// })
-
-
 setTimeout(function () {
     const messageElement = document.getElementById("message");
     if (messageElement) {
@@ -38,7 +29,6 @@ const backButton = document.querySelector("button[name='back']");
 backButton.addEventListener("click", (e) => {
         e.preventDefault(); 
         location.reload(); 
-
 });
 
 
