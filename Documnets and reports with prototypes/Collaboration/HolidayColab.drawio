@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.4">
+  <diagram name="Page-1" id="-4y6TIxBypE_FsvGpDST">
+    <mxGraphModel dx="150" dy="548" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-29" value="" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#ffff99;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.archimate3.actor;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1420" y="100" width="20" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-33" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1440" y="130" as="sourcePoint" />
+            <mxPoint x="1630" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-34" value="1. Create a new Holiday&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1450" y="100" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="nwQNhLfuP8KkaAH_geUa-35">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1990" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="nwQNhLfuP8KkaAH_geUa-35">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1670" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="nwQNhLfuP8KkaAH_geUa-35" target="nwQNhLfuP8KkaAH_geUa-31">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1700" y="388" />
+              <mxPoint x="2130" y="388" />
+              <mxPoint x="2130" y="60" />
+              <mxPoint x="1740" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-35" value="HolidayController" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1640" y="328.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-36" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1630" y="82" width="150" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-28" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="nwQNhLfuP8KkaAH_geUa-36">
+          <mxGeometry y="17.5" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-31" value="HolidayInterface" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="nwQNhLfuP8KkaAH_geUa-36">
+          <mxGeometry x="40" y="-4" width="70" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-37" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1940" y="210" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-30" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="nwQNhLfuP8KkaAH_geUa-37">
+          <mxGeometry width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-48" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.828;exitY=0.015;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="nwQNhLfuP8KkaAH_geUa-37" source="nwQNhLfuP8KkaAH_geUa-30">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="40" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="100" y="-20" />
+              <mxPoint x="40" y="-20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-32" value="Database" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="nwQNhLfuP8KkaAH_geUa-37">
+          <mxGeometry x="25" y="5" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-42" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="nwQNhLfuP8KkaAH_geUa-31">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1530" y="390" as="sourcePoint" />
+            <mxPoint x="1705" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-43" value="&lt;b&gt;1.1 Validate the input fields&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="220" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-45" value="&lt;b&gt;1.2 Send Post data&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1815" y="348" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.894;entryY=0.021;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;" edge="1" parent="1" target="nwQNhLfuP8KkaAH_geUa-35">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1940" y="230" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-47" value="&lt;b&gt;1.3 Provide result Result&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1760" y="198" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-49" value="&lt;b&gt;&amp;nbsp;1.3.1 Create a holiday Entry&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1905" y="158" width="190" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-51" value="&lt;b&gt;1.3..1.1&amp;nbsp; &amp;nbsp;Send notification&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="1570" y="220" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nwQNhLfuP8KkaAH_geUa-53" value="&lt;b&gt;1.3.2 Send Creation failed message&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1795" y="28" width="230" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

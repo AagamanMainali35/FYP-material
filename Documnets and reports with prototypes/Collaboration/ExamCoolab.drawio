@@ -1,0 +1,80 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.4">
+  <diagram name="Page-1" id="flILV6Tv65G7zXZoBFVm">
+    <mxGraphModel dx="255" dy="605" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-26" value="" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#ffff99;verticalLabelPosition=bottom;verticalAlign=top;align=center;shape=mxgraph.archimate3.actor;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1290" y="100" width="20" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-30" value="ExamController:" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1516" y="320" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-31" value="1. Request Exam Data&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1330" y="90" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-32" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1520" y="100" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-25" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="IAkAzU_FZb4gdTtN_mo8-32">
+          <mxGeometry width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-28" value="ExamUI:" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="IAkAzU_FZb4gdTtN_mo8-32">
+          <mxGeometry x="40" y="5" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-33" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1320" y="120" as="sourcePoint" />
+            <mxPoint x="1510" y="120" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-34" value="" style="endArrow=classic;html=1;rounded=0;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1590" y="140" as="sourcePoint" />
+            <mxPoint x="1591" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-38" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1840" y="213.75" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-27" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="IAkAzU_FZb4gdTtN_mo8-38">
+          <mxGeometry width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-29" value="ExamDatabase" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1" vertex="1" parent="IAkAzU_FZb4gdTtN_mo8-38">
+          <mxGeometry x="20" y="5" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-39" value="&lt;b&gt;1.1 Send Get request&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=90;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="213.75" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-40" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="IAkAzU_FZb4gdTtN_mo8-30" target="IAkAzU_FZb4gdTtN_mo8-27">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2020" y="130" as="sourcePoint" />
+            <mxPoint x="2210" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-43" value="&lt;b&gt;1.2 Request the questions&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=-30;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="300" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-45" value="" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;fontStyle=1;entryX=1;entryY=0.25;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="IAkAzU_FZb4gdTtN_mo8-27" target="IAkAzU_FZb4gdTtN_mo8-30">
+          <mxGeometry x="0.0048" relative="1" as="geometry">
+            <mxPoint x="1950" y="208.95" as="sourcePoint" />
+            <mxPoint x="1720" y="208.95" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-46" value="1.3 Send The request Data" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;rotation=-30;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="251.93" width="162.03" height="18.23" as="geometry" />
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-47" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.341;entryY=0.975;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="IAkAzU_FZb4gdTtN_mo8-25">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1571" y="310" as="sourcePoint" />
+            <mxPoint x="1490" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IAkAzU_FZb4gdTtN_mo8-48" value="&lt;b&gt;1.4 display all the data&amp;nbsp;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="213.75" width="150" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
