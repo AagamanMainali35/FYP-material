@@ -1,100 +1,15 @@
     {% extends "base.html" %}   
     {% load static %}
     {% block content %}
-    <style>
-    .image-container{
-        background-position:center;
-        background-size: cover;
-        background-image: url("{% static 'images/schoolland1.jpg' %}");
-    }
-
-    .services-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .services-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .services-header h4 {
-        font-size: 2rem;
-        color: #333;
-        margin: 0;
-    }
-
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    .service-box {
-        background-color: #ffffff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .service-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    .service-icon {
-        font-size: 40px;
-        color: #2563eb;
-        margin-bottom: 15px;
-    }
-
-    .service-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
-    }
-
-    .service-description {
-        font-size: 14px;
-        color: #666;
-        line-height: 1.6;
-    }
-
-    .service-link {
-        font-size: 14px;
-        font-weight: bold;
-        color: #2563eb;
-        text-decoration: none;
-        margin-top: 15px;
-        display: inline-block;
-        background: none;
-        border: none;
-        cursor: pointer;
-    }
-
-    .service-link:hover {
-        text-decoration: underline;
-    }
-
-    @media screen and (max-width: 768px) {
-        .services-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .services-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-    }
-
-    </style>
+  <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+  .image-container{
+    background-position:center;
+    background-size: cover;
+    background-image: url("{% static 'images/schoolland1.jpg' %}");
+}
+</style>
     <div class="content">
         <section class="main-section">
             <div class="content-left" style="text-align: justify;">
@@ -118,7 +33,7 @@
         </section>
     </div>
     <br><br><br>
-
+<!-- Our Service Section -->
     <div class="services-container">
         <div class="services-header">
             <h2>Our Services</h2>
@@ -128,39 +43,92 @@
                 <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
                 <div class="service-title">Quality Education</div>
                 <div class="service-description">Delivering a robust curriculum designed to cultivate critical thinking, creativity, and academic excellence.</div>
-                <button class="service-link">Read More</button>
             </div>
             <div class="service-box">
                 <div class="service-icon"><i class="fas fa-volleyball-ball"></i></div>
                 <div class="service-title">Extracurricular Activities</div>
                 <div class="service-description">Empowering students to explore their passions through a diverse range of clubs, sports, and creative arts.</div>
-                <button class="service-link">Read More</button>
             </div>
             <div class="service-box">
                 <div class="service-icon"><i class="fas fa-chalkboard-teacher"></i></div>
                 <div class="service-title">Career Counseling</div>
                 <div class="service-description">Guiding students toward successful career paths with personalized advice, internship opportunities, and college preparation.</div>
-                <button class="service-link">Read More</button>
             </div>
             <div class="service-box">
                 <div class="service-icon"><i class="fas fa-plug"></i></div>
                 <div class="service-title">Technology Integration</div>
                 <div class="service-description">Equipping students with cutting-edge digital tools and fostering a tech-savvy environment that prepares them for the future.</div>
-                <button class="service-link">Read More</button>
             </div>
             <div class="service-box">
                 <div class="service-icon"><i class="fas fa-crown"></i></div>
                 <div class="service-title">Student Leadership Opportunities</div>
                 <div class="service-description">Empowering the next generation of leaders with meaningful roles that develop responsibility, teamwork, and leadership skills.</div>
-                <button class="service-link">Read More</button>
             </div>
             <div class="service-box">
                 <div class="service-icon"><i class="fas fa-thumbs-up"></i></div>
                 <div class="service-title">Dedicated Support</div>
                 <div class="service-description">Providing personalized guidance and unwavering support to ensure every student has the resources and encouragement they need to succeed academically and personally.</div>
-                <button class="service-link">Read More</button>
             </div>
         </div>
     </div>
+<br><br><br>
+<div class=" Message about">
+    <img src="{% static 'images/principal.jpg' %}" class="pic" />
+    <div class="text">
+      <h2>Message from the Principal</h2>
+      <h5>Welcome to Our School</h5>
+      <p>
+        Dear Students, Parents, and Community Members,  
+        It is my honor to welcome you to our school, where excellence in education and holistic development are at the core of our mission. Our dedicated staff and vibrant learning environment aim to inspire curiosity, creativity, and a lifelong love of learning.  
+        Together, let us nurture a community of responsible, confident, and compassionate individuals who will contribute meaningfully to society. I invite you to explore the opportunities we offer and join us in our pursuit of academic and personal success.  
+      </p>
+      <div class="data">
+        <!-- <a href="#" class="hire">Learn More</a> -->
+      </div>
+    </div>
+  </div>
+<div class="gallery-header">
+    <h2>Our Gallery</h2>
+    <p>Explore the moments that capture the essence of our community, activities, and events.</p>
+</div>
+  <div class="Gallery container">
+    <div class="slider-wrapper">
+      <button id="prev-slide" class="slide-button material-symbols-rounded">
+        &lt;
+      </button>
+      <ul class="image-list">
+        <img class="image-item" src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?q=80&w=1896&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 1" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1544776193-352d25ca82cd?q=80&w=1929&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 2" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1544776193-32d404ae608a?q=80&w=1929&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 3" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1864&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 4" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1490424660416-359912d314b3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 5" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1636202339022-7d67f7447e3a?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 6" />
+        <img class="image-item" src="https://images.unsplash.com/flagged/photo-1574097656146-0b43b7660cb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 7" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1561089489-f13d5e730d72?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1574758324765-a29c77fb9c91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1560785496-3c9d27877182?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1610500796385-3ffc1ae2f046?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1524069290683-0457abfe42c3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1569173675610-42c361a86e37?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+        <img class="image-item" src="https://images.unsplash.com/photo-1567057420215-0afa9aa9253a?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Special Moment 8" />
+      </ul>
+      <button id="next-slide" class="slide-button material-symbols-rounded">
+        &gt;
+      </button>
+    </div>
+    
+  </div>
+  <div class="Contact-header ">
+    <h2>Contact US</h2>
+   
+    <p>Let us help you get back on track</p>
+</div>
+{% include 'ContactForm.html' %}
+<br><br><br>
+  <!-- Footer section-->
+{% include 'Footer.html'%}
+<br>
+  <script src="{% static 'js/slider.js' %}"> </script>
     {% endblock %}
 

@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ClassApp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Use SMTP backen
 EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
 EMAIL_PORT = 587  # Use port 587 for TLS
 EMAIL_USE_TLS = True  # Use TLS
-EMAIL_HOST_USER = 'classsphere2004@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'quuw rpax hoie bmxj'  # Your Gmail password (you might need an app-specific password for Gmail)
-
+# EMAIL_HOST_USER = 'classsphere2004@gmail.com' 
+EMAIL_HOST_USER = 'jewsfryer69@gmail.com'  # Your Gmail address
+# EMAIL_HOST_USER = 'classsphere2004@gmail.com'  # Your Gmail address
+# EMAIL_HOST_PASSWORD = 'quuw rpax hoie bmxj'  # Your Gmail password (you might need an app-specific password for Gmail)
+EMAIL_HOST_PASSWORD = 'qfhb eqvo imee bocu'  # Your Gmail password (you might need an app-specific password for Gmail)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # The email from which the emails will be sent

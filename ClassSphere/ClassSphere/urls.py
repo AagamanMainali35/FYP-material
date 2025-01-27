@@ -26,5 +26,6 @@ urlpatterns = [
     path('logout/',views.logouted,name='logout'),
     path('ottp/',views.ottp,name="ottp"),
     path('forget/',views.forgetpass,name='forgetpass'),
-    path('reset/',views.reset,name='reset')
+    path('reset/',views.reset,name='reset'),
+    path('contact/',views.contact,name='contact'),
 ]
