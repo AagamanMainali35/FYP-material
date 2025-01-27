@@ -1,0 +1,157 @@
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    .Formcontainer {
+        display: flex;
+        margin-left: 10rem;
+    }
+    header {
+        font-size: 28px;
+        font-weight: 600;
+        color: #232836;
+        text-align: center;
+    }
+
+    form {
+        margin-top: 30px;
+    }
+
+    .form .field {
+        position: relative;
+        height: 50px;
+        width: 100%;
+        margin-top: 20px;
+        border-radius: 6px;
+    }
+
+    .field input,
+    .field button {
+        height: 100%;
+        width:49%;
+        border: none;
+        font-size: 16px;
+        font-weight: 400;
+        border-radius: 6px;
+    }
+
+    .field input {
+        outline: none;
+        padding: 0 15px;
+        border: 1px solid#CACACA;
+    }
+
+    .field input:focus {
+        border-bottom-width: 2px;
+    }
+
+    .eye-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #8b8b8b;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .field button {
+        color: #fff;
+        background-color: #000000;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .field button:hover {
+        background-color: #555657;
+    }
+
+    .form-link {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .form-link span,
+    .form-link a {
+        font-size: 14px;
+        font-weight: 400;
+        color: #232836;
+    }
+
+    .form a {
+        color: #0171d3;
+        text-decoration: none;
+    }
+
+    .form-content a:hover {
+        text-decoration: underline;
+    }
+
+    select.input {
+        padding-left: 5px;
+        color: #5f5f5f;
+        height: 100%;
+        width: 49%;
+        border: none;
+        font-size: 16px;
+        font-weight: 400;
+        border-radius: 6px;
+        border: 2px solid #7f7f7f;
+    }
+
+    .loginp,
+    .Forgetp {
+        color: #7f7f7f;
+        text-align: center;
+        margin: 10px;
+        margin-bottom: -10px;
+    }
+
+    /* Styling for the text areas */
+    .field input-field input,
+    .field textarea {
+        padding-left: 5px;
+        color: #5f5f5f;
+        height: 100%;
+        width: 100%;
+        border: none;
+        font-size: 16px;
+        font-weight: 400;
+        border-radius: 6px;
+        border: 2px solid #7f7f7f;
+        resize: none;
+    }
+
+    /* Specific styling for the text areas */
+    .field textarea {
+        overflow: auto; /* Allow scrolling */
+        padding-right: 20px; /* To create space for scrollbar */
+        
+    }
+
+    /* Hides the scrollbar */
+    textarea::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    textarea::-webkit-scrollbar-thumb {
+        background: transparent;
+    }
+
+    textarea::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    /* Add space between text areas */
+    .field.input-field {
+        margin-bottom: 20px;
+    }
+    .field.input-field input,
+    .field textarea {
+        margin-bottom: -3px; /* This will add space between the text areas */
+    }
