@@ -5,25 +5,21 @@
     <div class="Formcontainer forms">   
         <div class="form signup">
             <div class="form-content">
-                <form method="post" enctype="multipart/form-data">
-                    {%csrf_token%}
+                <form method="post" enctype="multipart/form-data" id="contact-form">
+                    {% csrf_token %}
                     <div class="field input-field">
-                        <input type="text" class="input" placeholder="Enter your name" required name="name" style="padding-left: 5px; color: #5f5f5f; height: 100%; width: 49%; border: none; font-size: 16px; font-weight: 400; border-radius: 6px; border: 2px solid #7f7f7f;">
-                        <input type="email" class="input" placeholder="Enter Your Email" name="email" style="padding-left: 5px; color: #5f5f5f; height: 100%; width: 49%; border: none; font-size: 16px; font-weight: 400; border-radius: 6px; border: 2px solid #7f7f7f;">
+                        <input type="text" class="input" placeholder="Enter your name" required name="name" id="name" style="padding-left: 5px; color: #5f5f5f; height: 100%; width: 49%; border: none; font-size: 16px; font-weight: 400; border-radius: 6px; border: 2px solid #7f7f7f;">
+                        <input type="email" class="input" placeholder="Enter Your Email" name="email" id="email" style="padding-left: 5px; color: #5f5f5f; height: 100%; width: 49%; border: none; font-size: 16px; font-weight: 400; border-radius: 6px; border: 2px solid #7f7f7f;">
                     </div>
-                    <!-- Subject Text Area -->
                     <div class="field input-field input">
-                        <textarea placeholder="Subject Of the Issue" name="subject" required class="input"></textarea>
+                        <textarea placeholder="Subject Of the Issue" name="subject" id="subject" required class="input"></textarea>
                     </div>
-                    <!-- Message Text Area (Second) -->
                     <div class="field input-field input">
-                        <textarea placeholder="Enter your detailed message" name="message" required class="input" style="height: 150px;"></textarea>
-                        <!-- From Uiverse.io by Yaya12085 --> 
+                        <textarea placeholder="Enter your detailed message" name="message" id="message" required class="input" style="height: 150px;"></textarea>
                         <div class="field button-field">
-                            <button name="signup" id="submit" style="width: 50%">Submit</button>
-                            <!-- From Uiverse.io by omar49511 --> 
+                            <button type="submit" id="submit" style="width: 50%">Submit</button>
                             <input class="file" id="fileInput" style="display: none;" name="file" type="file" />
-                            <button class="container-btn-file "  id="uploadButton" type="button" >
+                            <button class="container-btn-file " id="uploadButton" type="button">
                                 <i class="fa-solid fa-file-excel"></i>
                                 Upload File
                             </button>
@@ -36,9 +32,10 @@
             </div>
         </div>
     </div> 
-    <div class="img" >
-        <img src="../static/images/Contact.jpg" alt="" height="400px" width="700px" >
+    <div class="img">
+        <img src="../static/images/Contact.jpg" alt="" height="400px" width="700px">
     </div> 
 </section>    
 </body>
 <script src="{% static 'js/contactform.js' %}"></script>
+<script src="{% static 'js/ContactForFileSend.js' %}"></script>

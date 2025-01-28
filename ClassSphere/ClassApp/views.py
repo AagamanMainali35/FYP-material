@@ -99,7 +99,6 @@ def ottp(request):
         return redirect('homepage')
     else:
         if request.method == 'POST':
-            print(f"Current session: {request.session.get('workflow')}")
             if request.session.get('workflow')=='login':
                 entered_otp = request.POST.get('ottp') 
                 email = request.session.get('email')  
@@ -197,15 +196,20 @@ def reset(request):
 def contact(request):
     postdata = request.data
     if postdata:
-        name = postdata.get('name')
-        email = postdata.get('email')
+        file=request.FILES.get('file')
         message = f"<b>From:</b> {postdata['email']} <br><b>Message:</b> <br>{postdata.get('message')}"
         subject = postdata.get('subject')
         email_message = EmailMessage(subject=subject,body=message,to=[settings.EMAIL_HOST_USER])
         email_message.content_subtype = "html"
-        email_message.send()
-        response_data = {
-            "data": postdata,
-            "status": "mail sent successfully"
-        }
+        if file:
+            email_message.attach(file.name, file.read(), file.content_type)
+        try:
+            email_message.send()
+            response_data = {
+                "status": "mail sent successfully"
+            }
+        except:
+            response_data = {
+                "status": "mail not sent"
+            }
         return JsonResponse(response_data, status=200)

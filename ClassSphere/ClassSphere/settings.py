@@ -133,4 +133,3 @@ EMAIL_HOST_USER = 'jewsfryer69@gmail.com'  # Your Gmail address
 # EMAIL_HOST_USER = 'classsphere2004@gmail.com'  # Your Gmail address
 # EMAIL_HOST_PASSWORD = 'quuw rpax hoie bmxj'  # Your Gmail password (you might need an app-specific password for Gmail)
 EMAIL_HOST_PASSWORD = 'qfhb eqvo imee bocu'  # Your Gmail password (you might need an app-specific password for Gmail)
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # The email from which the emails will be sent
