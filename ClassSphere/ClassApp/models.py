@@ -23,3 +23,13 @@ class profile(models.Model):
 
     def __str__(self):
         return self.newprofile.email
+    
+
+class Event(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    date = models.DateTimeField()
+    location = models.CharField(max_length=100)
+    form=models.FileField(upload_to='media/forms/',null=True,blank=True)
+    def __str__(self):
+        return self.title
