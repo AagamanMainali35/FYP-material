@@ -1,13 +1,16 @@
+import datetime
 import random
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import User, profile
+from .models import User, profile, Event
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from .serializer import Eventserializer
+from django.core.paginator import Paginator
 
 def LandingPage(request):
     if request.user.is_authenticated:
@@ -126,7 +129,7 @@ def ottp(request):
                      return redirect('reset')
                 return redirect('forgetpass')
     return render(request, 'otp.html')
-    
+   
 def logouted(request):
     logout(request)
     return redirect('login')
@@ -192,6 +195,9 @@ def reset(request):
                         messages.error(request, "Session has expired. Please log in again.")
         return render(request, 'passwordreset.html')
 
+def event(request):
+    return render(request,'event.html')
+
 @api_view(['POST'])
 def contact(request):
     postdata = request.data
@@ -213,3 +219,71 @@ def contact(request):
                 "status": "mail not sent"
             }
         return JsonResponse(response_data, status=200)
+
+# Apis for all event relates operations
+@api_view(['GET'])
+def getevents(request):
+ events=Event.objects.all()
+ serializer=Eventserializer(events,many=True)
+ return JsonResponse(serializer.data,safe=False)
+
+@api_view(['POST'])
+def create_event(request):
+    potsdata=request.data
+    serializer=Eventserializer(data=potsdata)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response({" Status ":serializer.errors})
+
+@api_view(['DELETE'])
+def delete(request,id):
+    event=get_object_or_404(Event,pk=id)
+    try:
+        event.delete()
+    except: 
+        return Response('Event not found')
+    return Response('Event deleted successfully')
+
+@api_view(['DELETE'])
+def deleteall(request):
+    data=Event.objects.all()
+    for i in data:
+        i.delete()
+    return JsonResponse({"Status":"Events Deleted Sucessfully"})
+
+@api_view(['GET'])
+def geteventbyid(request,id):
+    event=Event.objects.get(id=id)
+    serializer=Eventserializer(event)
+    return JsonResponse(serializer.data)
+
+
+@api_view(['POST'])
+def filterevents(request):
+    title = request.data.get('title', None)
+    paidstatus = request.data.get('paidstatus', None)
+    time_filter = request.data.get('timeFilter', None)
+    events = Event.objects.all() 
+    if title:
+        events = events.filter(title__icontains=title)
+    if paidstatus:
+        if paidstatus == "paid":
+            events = events.filter(is_paid=True)
+        elif paidstatus == "unpaid":
+            events = events.filter(is_paid=False)
+    if time_filter:
+        if time_filter == 'week':
+            start_of_week = datetime.datetime.now() - datetime.timedelta(days=datetime.datetime.now().weekday())
+            events = events.filter(date__gte=start_of_week)
+        elif time_filter == 'month':
+            start_of_month = datetime.datetime.now().replace(day=1)
+            events = events.filter(date__gte=start_of_month)
+    event_data=Eventserializer(events,many=True)
+    return JsonResponse({'events': event_data.data})
+
+def eventdetail(request,id):
+    event=Event.objects.get(id=id)
+    event_obj={'obj':event}
+    return render(request,'eventdetail.html',context=event_obj)

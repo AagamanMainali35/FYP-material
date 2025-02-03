@@ -1,0 +1,61 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/eventpage.css'%}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <body>
+    <style>
+        .imgcontainer{
+            margin-top: -45px;
+            height: 564px;
+            width:575px;
+            border: 3px solid black;
+            border-radius: 100px;
+        }
+        .imgcontainer img {
+            border-radius: 100px;
+            width: 100%;  /* Ensure it fills the container */
+            height: 100%; /* Ensure it fills the container */
+            object-fit: cover;
+            object-position: center;
+        }
+        
+    </style>
+    <header class="header__container">
+    {% if obj%}
+      <div class="header__content">
+        <h1>LET'S GO!<br />THE <span>Experience</span> IS WAITING FOR YOU</h1>
+        <p>
+          {{obj.description}}
+        </p>
+        <form action="/">
+          <div class="input__row">
+            <div class="input__group">
+              <h5>Destination</h5>
+              <div>
+                <span><i class="fa-solid fa-location-dot"></i></span>
+                <input type="text" placeholder="Paris, France" />
+              </div>
+            </div>
+            <div class="input__group">
+              <h5>Date</h5>
+              <div>
+                <span><i class="fa-solid fa-clock"></i></span>
+                <input type="text" placeholder="17 July 2024" />
+              </div>
+            </div>
+          </div>
+          <button type="submit">Register</button>
+        </form>
+      </div>
+      <div class="imgcontainer">
+        <img src="{{obj.eventbanner.url}}" alt="">
+      </div>
+    </header>
+    {% endif %}
+  </body>
+
+{% endblock%}
+
+

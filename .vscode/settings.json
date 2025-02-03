@@ -1,0 +1,43 @@
+{
+    "git.ignoreMissingGitWarning": true,
+    "workbench.startupEditor": "none",
+    "editor.minimap.enabled": false,
+    "terminal.explorerKind": "external",
+    "material-icon-theme.activeIconPack": "angular",
+    "explorer.confirmDelete": false,
+    "editor.quickSuggestions": {
+        "comments": "on"
+    },
+    "emmet.syntaxProfiles": {},
+    "liveServer.settings.donotShowInfoMsg": true,
+    "git.openRepositoryInParentFolders": "never",
+    "peacock.affectStatusBar": false,
+    "peacock.affectActivityBar": false,
+    "peacock.affectSashHover": false,
+    "git.autofetch": true,
+    "git.enableSmartCommit": true,
+    "workbench.editorAssociations": {
+        "*.pyc": "default",
+        "*.sqlite3": "default"
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "files.associations": {
+        "*.html": "html",
+        "*.py": "python"
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "files.autoSave": "afterDelay",
+    "python.defaultInterpreterPath": "C:\\Users\\aagam\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "workbench.colorTheme": "Default Dark+",
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultColorDecorators": "never",
+        "editor.formatOnType": true,
+        "editor.wordBasedSuggestions": "off"
+    },
+    "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.persistentSessionReviveProcess": "never",
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "python.terminal.activateEnvironment": false,
+    "liveServer.settings.port": 5501
+}

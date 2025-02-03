@@ -27,9 +27,11 @@ class profile(models.Model):
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
+    is_paid=models.BooleanField(default=False)
+    eventbanner=models.ImageField(upload_to='EventBanners')
     description = models.TextField()
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
-    form=models.FileField(upload_to='media/forms/',null=True,blank=True)
+    form=models.FileField(upload_to='forms/',null=True,blank=True)
     def __str__(self):
         return self.title

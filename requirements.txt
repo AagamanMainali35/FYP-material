@@ -2,3 +2,5 @@ Django
 djangorestframework
 Faker
 psycopg2-binary
+pillow
+

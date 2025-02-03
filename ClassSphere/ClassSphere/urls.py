@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 from ClassApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +29,7 @@ urlpatterns = [
     path('forget/',views.forgetpass,name='forgetpass'),
     path('reset/',views.reset,name='reset'),
     path('contact/',views.contact,name='contact'),
-    path('api/',include('ClassApp.api.urls')),
-]
+    path('event/',views.event,name='eventpage'),
+    path('events/<int:id>/',views.eventdetail,name='DetailPage'),
+    path('events/',include('ClassApp.api.urls')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
