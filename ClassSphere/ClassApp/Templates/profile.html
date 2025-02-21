@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <p><strong>Username:</strong> {{ user_name }}</p>
+    <h2>Fees Details</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p><strong>Total Fee Amount:</strong> {{ fees }}</p>
+        <input type="text" name="feeAmount" id="amnt">
+        <button type="submit" id="paybtn">Pay Fee</button>
+    </form>
+
+    <script>
+        const btn = document.getElementById('paybtn');
+        const amount = document.getElementById('amnt');
+        csrfToken=`{{csrf_token}}`
+
+        btn.onclick = (e) => {
+            e.preventDefault(); // Prevents the default form submission behavior
+
+            const payload = {
+                "feeAmount": amount.value // Get the value of the input field
+            };
+            fetch('/pay/', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken // Add CSRF token to the headers
+
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response here
+                console.log('Response:', data);
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+        };
+    </script>
+</body>
+</html>

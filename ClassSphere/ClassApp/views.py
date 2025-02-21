@@ -1,16 +1,16 @@
 import datetime
 import random
-from django.http import HttpResponse, JsonResponse
+import uuid
+from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import User, profile, Event
+from .models import User, profile, Event,Grade,PaymentStructure,FeePayment
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializer import Eventserializer
-from django.core.paginator import Paginator
+from .serializer import Eventserializer,PaymentSerializer
 
 def LandingPage(request):
     if request.user.is_authenticated:
@@ -25,7 +25,8 @@ def RegisterPage(request):
         if request.method == 'POST':
             if 'signup' in request.POST:
                 role = request.POST.get('role')
-                grade = request.POST.get('Grade')
+                grade_id = request.POST.get('Grade')
+                grade=Grade.objects.get(id=grade_id)
                 email = request.POST.get('remail')
                 password2 = request.POST.get('rpassword2')
                 password = request.POST.get('rpassword')
@@ -198,6 +199,39 @@ def reset(request):
 def event(request):
     return render(request,'event.html')
 
+def userprofile(request):
+    user=request.user
+    profileuser=profile.objects.get(newprofile=user.id)
+    fees=FeePayment.objects.get(student=profileuser.id)
+    context={
+        "fees":fees.total_fee_left,
+        "user_name":user.username,
+    }
+    return render(request,'profile.html',context)
+
+
+@api_view(['POST'])
+def make_payment(request):
+    data = request.data  
+    serializer = PaymentSerializer(data=data)  
+    if serializer.is_valid(): 
+        user = request.user
+        try:
+            profileuser = profile.objects.get(newprofile=user.id)
+            print(profileuser)
+            fees = FeePayment.objects.get(student=profileuser.id)
+            print(fees)
+            fee_amount_paid = serializer.validated_data['feeAmount']
+            fees.amount_paid += fee_amount_paid
+            fees.save() 
+            print(f'The Total Fee Left is {fees.total_fee_left} and Fee Paid is {fees.amount_paid}')
+            return Response({"message": "Payment successful", "total_fee_left": fees.total_fee_left}, status=200)
+        except profile.DoesNotExist:
+            return Response({"error": "Profile not found"}, status=404)
+        except FeePayment.DoesNotExist:
+            return Response({"error": "FeePayment record not found"}, status=404)
+    return Response({"error": "Invalid data", "details": serializer.errors}, status=400)
+
 @api_view(['POST'])
 def contact(request):
     postdata = request.data
@@ -220,7 +254,6 @@ def contact(request):
             }
         return JsonResponse(response_data, status=200)
 
-# Apis for all event relates operations
 @api_view(['GET'])
 def getevents(request):
  events=Event.objects.all()
@@ -259,7 +292,6 @@ def geteventbyid(request,id):
     serializer=Eventserializer(event)
     return JsonResponse(serializer.data)
 
-
 @api_view(['POST'])
 def filterevents(request):
     title = request.data.get('title', None)
@@ -287,3 +319,4 @@ def eventdetail(request,id):
     event=Event.objects.get(id=id)
     event_obj={'obj':event}
     return render(request,'eventdetail.html',context=event_obj)
+
