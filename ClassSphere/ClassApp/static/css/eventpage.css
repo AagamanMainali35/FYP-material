@@ -1,30 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
 :root {
-  --primary-color: #ff833e;
-  --primary-color-dark: #db6f35;
+  --primary-color: #6366F1;
+  --primary-color-dark: #6366F1;
   --text-dark: #333333;
   --text-light: #767268;
   --white: #ffffff;
   --max-width: 100%;
   --header-font: "Bebas Neue", sans-serif;
 }
-
-
 img {
   display: flex;
   width: 100%;
 }
-
 a {
   text-decoration: none;
   transition: 0.3s;
 }
-
 body {
   font-family: "Poppins", sans-serif;
 }
-
 .header__container {
   max-width: var(--max-width);
   margin: auto;
@@ -36,9 +30,6 @@ body {
   margin-left: 142px;
   margin-top: -51px;
 }
-
-
-
 .header__content h1 {
   margin-bottom: 1rem;
   font-size: 5rem;
@@ -48,18 +39,15 @@ body {
   line-height: 5.5rem;
   text-align: center;
 }
-
 .header__content h1 span {
-  color: var(--primary-color);
+  color: #6366F1;
 }
-
 .header__content p {
   margin-bottom: 2rem;
   columns: var(--text-light);
   line-height: 1.75rem;
   text-align: center;
 }
-
 .header__content form {
   margin-bottom: 4rem;
   padding: 1.5rem;
@@ -71,7 +59,6 @@ body {
   border-radius: calc(1rem + 10px);
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
 }
-
 .header__content .input__row {
   width: 100%;
   display: flex;
@@ -79,25 +66,23 @@ body {
   gap: 1rem;
   flex: 1;
 }
-
 .header__content .input__group {
   flex: 1;
 }
-
 .header__content .input__group h5 {
+  margin-top: 0;
   margin-bottom: 5px;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--text-light);
 }
-
 .header__content .input__group > div {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 .header__content input {
+  margin-top:0px;
   width: 100%;
   outline: none;
   border: none;

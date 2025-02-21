@@ -11,223 +11,166 @@
   </head>
   <body>
 <style>
-    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
-
-:root {
-  --primary-color: #6366F1;
-  --primary-color-dark: #2476da;
-  --text-dark: #0a0a0a;
-  --text-light: #737373;
-  --extra-light: #f3f4f6;
-  --white: #ffffff;
-  --max-width: 1200px;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  outline: none;
-  border: none;
-  font-size: 1rem;
-  white-space: nowrap;
-  color: var(--white);
-  background-color: var(--primary-color);
-  border-radius: 5rem;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: var(--primary-color-dark);
-}
-
-.logo {
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap");
+.footerLogo {
+  font-family: "DM Sans", sans-serif;
   font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--text-dark);
-}
-
-img {
-  display: flex;
-  width: 100%;
-}
-
-a {
+  font-weight: bold;
   text-decoration: none;
-  transition: 0.3s;
+  color: #0a0a0a;
 }
-ul {
+.footerContainer {
+  background-color: rgb(244, 244, 244);
+  padding: 50px;
+}
+ul{
   list-style: none;
 }
-
-
-footer {
-  background-color: rgb(244, 244, 244);
-  padding:50px;
-}
-
-.footer__container {
+.footerGrid {
   display: grid;
   gap: 4rem 2rem;
 }
-
-.footer__col p {
+.footerText p {
+  font-family: "Poppins", serif; 
   max-width: 355px;
   margin-block: 1rem;
-  color: var(--text-light);
+  color: #737373;
   text-align: justify;
 }
-
-.footer__socials {
+.footerSocials {
   display: flex;
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.footer__socials a {
+.footerSocials a {
   display: inline-block;
   padding: 7px 10px;
   font-size: 1.25rem;
-  color: var(--white);
-  background-color: var(--primary-color);
+  color: white;
+  background-color: #6366F1;
   border-radius: 100%;
+  transition: 0.3s;
 }
 
-.footer__socials a:hover {
-  background-color: var(--primary-color-dark);
+.footerSocials a:hover {
+  background-color: #2476da;
 }
 
-.footer__col h4 {
-  margin-bottom: 2rem;
+.footerTitle {
+  margin-top:0px;
+  font-family: "Poppins", serif;;
+  margin-bottom: 2rem;  
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--text-dark);
+  color: #0a0a0a;
 }
 
-.footer__links {
+.footerLinks {
   display: grid;
   gap: 1rem;
 }
 
-.footer__links a {
+.footerLinks a {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--text-light);
+  color: #737373;
+  text-decoration: none;
+  transition: 0.3s;
+  font-family: "Poppins", serif;;
 }
 
-.footer__links a:hover {
-  color: var(--primary-color);
+.footerLinks a:hover {
+  color: #6366F1;
 }
 
-.footer__links a span {
-  font-size: 1.25rem;
-}
-
-.footer__col form {
+.footerForm {
   display: grid;
   gap: 1rem;
 }
 
-.footer__col input {
+.footerInput {
   padding: 0.75rem;
   font-size: 1rem;
-  color: var(--text-dark);
-  background-color: var(--white);
-  border: 1px solid var(--text-light);
+  color: #0a0a0a;
+  background-color: white;
+  border: 1px solid #737373;
   border-radius: 5px;
 }
 
-.footer__col input::placeholder {
-  color: var(--text-light);
+.footerInput::placeholder {
+  color: #737373;
 }
 
-.footer__col .btn {
+.footerButton {
+  padding: 0.75rem 1.5rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  color: white;
+  background-color: #6366F1;
   border-radius: 5px;
+  transition: 0.3s;
+  cursor: pointer;
 }
 
-.footer__bar {
+.footerButton:hover {
+  background-color: #2476da;
+}
+
+.footerBar {
   padding: 1rem;
   font-size: 0.9rem;
-  color: var(--text-light);
+  color: #737373;
   text-align: center;
 }
 
 @media (width > 540px) {
-  .footer__container {
+  .footerGrid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .footer__col:last-child {
-    grid-area: 2/1/3/2;
   }
 }
 
 @media (width > 768px) {
-  .footer__container {
+  .footerGrid {
     grid-template-columns: 2fr 1fr 1fr 1.5fr;
   }
-
-  .footer__col:last-child {
-    grid-area: unset;
-  }
 }
-
-
 </style>
 
-    <footer id="contact">
-      <div class="section__container footer__container">
-        <div class="footer__col">
-          <div class="footer__logo">
-            <a href="#" class="logo">ClassSphere</a>
-          </div>
+    <footer id="contact" class="footerContainer">
+      <div class="footerGrid">
+        <div class="footerText">
+          <a href="#" class="footerLogo">ClassSphere</a>
           <p>
             Immerse yourself in a world of knowledge and discovery with Class Sphere. Where learning meets innovation. Your journey to excellence starts here.
           </p>
-
         </div>
-        <div class="footer__col">
-          <h4>Quick Links</h4>
-          <ul class="footer__links">
+        <div class="footerColumn">
+          <h4 class="footerTitle">Quick Links</h4>
+          <ul class="footerLinks">
             <li><a href="#">Home</a></li>
             <li><a href="#">Flights</a></li>
             <li><a href="#">Hotels</a></li>
             <li><a href="#">Cruise</a></li>
           </ul>
         </div>
-        <div class="footer__col">
-          <h4>Contact Us</h4>
-          <ul class="footer__links">
-            <li>
-              <a href="#">
-                <span><i class="ri-phone-fill"></i></span> +977 9803184146
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span><i class="ri-record-mail-line"></i></span> info@ClassSphere
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span><i class="ri-map-pin-2-fill"></i></span> Kathmandu,Nepal
-              </a>
-            </li>
+        <div class="footerColumn">
+          <h4 class="footerTitle">Contact Us</h4>
+          <ul class="footerLinks">
+            <li><a href="#"><span><i class="ri-phone-fill"></i></span> +977 9803184146</a></li>
+            <li><a href="#"><span><i class="ri-record-mail-line"></i></span> info@ClassSphere</a></li>
+            <li><a href="#"><span><i class="ri-map-pin-2-fill"></i></span> Kathmandu, Nepal</a></li>
           </ul>
         </div>
-        <div class="footer__col">
-          <h4>Subscribe</h4>
-          <form action="/">
-            <input type="text" placeholder="Enter your email" />
-            <button class="btn">Subscribe</button>
+        <div class="footerColumn">
+          <h4 class="footerTitle">Subscribe</h4>
+          <form action="/" class="footerForm">
+            <input type="text" placeholder="Enter your email" class="footerInput" />
+            <button class="footerButton">Subscribe</button>
           </form>
         </div>
       </div>
