@@ -1,16 +1,18 @@
 import datetime
 import random
-import uuid
 from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import User, profile, Event,Grade,PaymentStructure,FeePayment
+from .models import User, profile, Event,Grade,PaymentStructure,FeePayment,Notification
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .serializer import Eventserializer,PaymentSerializer
+from .serializer import Eventserializer,NotificationSerilizer
+from django.contrib.auth import update_session_auth_hash 
+
 
 def LandingPage(request):
     if request.user.is_authenticated:
@@ -19,17 +21,21 @@ def LandingPage(request):
         return redirect('login')
 
 def RegisterPage(request):
+
+    gradeoptions=Grade.objects.all()
+    context={'grade':gradeoptions}
     if request.user.is_authenticated:
         return redirect('homepage')
     else:
         if request.method == 'POST':
             if 'signup' in request.POST:
-                role = request.POST.get('role')
-                grade_id = request.POST.get('Grade')
+                roleuser= request.POST.get('role')
+                grade_id= request.POST.get('Grade')
                 grade=Grade.objects.get(id=grade_id)
                 email = request.POST.get('remail')
                 password2 = request.POST.get('rpassword2')
                 password = request.POST.get('rpassword')
+                paymentstructure = PaymentStructure.objects.get(grade=grade)
                 char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
                 if len(password) < 10:
                     messages.error(request, "Use a stronger password")
@@ -49,13 +55,13 @@ def RegisterPage(request):
                             if "@" in email:
                                 username = email.split("@")[0]
                             newuser = User.objects.create_user(username=username, email=email, password=password)
-                            user_profile = profile.objects.create(newprofile=newuser, role=role, grade=grade)
+                            user_profile = profile.objects.create(newprofile=newuser,role=roleuser,grade=grade,payment_structure=paymentstructure)
                             return redirect('login')
                     else:
                         messages.error(request, "Passwords do not match.")
             elif 'back' in request.POST:
                 return redirect('login')
-    return render(request, 'Register.html')
+    return render(request, 'Register.html',context)
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -77,6 +83,7 @@ def loginPage(request):
                 check = authenticate(request, username=userobj.username, password=password)
                 if check is not None:
                     otp = random.randint(100000, 999999)
+                    print(otp)
                     request.session['ottp'] = otp  
                     request.session['email'] = email  
                     request.session['isloggedin?']=True
@@ -90,6 +97,7 @@ def loginPage(request):
                             messages.success(request, "OTP has been sent to your email!")
                             return redirect('ottp') 
                     except Exception as e:
+                            return redirect('ottp') 
                             print(f"Error sending email: {e}")
                             messages.error(request, "Error sending OTP. Please try again.")
                 else:
@@ -199,38 +207,6 @@ def reset(request):
 def event(request):
     return render(request,'event.html')
 
-def userprofile(request):
-    user=request.user
-    profileuser=profile.objects.get(newprofile=user.id)
-    fees=FeePayment.objects.get(student=profileuser.id)
-    context={
-        "fees":fees.total_fee_left,
-        "user_name":user.username,
-    }
-    return render(request,'profile.html',context)
-
-
-@api_view(['POST'])
-def make_payment(request):
-    data = request.data  
-    serializer = PaymentSerializer(data=data)  
-    if serializer.is_valid(): 
-        user = request.user
-        try:
-            profileuser = profile.objects.get(newprofile=user.id)
-            print(profileuser)
-            fees = FeePayment.objects.get(student=profileuser.id)
-            print(fees)
-            fee_amount_paid = serializer.validated_data['feeAmount']
-            fees.amount_paid += fee_amount_paid
-            fees.save() 
-            print(f'The Total Fee Left is {fees.total_fee_left} and Fee Paid is {fees.amount_paid}')
-            return Response({"message": "Payment successful", "total_fee_left": fees.total_fee_left}, status=200)
-        except profile.DoesNotExist:
-            return Response({"error": "Profile not found"}, status=404)
-        except FeePayment.DoesNotExist:
-            return Response({"error": "FeePayment record not found"}, status=404)
-    return Response({"error": "Invalid data", "details": serializer.errors}, status=400)
 
 @api_view(['POST'])
 def contact(request):
@@ -315,8 +291,154 @@ def filterevents(request):
     event_data=Eventserializer(events,many=True)
     return JsonResponse({'events': event_data.data})
 
+def make_payment(request):
+    if request.method == 'POST':
+        amount_paid = request.POST.get('amount_paid')
+        userprofile = request.user.profile
+        payment = FeePayment(
+            student=userprofile,
+            amount_paid=int(amount_paid),
+        )
+        payment.save() 
+    current_user = request.user
+    try:
+        userprofile = profile.objects.get(newprofile=current_user)
+    except profile.DoesNotExist:
+        return Response({"error": "Profile not found."}, status=404)
+    fee = FeePayment.objects.filter(student=userprofile).first()
+    # If fee records exist, calculate the total fee left, else set it to 0
+    total_paid = 0
+    if fee:
+        total_paid = sum(payment.amount_paid for payment in userprofile.fee_payments.all())
+        total_fee_left = userprofile.payment_structure.Totalfeeamount - total_paid
+    else:
+        total_fee_left = userprofile.payment_structure.Totalfeeamount  # Assuming no payments made yet
+    context = {
+        'userprofile': userprofile,
+        'amount_paid': total_paid,
+        'total_fee_left': total_fee_left,
+    }
+    return render(request, 'test.html', context)
+
 def eventdetail(request,id):
     event=Event.objects.get(id=id)
     event_obj={'obj':event}
     return render(request,'eventdetail.html',context=event_obj)
 
+@api_view(['POST'])
+def send_Notification(request):
+    data=NotificationSerilizer(data=request.data)
+    if data.is_valid():
+        users=profile.objects.all()
+        print(users)
+        for user in users:
+            print(user)
+            message=data.validated_data['NotificationMsg']
+            Notification.objects.create(NotificationMsg=message,user_instance=user)
+        return JsonResponse({'Status':'Message sent Sucessfully'})
+    else:
+        return JsonResponse({'Status':data.errors})
+
+@login_required
+def profilepage(request):
+    user = request.user
+    grade_list = Grade.objects.all()
+    userprofile_instance = profile.objects.get(newprofile=user)
+
+    if request.method == 'POST':
+        # Handle Saving Basic Details
+        if 'Savedetails' in request.POST:
+            fname = request.POST.get('fname', '').strip()
+            lname = request.POST.get('lname', '').strip()
+            username = request.POST.get('username', '').strip()
+
+            updated = False
+            if fname:
+                user.first_name = fname
+                updated = True
+            if lname:
+                user.last_name = lname
+                updated = True
+            if username:
+                user.username = username
+                updated = True
+
+            if updated:
+                user.save()
+                messages.success(request, 'Details Updated Successfully')
+                return redirect('userprofile')
+
+        # Handle Email Change
+        elif 'SubmitEmailChnage' in request.POST:
+            email = request.POST.get('email', '').strip()
+            password = request.POST.get('password', '')
+            check = authenticate(request, username=user.username, password=password)
+            if check:
+                user.email = email
+                user.save()
+                messages.success(request, 'Email Updated Successfully')
+                return redirect('userprofile')
+            else:
+                messages.error(request, 'Wrong Credential Entered')
+
+        elif 'passwordchange' in request.POST:
+            oldpass = request.POST.get('old')
+            newpass = request.POST.get('new')
+            check = authenticate(request, username=user.username, password=oldpass)
+            if check:
+                if user.check_password(oldpass):
+                    has_letter = False
+                    has_digit = False
+                    has_special = False
+                    special_characters = "!@#$%^&*(),.?\":{}|<>"
+
+                    for char in newpass:
+                        if char.isalpha():
+                            has_letter = True
+                        elif char.isdigit():
+                            has_digit = True
+                        elif char in special_characters:
+                            has_special = True
+
+                    if len(newpass) < 8:
+                        messages.error(request, 'Password must be at least 8 characters long.')
+                    elif not has_letter:
+                        messages.error(request, 'Password must contain at least one letter.')
+                    elif not has_digit:
+                        messages.error(request, 'Password must contain at least one number.')
+                    elif not has_special:
+                        messages.error(request, 'Password must include at least one special character.')
+                    elif user.check_password(newpass):
+                        messages.error(request, 'The password has been used previously.')
+                    else:
+                        user.set_password(newpass)
+                        user.save()
+                        update_session_auth_hash(request, user)
+                        messages.success(request, 'Password updated successfully.')
+                        return redirect('userprofile')
+
+                else:
+                    messages.error(request, 'Wrong Old Password Entered.')
+            else:
+                messages.error(request, 'Wrong Old Password Entered.')
+
+        elif 'Profilepic' in request.FILES:
+                profilepicture = request.FILES['Profilepic']
+                profile_ins=profile.objects.get(newprofile=request.user)
+                profile_ins.profile_picture=profilepicture
+                profile_ins.save()
+                return redirect('userprofile')
+    context = {
+        'Grades': grade_list,
+        'user_info': {
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        },
+        'profile_info': {
+            'picture':userprofile_instance.profile_picture,
+            'grade': userprofile_instance.grade.classname
+        }
+    }
+    return render(request, 'Userprofile.html', context)

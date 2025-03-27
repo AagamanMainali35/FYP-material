@@ -2,14 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 import datetime
-from django.utils import timezone
-
-# Helper function to get the current academic year
 def get_academic_year():
     current_year = datetime.datetime.now().year
     return f"{current_year}/{current_year + 1}"
 
-# Grade Model
 class Grade(models.Model):
     option = [
         ('1', 'Grade 1'),
@@ -27,13 +23,13 @@ class Grade(models.Model):
     academic_year = models.CharField(max_length=9, default=get_academic_year)
     
     def __str__(self):
-        return f'Grade {self.classname}--{self.academic_year}'
+        return f'Grade {self.classname}--{self.id}'
     
     class Meta:
         unique_together = ['classname', 'academic_year']
         db_table = 'grade_table'
 
-# PaymentStructure Model
+
 class PaymentStructure(models.Model):
     grade = models.OneToOneField(Grade, on_delete=models.CASCADE, related_name="payment_structure")
     Totalfeeamount = models.IntegerField()  # Total fee for the grade
@@ -46,7 +42,6 @@ class PaymentStructure(models.Model):
     def __str__(self):
         return f'Grade {self.grade.classname}'
 
-# Profile Model
 class profile(models.Model):
     ROLE = [
         ('Teacher', 'Teacher'),
@@ -54,8 +49,9 @@ class profile(models.Model):
     ]
     newprofile = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(verbose_name='Role', choices=ROLE, max_length=10)
-    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True, blank=True)
-    payment_structure = models.ForeignKey(PaymentStructure, on_delete=models.CASCADE, null=True, blank=True, related_name='profiles')
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
+    payment_structure = models.ForeignKey(PaymentStructure, on_delete=models.CASCADE, null=True, related_name='profiles')
+    profile_picture=models.ImageField(verbose_name='Enter Your Profile Picture here' ,null=True ,upload_to='profilePictures')
 
     def clean(self):
         if self.role == 'Student' and not self.grade:
@@ -95,11 +91,11 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-# Notification Model
+
 class Notification(models.Model):
     NotificationMsg = models.CharField(max_length=500)
-    user = models.ForeignKey(profile, on_delete=models.CASCADE)
+    user_instance = models.ForeignKey(profile, on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.user.id}--{self.NotificationMsg}'
+        return f'{self.user_instance.id}--{self.NotificationMsg}'

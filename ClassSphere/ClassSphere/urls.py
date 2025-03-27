@@ -16,6 +16,7 @@ urlpatterns = [
     path('event/',views.event,name='eventpage'),
     path('detail/<int:id>/',views.eventdetail,name='DetailPage'),
     path('events/',include('ClassApp.api.urls')),
-    path('profile/',views.userprofile,name='profile'),
-    path('pay/',views.make_payment)
+    path('pay/',views.make_payment),
+    path('send/',views.send_Notification),
+    path('profile/',views.profilepage,name='userprofile')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
