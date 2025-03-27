@@ -3,28 +3,45 @@ const submit = document.getElementById('submit');
     const form = document.querySelector('form'); 
     submit.addEventListener('click', (e) => {
       e.preventDefault(); 
+      function getCSRFToken() {
+        const cookieValue = document.cookie
+            .split(';')
+            .find(cookie => cookie.trim().startsWith('csrftoken='))
+            ?.split('=')[1];
+        return cookieValue || ''; 
+    }
+      const form = document.querySelector('form');
+      if (!form.checkValidity()) {
+          form.reportValidity(); 
+          return;  
+      }
       text.textContent = "Thank you for contacting us. We will get back to you shortly";
       text.style.color = "green"; 
       setTimeout(() => {
         text.textContent = "Let us help you get back on track"; 
         text.style.color = "black";
       }, 3000);
-        form.reset(); 
-      const name = document.getElementById('name');
-      const email = document.getElementById('email');
-      const subject = document.getElementById('subject');
-      const message = document.getElementById('message');
-      const fileInput = document.getElementById('fileInput');
-      const formData = new FormData();
-      formData.append('name', name.value);
-      formData.append('email', email.value);
-      formData.append('subject', subject.value);
-      formData.append('message', message.value);
-      formData.append('file', fileInput.files[0]); 
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const subject = document.getElementById("subject");
+        const message = document.getElementById("message");
+        const fileInput = document.getElementById("fileInput");
+        console.log(name.value)
+        const formData = new FormData();
+        formData.append('name', name.value);
+        formData.append('email', email.value);
+        formData.append('subject', subject.value);
+        formData.append('message', message.value);
+        formData.append('file', fileInput.files[0]);
+    
+        // Log the FormData entries for debugging
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
       fetch('http://127.0.0.1:8000/contact/', {
         method: 'POST',
         headers: {
-          "x-csrftoken": '{{ csrf_token }}', 
+          "x-csrftoken": getCSRFToken(), 
         },
         body: formData,
       })
@@ -32,5 +49,6 @@ const submit = document.getElementById('submit');
       .catch(error => {
         console.error('Error:', error);
       });
+      form.reset(); 
       
     });

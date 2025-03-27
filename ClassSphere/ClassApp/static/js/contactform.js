@@ -16,6 +16,7 @@ window.onload = function () {
     });
 
     uploadButton.addEventListener("click", function () {
+        e.preventDefault();
         fileInput.click();
     });
 };
