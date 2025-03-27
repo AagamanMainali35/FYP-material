@@ -46,21 +46,14 @@
                     <div class="field input-field">
                         <select class="input" required name="role">
                             <option value="" hidden selected>Signup as</option>
-                            <option value="teacher">Teacher</option>
-                            <option value="student">Student</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Student">Student</option>
                         </select>
                         <select class="input" required name="Grade">
                             <option value="" hidden selected>Grade</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
+                            {% for grade in grade %}
+                            <option value="{{grade.id}}">{{ forloop.counter }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="field input-field input">
