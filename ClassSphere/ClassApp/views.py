@@ -318,7 +318,7 @@ def make_payment(request):
         'amount_paid': total_paid,
         'total_fee_left': total_fee_left,
     }
-    return render(request, 'test.html', context)
+    return render(request, 'Payment', context)
 
 def eventdetail(request,id):
     event=Event.objects.get(id=id)

@@ -16,14 +16,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = 'django-insecure-z!v3gi5-anh_9fm0q(8008*lrh%h8i3v#1j-wtqcz3!r=dw@4z'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -112,7 +109,6 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
@@ -123,8 +119,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Use SMTP backen
 EMAIL_HOST = 'smtp.gmail.com'  # For Gmail
 EMAIL_PORT = 587  # Use port 587 for TLS
 EMAIL_USE_TLS = True  # Use TLS
-# EMAIL_HOST_USER = 'classsphere2004@gmail.com' 
-EMAIL_HOST_USER = 'jewsfryer69@gmail.com'  # Your Gmail address
-# EMAIL_HOST_USER = 'classsphere2004@gmail.com'  # Your Gmail address
-# EMAIL_HOST_PASSWORD = 'quuw rpax hoie bmxj'  # Your Gmail password (you might need an app-specific password for Gmail)
-EMAIL_HOST_PASSWORD = 'qfhb eqvo imee bocu'  # Your Gmail password (you might need an app-specific password for Gmail)
+EMAIL_HOST_USER = 'classsphere2004@gmail.com' 
+# EMAIL_HOST_USER = 'jewsfryer69@gmail.com'  
+EMAIL_HOST_PASSWORD = 'dlzi tzoi fkkr wtck'  
+# EMAIL_HOST_PASSWORD = 'qfhb eqvo imee bocu' 
