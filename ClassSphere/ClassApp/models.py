@@ -91,7 +91,6 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-
 class Notification(models.Model):
     NotificationMsg = models.CharField(max_length=500)
     user_instance = models.ForeignKey(profile, on_delete=models.CASCADE)
@@ -99,3 +98,54 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'{self.user_instance.id}--{self.NotificationMsg}'
+ 
+class Exam(models.Model):
+    Exam_Name=models.CharField(max_length=255,null=False)
+    ExamGrade=models.ForeignKey(Grade,null=False,on_delete=models.CASCADE)
+    Exam_Date=models.DateField(max_length=255,null=False)
+    Created_by=models.ForeignKey(User,on_delete=models.CASCADE)
+    Total_Marks=models.CharField(max_length=255,null=False)
+    def __str__(self):
+        return f'{self.Exam_Name[:50]}-{self.id}'
+    
+class Questions(models.Model): 
+    Exam_Instace=models.ForeignKey(Exam,on_delete=models.CASCADE,null=False)
+    Question_Name=models.CharField(max_length=255,null=False)
+    Question_Marks= models.CharField(max_length=100,null=False)
+    correct_answer=models.CharField(max_length=255,null=True)
+    def __str__(self):
+        return f'{self.Exam_Instace}-{self.Question_Name[:20]}'
+    
+class Choice(models.Model):
+    choice_name=models.CharField(max_length=255,verbose_name='Answer',null=False)
+    question_id=models.ForeignKey(Questions,on_delete=models.CASCADE,null=False)
+    def __str__(self):
+        return self.choice_name[:20]
+
+class StudentAnswers(models.Model):
+    question_id=models.ForeignKey(Questions,on_delete=models.CASCADE,null=False)
+    user_id=models.ForeignKey(User,on_delete=models.CASCADE,null=False)
+    StudentAnswers=models.CharField(verbose_name='Student_ID',max_length=255,null=True)
+    def __str__(self):
+        return f' question no {self.question_id.id} answered as {self.StudentAnswers} bu  {self.user_id.username}'
+    
+class StudentLeaderBoard(models.Model):
+    exam_id=models.ForeignKey(Exam,on_delete=models.CASCADE)
+    student_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    total_marks=models.IntegerField()
+    Correct=models.IntegerField(null=True)
+    Incorrect=models.IntegerField(null=True)
+    Answered=models.IntegerField(null=True)
+    Total_Question=models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.exam_id.Exam_Name
+
+    
+
+
+
+
+
+
+

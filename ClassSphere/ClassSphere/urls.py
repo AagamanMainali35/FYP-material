@@ -18,5 +18,9 @@ urlpatterns = [
     path('events/',include('ClassApp.api.urls')),
     path('pay/',views.make_payment),
     path('send/',views.send_Notification),
-    path('profile/',views.profilepage,name='userprofile')
+    path('profile/',views.profilepage,name='userprofile'),
+    path('schedule/',views.schedule,name='schedule'),
+    path('exam/<int:id>/',views.exam,name="exam"),
+    path('esewa/',views.esewa),
+    path('leaderboard/',views.leader_board)
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern Color Palette */
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --gradient-dark: linear-gradient(135deg, var(--dark), #1a1a2e);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 106rem;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .leaderboard-header {
+            background: var(--gradient-dark);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .exam-selector {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table thead {
+            background-color: #f8f9fa;
+        }
+
+        .leaderboard-table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 500;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .leaderboard-table td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .leaderboard-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: var(--dark);
+            width: 50px;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .student-name {
+            font-weight: 500;
+        }
+
+        .score {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .correct {
+            color: var(--success);
+        }
+
+        .incorrect {
+            color: var(--danger);
+        }
+
+        .answered {
+            color: var(--warning);
+        }
+
+        .medal {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .gold {
+            color: #ffd700;
+        }
+
+        .silver {
+            color: #c0c0c0;
+        }
+
+        .bronze {
+            color: #cd7f32;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(239, 35, 60, 0.1);
+            color: var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .leaderboard-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .leaderboard-table th, 
+            .leaderboard-table td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Industry Leaderboard</h1>
+            <p class="subtitle">See how you stack up against your peers</p>
+        </header>
+
+        <div class="leaderboard-container">
+            <div class="leaderboard-header">
+                <div class="leaderboard-title">Exam Performance Rankings</div>
+                <select class="exam-selector">
+                    <option>All Exams</option>
+                    <option>Python Certification</option>
+                    <option>Data Science Exam</option>
+                    <option>Web Development Test</option>
+                </select>
+            </div>
+
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student</th>
+                        <th>Total Score</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Answered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in context %}
+                    <tr>
+                        <td class="rank {{forloop.counter}}" id="{{forloop.counter}}">
+                            <svg class="medal gold" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12,2L15.09,8.26L22,9.27L17,14.14L18.18,21.02L12,17.77L5.82,21.02L7,14.14L2,9.27L8.91,8.26L12,2Z" />
+                            </svg>
+                            {{forloop.counter}}
+                        </td>
+                        <td>
+                            <div class="student-info">
+                                <div class="avatar">JS</div>
+                                <div class="student-name">{{data.student_id.username}}</div>
+                            </div>
+                        </td>
+                        <td class="score">{{data.total_marks}}</td>
+                        <td class="correct">
+                            <span class="badge badge-success">{{data.Correct}}/{{data.Total_Question}}</span>
+                        </td>
+                        <td class="incorrect">
+                            <span class="badge badge-danger">{{data.Incorrect}}</span>
+                        </td>
+                        <td class="answered">
+                            <span class="badge badge-warning">{{data.Answered}}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Rank 1 -->
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

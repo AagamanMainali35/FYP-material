@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Exam Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Light Theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-card: #ffffff;
+            --bg-surface: #f3f4f6;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            
+            /* Transitions */
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 106rem;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .exam-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .exam-meta {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .exam-timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--warning);
+            background-color: rgba(245, 158, 11, 0.1);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .exam-progress {
+            background-color: var(--bg-surface);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Main Layout */
+        .exam-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        /* Question Container */
+        .questions-container {
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Navigation Sidebar */
+        .question-nav {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 1.75rem;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .question-nav-title {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-nav-items {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+        }
+
+        .nav-item {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .nav-item.answered {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: var(--success);
+        }
+
+        .nav-item.marked {
+            background-color: rgba(236, 72, 153, 0.2);
+            border-color: rgba(236, 72, 153, 0.4);
+            color: var(--accent);
+            position: relative;
+        }
+
+        .nav-item.marked::after {
+            content: '!';
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Single Notepad */
+        .exam-notepad {
+            position: sticky;
+            top: calc(2rem + 250px);
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 1.75rem;
+            border: 1px solid var(--border);
+            height: 30rem;
+        }
+
+        .notepad-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .notepad-content {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            width: 100%;
+            height: calc(100% - 40px);
+            font-family: inherit;
+            resize: none;
+            border: none;
+        }
+
+        .notepad-content:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Question Styles */
+        .question {
+            margin-bottom: 3rem;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .question-marks {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            background-color: var(--bg-surface);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .question-body {
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        /* Choices Styling */
+        .choices {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .choice {
+            position: relative;
+        }
+
+        .choice-input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .choice-label {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            background-color: var(--bg-surface);
+        }
+
+        .choice-label:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .choice-input:checked + .choice-label {
+            background-color: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .choice-radio {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            margin-right: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed) ease;
+            flex-shrink: 0;
+        }
+
+        .choice-input:checked + .choice-label .choice-radio {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+
+        .choice-radio::after {
+            content: '';
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: white;
+            opacity: 0;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .choice-input:checked + .choice-label .choice-radio::after {
+            opacity: 1;
+        }
+
+        /* Footer Navigation */
+        .exam-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-surface);
+            border-color: var(--primary);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-mark {
+            background-color: rgba(236, 72, 153, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+
+        .btn-mark:hover {
+            background-color: rgba(236, 72, 153, 0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .exam-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-nav, .exam-notepad {
+                position: static;
+            }
+            
+            .exam-notepad {
+                height: auto;
+                min-height: 200px;
+                margin-top: 2rem;
+            }
+            
+            .exam-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            
+            .exam-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .questions-container {
+                padding: 1.75rem;
+            }
+            
+            .question-nav-items {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .exam-footer {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+            
+            .btn-group {
+                width: 100%;
+            }
+            
+            .btn {
+                flex-grow: 1;
+                justify-content: center;
+            }
+        }
+
+
+
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+        }
+        
+        .modal h2 {
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+        
+        .modal p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="exam-header">
+            <h1 class="exam-title">Professional Certification Exam</h1>
+            <div class="exam-meta">
+                <div class="exam-timer" id="timer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="time-display">60:00</span>
+                </div>
+                <div class="exam-progress" id="progress-display">
+                    Question 1 of {{ question_data|length }}
+                </div>
+            </div>
+        </div>
+
+        <main class="exam-content">
+            <div class="questions-container">
+                <form id="examForm" method="post" action="#">
+                    {% csrf_token %}
+                    
+                    {% for item in question_data %}
+                    <div class="question {% if forloop.first %}active{% endif %}" id="question-{{ forloop.counter }}" data-question-id="{{ item.question.id }}">
+                        <div class="question-header">
+                            <div class="question-text">Question {{ forloop.counter }}</div>
+                            <div class="question-marks">{{ item.question.Question_Marks }} marks</div>
+                        </div>
+                        
+                        <div class="question-body">
+                            {{ item.question.Question_Name }}
+                        </div>                        
+                        <div class="choices">
+                            {% for choice in item.choices %}
+                            <div class="choice">
+                                <input type="radio" 
+                                       class="choice-input"
+                                       name="question_{{ item.question.id }}" 
+                                       id="choice_{{ choice.id }}" 
+                                       value="{{ choice.id }}">
+                                <label for="choice_{{ choice.id }}" class="choice-label">
+                                    <span class="choice-radio"></span>
+                                    <span>{{ choice.choice_name }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="exam-footer">
+                        <button type="button" class="btn btn-outline" id="prev-btn" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                            Previous
+                        </button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-mark" id="mark-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                </svg>
+                                Mark
+                            </button>
+                            <button type="button" class="btn btn-primary" id="next-btn">
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                            <button type="submit" class="btn btn-danger hidden" id="submit-btn">
+                                Submit Exam
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="question-sidebar">
+                <div class="question-nav">
+                    <h3 class="question-nav-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        Question Navigation
+                    </h3>
+                    <div class="question-nav-items">
+                        {% for item in question_data %}
+                        <div class="nav-item {% if forloop.first %}active{% endif %}" data-question="{{ forloop.counter }}">{{ forloop.counter }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="exam-notepad">
+                    <div class="notepad-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2 2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <h3>Notes for Question <span id="current-question-num">1</span></h3>
+                    </div>
+                    <textarea class="notepad-content" id="universal-notepad" placeholder="Type your notes here..."></textarea>
+                </div>
+            </div>
+            <div id="timeUpModal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Time's Up!</h2>
+                    <p>Your exam has automatically finished.</p>
+                    <button id="goBackBtn" class="btn btn-primary" onclick="submitform" ><a href="/" style=" text-decoration: none; color:rgb(255, 255, 255);">Go Back to Home</a></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const timerElement = document.getElementById('time-display');
+        const progressElement = document.getElementById('progress-display');
+        const questions = document.querySelectorAll('.question');
+        const navItems = document.querySelectorAll('.nav-item');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const markBtn = document.getElementById('mark-btn');
+        const radioInputs = document.querySelectorAll('.choice-input');
+        const notepad = document.getElementById('universal-notepad');
+        const currentQuestionNum = document.getElementById('current-question-num');
+        
+        
+        let currentQuestion = 0;
+        let timeLeft =  0.6* 60; 
+        const totalQuestions = questions.length;
+        let markedQuestions = new Set();
+        let questionNotes = {};
+        
+        
+        function initializeNotes() {
+            for (let i = 0; i < totalQuestions; i++) {
+                const savedNotes = localStorage.getItem(`exam-notes-q${i+1}`);
+                questionNotes[`q${i+1}`] = savedNotes || '';
+            }
+            notepad.value = questionNotes['q1'];
+        }
+        
+        function submitform(){
+            document.getElementById('examForm').submit()
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft <= 300 && timeLeft > 0) { // Last 5 minutes
+                timerElement.parentElement.style.color = 'var(--danger)';
+                timerElement.parentElement.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                timerElement.parentElement.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                
+                if (timeLeft % 2 === 0) {
+                    timerElement.parentElement.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.3)';
+                } else {
+                    timerElement.parentElement.style.boxShadow = 'none';
+                }
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                showTimeUpModal();
+            } else {
+                timeLeft--;
+            }
+        }
+
+// Show time up modal
+function showTimeUpModal() {
+    const modal = document.getElementById('timeUpModal');
+    modal.classList.remove('hidden');
+    
+    // Disable all inputs
+    document.querySelectorAll('.choice-input').forEach(input => {
+        input.disabled = true;
+    });
+    
+    // Disable navigation buttons
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    markBtn.disabled = true;
+}
+
+// Handle Go Back button
+document.getElementById('goBackBtn').addEventListener('click', function() {
+    // Submit the form
+    document.getElementById('examForm').submit();
+    
+    // In case form submission takes time, also redirect after a short delay
+    setTimeout(() => {
+        window.location.href = "/";
+    }, 1000);
+});
+        const timerInterval = setInterval(updateTimer, 1000);
+        
+        // Navigation functions
+        function showQuestion(index) {
+            // Save current notes before switching
+            questionNotes[`q${currentQuestion+1}`] = notepad.value;
+            localStorage.setItem(`exam-notes-q${currentQuestion+1}`, notepad.value);
+            
+            // Update questions
+            questions.forEach((q, i) => {
+                q.classList.toggle('active', i === index);
+            });
+            
+            // Update navigation items
+            navItems.forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            // Update current question number
+            currentQuestionNum.textContent = index + 1;
+            
+            // Load notes for new question
+            notepad.value = questionNotes[`q${index+1}`] || '';
+            
+            prevBtn.disabled = index === 0;
+            
+            if (index === totalQuestions - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+            
+            // Update progress display
+            progressElement.textContent = `Question ${index + 1} of ${totalQuestions}`;
+            
+            currentQuestion = index;
+        }
+        
+        // Navigation event listeners
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => showQuestion(index));
+        });
+        
+        prevBtn.addEventListener('click', () => showQuestion(currentQuestion - 1));
+        nextBtn.addEventListener('click', () => showQuestion(currentQuestion + 1));
+        
+        // Mark question functionality
+        markBtn.addEventListener('click', function() {
+            if (markedQuestions.has(currentQuestion)) {
+                markedQuestions.delete(currentQuestion);
+                navItems[currentQuestion].classList.remove('marked');
+                this.classList.remove('active');
+            } else {
+                markedQuestions.add(currentQuestion);
+                navItems[currentQuestion].classList.add('marked');
+                this.classList.add('active');
+            }
+        });
+        
+        // Track answered questions
+        radioInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const questionId = this.name.split('_')[1];
+                const questionIndex = Array.from(questions).findIndex(q => 
+                    q.dataset.questionId === questionId
+                );
+                
+                if (questionIndex !== -1) {
+                    navItems[questionIndex].classList.add('answered');
+                    
+                    // Remove mark if answered
+                    if (markedQuestions.has(questionIndex)) {
+                        markedQuestions.delete(questionIndex);
+                        navItems[questionIndex].classList.remove('marked');
+                        markBtn.classList.remove('active');
+                    }
+                }
+            });
+        });
+        
+        notepad.addEventListener('input', function() {
+            questionNotes[`q${currentQuestion+1}`] = this.value;
+            localStorage.setItem(`exam-notes-q${currentQuestion+1}`, this.value);
+        });
+        
+        document.getElementById('examForm').addEventListener('submit', function(e) {
+            const answeredQuestions = document.querySelectorAll('.nav-item.answered').length;
+            const markedCount = markedQuestions.size;
+            
+            if ((answeredQuestions < totalQuestions || markedCount > 0) && timeLeft > 0) {
+                let message = `You have answered ${answeredQuestions} out of ${totalQuestions} questions.`;
+                
+                if (markedCount > 0) {
+                    message += `\n\nYou have ${markedCount} marked question(s).`;
+                }
+                
+                message += '\n\nAre you sure you want to submit?';
+                
+                if (!confirm(message)) {
+                    e.preventDefault();
+                }
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' && currentQuestion < totalQuestions - 1) {
+                showQuestion(currentQuestion + 1);
+            } else if (e.key === 'ArrowLeft' && currentQuestion > 0) {
+                showQuestion(currentQuestion - 1);
+            } else if (e.key === 'm' || e.key === 'M') {
+                markBtn.click();
+            }
+        });
+        
+        // Initialize
+        initializeNotes();
+        showQuestion(0);
+        updateTimer();
+    </script>
+</body>
+</html>

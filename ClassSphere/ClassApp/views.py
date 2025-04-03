@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import User, profile, Event,Grade,PaymentStructure,FeePayment,Notification
+from .models import *
+from .models import  profile,Event,Grade,Notification,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentAnswers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import Eventserializer,NotificationSerilizer
@@ -144,9 +145,7 @@ def logouted(request):
     return redirect('login')
 
 def forgetpass(request):
-    # if not request.session.get('isloggedin?',False):
-    #     return redirect('homepage')
-    # else:
+
         if request.method=='POST':
             email=request.POST.get('forgotemail')
             request.session['workflow']='Forgetpassword'
@@ -442,3 +441,91 @@ def profilepage(request):
         }
     }
     return render(request, 'Userprofile.html', context)
+
+
+def exam(request,id):
+    questions_list = Questions.objects.filter(Exam_Instace=id) 
+    question_data = [] 
+    for question in questions_list:
+        choices = Choice.objects.filter(question_id=question.id)  
+        question_data.append({
+            'question': question,  
+            'choices': choices  
+        })
+    context = {'question_data': question_data}
+    user=request.user
+    check = StudentLeaderBoard.objects.filter(student_id=user, exam_id=id).exists()
+    if check :
+        messages.error(request,'Exam Already Taken')
+        return redirect('schedule')
+    else:
+        if request.method=='POST':
+            answers = {}
+            marks=0
+            Total_quest_Answered=0
+            Total_Incorrect_ans=0
+            Total_Correct_Answers=0
+            current_exam=None
+            currentuser=request.user
+            for key, value in request.POST.items():
+                if key.startswith('question_'):
+                    key=key.replace('question_','')
+                    answers.update({key: value})  
+
+            for key,value in answers.items():
+                totalquestion=Questions.objects.filter(Exam_Instace=question.Exam_Instace.id).count()
+                question=Questions.objects.get(id=key)
+                choice=Choice.objects.get(id=value)
+                print(f'the question is {question.Question_Name} and students answers is \n {choice.choice_name}')
+                Total_quest_Answered+=1
+                if question.correct_answer==choice.choice_name:
+                    marks+=int(question.Question_Marks)
+                    Total_Correct_Answers+=1
+                    exam_id=question.Exam_Instace.id
+                else:
+                    Total_Incorrect_ans+=1
+                    print(f'invalid answer for {question.Question_Name}')
+            current_exam=Exam.objects.get(id=exam_id)
+            StudentLeaderBoard.objects.create(exam_id=current_exam,student_id=currentuser, Total_Question=totalquestion ,total_marks=marks,Correct=Total_Correct_Answers,Answered=Total_quest_Answered,Incorrect=Total_Incorrect_ans)
+    return render(request, 'examquest.html', context)   
+
+import hmac
+import hashlib
+def genSha256(key, message):
+    key = key.encode('utf-8')
+    message = message.encode('utf-8')
+    hmac_sha256 = hmac.new(key, message, hashlib.sha256)
+    return hmac_sha256.hexdigest() 
+
+def esewa(request):
+    import uuid
+    ids=uuid.uuid4()
+    amunt=100
+    tax=20
+    servicec=0
+    total=amunt+tax+servicec
+    secret_key='8gBm/:&EnhH.1/q'
+    message=f"EPAYTEST,{amunt},{ids}"
+    result=genSha256(secret_key,message)
+    print(result)
+    context={
+        "total":total,
+        "tax":tax,
+        "service":servicec,
+        "amount":amunt,
+        "id":ids,
+        "signature":result
+    }
+    return render(request,'test.html',context)
+
+def leader_board(request):
+    leaderboard=StudentLeaderBoard.objects.all().order_by('-total_marks')
+    context={   
+        "context":leaderboard
+    } 
+    return render(request,'Leaderboard.html',context)
+
+def schedule(request):
+    exam=Exam.objects.all()
+    context={'exam':exam}
+    return render(request,'exam.html',context)
