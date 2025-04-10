@@ -47,11 +47,12 @@ class profile(models.Model):
         ('Teacher', 'Teacher'),
         ('Student', 'Student'),
     ]
+    student_id=models.CharField(null=True,blank=True)
     newprofile = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(verbose_name='Role', choices=ROLE, max_length=10)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
     payment_structure = models.ForeignKey(PaymentStructure, on_delete=models.CASCADE, null=True, related_name='profiles')
-    profile_picture=models.ImageField(verbose_name='Enter Your Profile Picture here' ,null=True ,upload_to='profilePictures')
+    profile_picture=models.ImageField(verbose_name='Enter Your Profile Picture here' ,null=True,blank=True ,upload_to='profilePictures0,',default='profilePictures/DefaultPP.jpg')
 
     def clean(self):
         if self.role == 'Student' and not self.grade:
@@ -63,10 +64,10 @@ class profile(models.Model):
 class FeePayment(models.Model):
     student = models.ForeignKey(profile, on_delete=models.CASCADE, related_name='fee_payments')
     amount_paid = models.IntegerField() 
-    payment_date = models.DateTimeField(auto_now_add=True)  
+    payment_date = models.DateTimeField()  
 
     def __str__(self):
-        return f'{self.student.newprofile.email} - {self.amount_paid}'
+        return f' {self.id}-{self.student.newprofile.email} - {self.amount_paid}'
 
     @property
     def total_fee_left(self):
@@ -92,8 +93,17 @@ class Event(models.Model):
         return self.title
 
 class Notification(models.Model):
+    tag=[
+        ('Fees','Fees'),
+        ('General','General'),
+        ('Holiday','Holiday'),
+        ('Exam','Exam'),
+        ('Profile','Profile')
+    ]
     NotificationMsg = models.CharField(max_length=500)
     user_instance = models.ForeignKey(profile, on_delete=models.CASCADE)
+    created_at=models.DateField(default=datetime.date.today)
+    tag=models.CharField(choices=tag,max_length=255,default='General')
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
@@ -140,10 +150,31 @@ class StudentLeaderBoard(models.Model):
 
     def __str__(self):
         return self.exam_id.Exam_Name
-
+    
+class attendance(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    Grade=models.ForeignKey(Grade,on_delete=models.CASCADE)
+    date=models.DateField()
+    Attendance_Status=models.CharField(verbose_name='Attendnace Status',null=True)
+    def __str__(self):
+        return f'Attendance of {self.user.username} on date  {self.date}'
     
 
-
+class Holiday(models.Model):
+    Holiday_Name=models.CharField(max_length=300)
+    Holiday_Date=models.DateField()
+    End_DateField=models.DateField()
+    School_ResumeDate=models.DateField()
+    Duration=models.CharField(max_length=255,null=True,blank=True)
+    Type=models.CharField(verbose_name='Type of Holiday')
+    def save(self, *args, **kwargs):
+        if self.Holiday_Date and self.School_ResumeDate:
+            days = (self.School_ResumeDate - self.Holiday_Date).days
+            self.Duration = f"{days} days"
+        super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.Holiday_Name
 
 
 

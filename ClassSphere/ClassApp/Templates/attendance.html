@@ -1,0 +1,329 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Teacher Attendance System</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        {% load static%}
+        <link rel="stylesheet" href="{% static 'css/table.css' %}">
+    </head>
+    <body>
+        {% include 'sidebar.html'%}
+        <div class="container"> 
+            <input type="hidden" id="csrf" value="{{ csrf_token }}">
+
+            <section class="upload-section">
+                <h2>Upload Attendance File</h2>
+                <p id="apistatus">Please upload an Excel (.xlsx) file with student attendance data</p>
+                
+                <div class="file-upload" id="dropArea">
+                    <input type="file" id="fileInput" accept=".xlsx">
+                    <label for="fileInput">Choose File</label>
+                    <div class="file-info" id="fileInfo">No file selected</div>
+                    <div class="error-message" id="fileError">Please upload a valid .xlsx file</div>
+                </div>
+            </section>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Total Students</h3>
+                    <div class="value" id="totalStudents">{{total_Student}}</div>
+                </div>
+                <div class="summary-card present">
+                    <h3>Present</h3>
+                    <div class="value" id="presentCount">
+                        {{present}}
+                    </div>
+                </div>
+                <div class="summary-card absent">
+                    <h3>Absent</h3>
+                    <div class="value" id="absentCount">
+                    {{absent}}
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h3>Attendance %</h3>
+                    <div class="value" id="attendancePercent">
+                        {{percent}}
+                    </div>
+                </div>
+            </div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="classFilter">Class</label>
+                    <select id="classFilter">
+                        <option value="">All Classes</option>
+                        {% for i  in grades %}
+                        <option value="{{i.classname}}">{{i.classname}}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+                <div class="filter-group">
+                    <label for="dateFilter">Date</label>
+                    <input id="dateFilter" type="date">
+                    
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter">
+                        <option value="">All</option>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="searchInput">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search by name...">
+                </div>
+                <div class="buttons">
+                    <div class="" style="align-self: flex-end;">
+                        <button id="applyFilter" class="apply-filter-btn">Apply Filters</button>
+                    </div>
+                    <div id="clearFilter" style="align-self: flex-end;">
+                        <button id="applyFilter" class="apply-filter-btn" type="reset" style="background-color: #555;">Clear Filters</button>
+                    </div>
+                    <div id="clearFilter" style="align-self: flex-end;">
+                        <button id="print-btn" class="apply-filter-btn" style="background-color: #28a745;">Print Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-wrapper">
+                    <table id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTablebody">
+                            {% for data in attendance %}
+                            <tr>
+                                <td>{{ data.user.profile.student_id }}</td>
+                                <td>{{ data.user.username }}</td>
+                                <td>{{ data.user.profile.grade.classname}}</td>
+                                <td>{{ data.date }}</td>
+                                {% if data.Attendance_Status == 'Present'%}
+                                    <td class="present">Present</td>
+                                {% else %}
+                                    <td class="absent">Absent</td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; text-align: right;">
+                
+            </div>
+            <style>
+                .sidebar{
+                    width: 235px;
+                }
+            </style>
+<script>
+// Print Functionality - Captures entire table
+document.getElementById('print-btn').addEventListener('click', function() {
+    const originalTable = document.getElementById('attendanceTable');
+    const tableClone = originalTable.cloneNode(true);
+    tableClone.style.width = '100%';
+    tableClone.style.overflow = 'visible';
+    tableClone.style.height = 'auto';
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Attendance Report</title>
+            <style>
+                body { margin: 0; padding: 20px; }
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .present { color: green; }
+                .absent { color: red; }
+                @page { size: auto; margin: 10mm; }
+            </style>
+        </head>
+        <body>
+            <h2>Attendance Report</h2>
+    `);
+    printWindow.document.write(tableClone.outerHTML);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Trigger print after content loads
+    printWindow.onload = function() {
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    };
+});
+</script>
+        
+            
+        </div>
+
+        <script>
+
+            document.getElementById('clearFilter').addEventListener('click', function() {
+                // Clear all filter inputs
+                document.getElementById('classFilter').value = '';
+                document.getElementById('dateFilter').value = '';
+                document.getElementById('statusFilter').value = '';
+                document.getElementById('searchInput').value = '';
+                document.getElementById('applyFilter').click();
+            }); 
+            document.addEventListener('DOMContentLoaded', function() {
+                // File Upload Handling
+                const fileInput = document.getElementById('fileInput');
+                const fileInfo = document.getElementById('fileInfo');
+                const fileError = document.getElementById('fileError');
+                const dropArea = document.getElementById('dropArea');
+
+                // File Handling Functions
+                function handleFileSelect(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        processFile(file);
+                    }
+                }
+
+                function handleDragOver(e) {
+                    e.preventDefault();
+                    dropArea.classList.add('active');
+                }
+
+                function handleDragLeave() {
+                    dropArea.classList.remove('active');
+                }
+
+                function handleDrop(e) {
+                    e.preventDefault();
+                    dropArea.classList.remove('active');
+                    const file = e.dataTransfer.files[0];
+                    if (file) {
+                        fileInput.files = e.dataTransfer.files;
+                        processFile(file);
+                    }
+                }
+
+                function processFile(file) {
+                    if (!file.name.endsWith('.xlsx')) {
+                        fileError.style.display = 'block';
+                        fileInfo.textContent = 'No file selected';
+                        return;
+                    }
+                    
+                    fileError.style.display = 'none';
+                    fileInfo.textContent = file.name;
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    fetch('/upload-data/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.getElementById('csrf').value
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        fileInfo.textContent = `${file.name} has been submitted successfully`;
+                        document.getElementById('apistatus').textContent = 'File Submission Successful';
+                        document.getElementById('apistatus').style.color = 'green';
+                        
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        fileError.style.display = 'block';
+                        fileError.textContent = 'Upload failed: ' + error.message;
+                    });
+                }
+
+                fileInput.addEventListener('change', handleFileSelect);
+                dropArea.addEventListener('dragover', handleDragOver);
+                dropArea.addEventListener('dragleave', handleDragLeave);
+                dropArea.addEventListener('drop', handleDrop);
+
+                // Filter Handling
+                document.getElementById('applyFilter').addEventListener('click', function() {
+                    const formData = new FormData();
+                    table=document.getElementById('attendanceTablebody')
+                    const classFilter = document.getElementById('classFilter').value;
+                    const dateFilter = document.getElementById('dateFilter').value;
+                    const statusFilter = document.getElementById('statusFilter').value;
+                    const searchInput = document.getElementById('searchInput').value;
+                    
+                    
+                    if (classFilter) formData.append('class', classFilter);
+                    if (dateFilter) formData.append('date', dateFilter);
+                    if (statusFilter) formData.append('status', statusFilter);
+                    if (searchInput) formData.append('name', searchInput);
+
+                    fetch('/get_filter/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.getElementById('csrf').value
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        return response.json();
+                        
+                    })
+                    .then(data => {
+                        if(data){
+                            console.log(data)
+                            student_data = data.status; 
+                            const table = document.querySelector('#attendanceTable tbody');
+                            table.innerHTML = '';
+                            if (student_data && student_data.length > 0) {
+                                for (let i = 0; i < student_data.length; i++) {
+                                    const create = document.createElement('tr');
+                                    create.innerHTML = `  
+                                        <td>${student_data[i].student_id}</td>
+                                        <td>${student_data[i].Name}</td>
+                                        <td>${student_data[i].Class}</td>
+                                        <td>${student_data[i].Date}</td>
+                                        <td class="${student_data[i].Status.toLowerCase()}">${student_data[i].Status}</td>
+                                    `;
+                                    table.appendChild(create);
+                                }
+                            } else {
+                                table.innerHTML = '<tr><td colspan="5" style="text-align:center;">No matching records found</td></tr>';
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Filter error:', error);
+                        alert('Failed to apply filters. Please try again.');
+                    })
+                });
+            });  
+ 
+            
+           
+            
+        </script>
+    </body>
+    </html>

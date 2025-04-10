@@ -1,6 +1,6 @@
 
 .services-container {
-    max-width: 1300px;
+    max-width: 1400px;
 margin: 0 auto;
 padding: 20px;
 }
@@ -35,12 +35,16 @@ padding: 20px;
 }
 
 .service-icon {
+    display: flex;
+    justify-content: center;
     font-size: 40px;
     color: #6366F1;
     margin-bottom: 15px;
 }
 
 .service-title {
+    display: flex;
+    justify-content: center;
     font-size: 18px;
     font-weight: 600;
     color: #333;
@@ -168,7 +172,6 @@ transform: translateY(-3px);
 .container {
     max-width: 1356px;
     width: 95%;
-    margin-left: 91px;
 }
 .slider-wrapper {
 position: relative;

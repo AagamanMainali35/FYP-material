@@ -708,11 +708,6 @@ function showTimeUpModal() {
 document.getElementById('goBackBtn').addEventListener('click', function() {
     // Submit the form
     document.getElementById('examForm').submit();
-    
-    // In case form submission takes time, also redirect after a short delay
-    setTimeout(() => {
-        window.location.href = "/";
-    }, 1000);
 });
         const timerInterval = setInterval(updateTimer, 1000);
         
@@ -830,8 +825,7 @@ document.getElementById('goBackBtn').addEventListener('click', function() {
                 markBtn.click();
             }
         });
-        
-        // Initialize
+
         initializeNotes();
         showQuestion(0);
         updateTimer();

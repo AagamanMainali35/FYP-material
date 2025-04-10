@@ -1,51 +1,679 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Notifications</title>
 </head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    :root {
+        --body-color: #F5F5F5;
+        --sidebar-color: #FFF;
+        --primary-color: #695CFE;
+        --primary-color-light: #F6F5FF;
+        --toggle-color: #DDD;
+        --text-color: #707070;
+        --tran-05: all 0.3s ease;
+        
+        /* Notification type colors */
+        --fees-color: #FF6B6B;
+        --holiday-color: #48DBFB;
+        --profile-color: #1DD1A1;
+        --general-color: #FFC048;
+    }
+
+    body {
+        background-color: var(--body-color);
+    }
+
+    .bodyContainer {
+        min-height: 100vh;
+        display: flex;
+        background-color: var(--body-color);
+    }
+
+    .notification-container {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+        max-width: 100rem;
+        padding: 30px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .page-header p {
+        color: var(--text-color);
+        font-size: 16px;
+    }
+
+    /* Filter controls */
+    .notification-filter {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .filter-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .filter-btn:hover:not(.active) {
+        background-color: #f0f0f0;
+    }
+
+    .filter-badge {
+        background-color: rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .filter-btn.active .filter-badge {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Notification list */
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Notification item */
+    .notification-item {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        display: flex;
+        gap: 20px;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    .notification-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+
+    .notification-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .notification-icon i {
+        font-size: 24px;
+        color: white;
+    }
+
+    .notification-content {
+        flex-grow: 1;
+    }
+
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .notification-title {
+        font-size: 17px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .notification-time {
+        font-size: 14px;
+        color: #888;
+    }
+
+    .notification-message {
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .notification-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn-primary {
+        background-color: var(--primary-color-light);
+        color: var(--primary-color);
+    }
+
+    .action-btn-primary:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .action-btn-secondary {
+        background-color: #f0f0f0;
+        color: #666;
+    }
+
+    .action-btn-secondary:hover {
+        background-color: #e0e0e0;
+    }
+
+    .notification-status {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+    }
+
+    /* Notification types styling */
+    .notification-fees .notification-icon {
+        background-color: var(--fees-color);
+    }
+
+    .notification-holiday .notification-icon {
+        background-color: var(--holiday-color);
+    }
+
+    .notification-profile .notification-icon {
+        background-color: var(--profile-color);
+    }
+
+    .notification-general .notification-icon {
+        background-color: var(--general-color);
+    }
+
+    /* Notification status indicators */
+    .notification-item.unread {
+        border-left: 3px solid var(--primary-color);
+    }
+
+    .notification-item.read {
+        opacity: 0.8;
+    }
+
+    .notification-item.read .notification-status {
+        display: none;
+    }
+
+    /* Date divider */
+    .date-divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0 15px;
+        color: var(--text-color);
+    }
+
+    .date-divider-text {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 15px;
+    }
+
+    .date-divider::before,
+    .date-divider::after {
+        content: "";
+        flex-grow: 1;
+        height: 1px;
+        background-color: #e0e0e0;
+    }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .empty-state-icon {
+        font-size: 60px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .empty-state-title {
+        font-size: 20px;
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .empty-state-description {
+        color: #888;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    /* "Mark all as read" button */
+    .mark-all-btn {
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        font-weight: 500;
+        cursor: pointer;
+        padding: 5px 0;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .mark-all-btn:hover {
+        text-decoration: underline;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .page-item {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .page-item:hover:not(.active) {
+        background-color: #f0f0f0;
+    }
+
+    .page-item.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 992px) {
+        .notification-container {
+            margin-left: 0;
+            width: 100%;
+            padding: 20px 15px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .notification-item {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .notification-status {
+            top: 15px;
+            right: 15px;
+        }
+
+        .notification-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+        }
+    }
+</style>
+
 <body>
-    <h1>User Profile</h1>
-    <p><strong>Username:</strong> {{ user_name }}</p>
-    <h2>Fees Details</h2>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <p><strong>Total Fee Amount:</strong> {{ fees }}</p>
-        <input type="text" name="feeAmount" id="amnt">
-        <button type="submit" id="paybtn">Pay Fee</button>
-    </form>
+    <div class="bodyContainer">
+        {%include 'sidebar.html'%}
+
+        <div class="notification-container">
+            <div class="page-header">
+                <h1>Notifications</h1>
+                <p>Stay updated with your latest activities and announcements</p>
+            </div>
+
+            <div class="header-actions">
+                <div class="notification-filter">
+                    <button class="filter-btn active">All <span class="filter-badge">12</span></button>
+                    <button class="filter-btn">Fees <span class="filter-badge">3</span></button>
+                    <button class="filter-btn">Holiday <span class="filter-badge">2</span></button>
+                    <button class="filter-btn">Profile <span class="filter-badge">4</span></button>
+                    <button class="filter-btn">General <span class="filter-badge">3</span></button>
+                </div>
+                
+                <button class="mark-all-btn">
+                    <i class="fas fa-check-double"></i> Mark all as read
+                </button>
+            </div>
+
+            <div class="notification-list">
+                <div class="date-divider">
+                    <span class="date-divider-text">Today</span>
+                </div>
+
+                <!-- Fees Notification -->
+                <div class="notification-item notification-fees unread">
+                    <div class="notification-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Fee Payment Reminder</h3>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <p class="notification-message">Your quarterly tuition fee of $1,200 is due on April 15, 2025. Please make the payment before the due date to avoid late payment charges.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">Pay Now</button>
+                            <button class="action-btn action-btn-secondary">View Details</button>
+                        </div>
+                    </div>
+                    <div class="notification-status"></div>
+                </div>
+
+                <!-- Profile Notification -->
+                <div class="notification-item notification-profile unread">
+                    <div class="notification-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Profile Update Required</h3>
+                            <span class="notification-time">3 hours ago</span>
+                        </div>
+                        <p class="notification-message">Please update your emergency contact information in your profile. It's important to keep this information current for safety purposes.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">Update Now</button>
+                            <button class="action-btn action-btn-secondary">Remind Later</button>
+                        </div>
+                    </div>
+                    <div class="notification-status"></div>
+                </div>
+
+                <!-- General Notification -->
+                <div class="notification-item notification-general">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">New Learning Resources Available</h3>
+                            <span class="notification-time">5 hours ago</span>
+                        </div>
+                        <p class="notification-message">New study materials have been uploaded to the learning portal for Science and Mathematics subjects. Check them out to enhance your learning experience.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">View Resources</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="date-divider">
+                    <span class="date-divider-text">Yesterday</span>
+                </div>
+
+                <!-- Holiday Notification -->
+                <div class="notification-item notification-holiday">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Upcoming Holiday Notice</h3>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <p class="notification-message">The institution will remain closed on April 15, 2025, for Spring Festival celebrations. Classes will resume on April 16, 2025.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">Add to Calendar</button>
+                            <button class="action-btn action-btn-secondary">View Academic Calendar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fees Notification -->
+                <div class="notification-item notification-fees">
+                    <div class="notification-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Scholarship Opportunity</h3>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <p class="notification-message">You qualify for the Merit Scholarship Program that covers 50% of your tuition fees. Application deadline is April 30, 2025. Don't miss this opportunity!</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">Apply Now</button>
+                            <button class="action-btn action-btn-secondary">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="date-divider">
+                    <span class="date-divider-text">Earlier This Week</span>
+                </div>
+
+                <!-- Profile Notification -->
+                <div class="notification-item notification-profile">
+                    <div class="notification-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Password Changed Successfully</h3>
+                            <span class="notification-time">2 days ago</span>
+                        </div>
+                        <p class="notification-message">Your account password was changed successfully. If you did not make this change, please contact the administrator immediately.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">Contact Support</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Notification -->
+                <div class="notification-item notification-general">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Campus Wi-Fi Maintenance</h3>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                        <p class="notification-message">The campus Wi-Fi network will undergo maintenance on April 10, 2025, from 10:00 PM to 2:00 AM. Internet services may be unavailable during this time.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-secondary">Acknowledge</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Holiday Notification -->
+                <div class="notification-item notification-holiday">
+                    <div class="notification-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3 class="notification-title">Summer Break Schedule</h3>
+                            <span class="notification-time">4 days ago</span>
+                        </div>
+                        <p class="notification-message">The summer break will commence on June 15, 2025, and classes will resume on August 20, 2025. Plan your vacations accordingly.</p>
+                        <div class="notification-actions">
+                            <button class="action-btn action-btn-primary">View Schedule</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="page-item">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="page-item active">1</div>
+                <div class="page-item">2</div>
+                <div class="page-item">3</div>
+                <div class="page-item">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- Empty state (hidden by default, show when no notifications) -->
+            <div class="empty-state" style="display: none;">
+                <div class="empty-state-icon">
+                    <i class="fas fa-bell-slash"></i>
+                </div>
+                <h3 class="empty-state-title">No notifications yet</h3>
+                <p class="empty-state-description">When you receive notifications, they will appear here. Check back later!</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const btn = document.getElementById('paybtn');
-        const amount = document.getElementById('amnt');
-        csrfToken=`{{csrf_token}}`
+        // Toggle sidebar (assuming sidebar has this functionality)
+        const body = document.querySelector('body'),
+              sidebar = body.querySelector('nav'),
+              toggle = body.querySelector(".toggle");
 
-        btn.onclick = (e) => {
-            e.preventDefault(); // Prevents the default form submission behavior
-
-            const payload = {
-                "feeAmount": amount.value // Get the value of the input field
-            };
-            fetch('/pay/', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken // Add CSRF token to the headers
-
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response here
-                console.log('Response:', data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error('Error:', error);
+        // Filter buttons functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Filter logic would go here
+                const filterType = button.textContent.split(' ')[0].toLowerCase();
+                console.log(`Filtering by: ${filterType}`);
+                
+                // Example of how you might implement filtering
+                // This would be connected to your backend with Jinja
+                if (filterType === 'all') {
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        item.style.display = 'flex';
+                    });
+                } else {
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        if (item.classList.contains(`notification-${filterType}`)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
             });
-        };
+        });
+
+        // Mark all as read functionality
+        const markAllBtn = document.querySelector('.mark-all-btn');
+        
+        markAllBtn.addEventListener('click', () => {
+            document.querySelectorAll('.notification-item.unread').forEach(item => {
+                item.classList.remove('unread');
+                item.classList.add('read');
+            });
+        });
+
+        // Individual notification interaction
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                // Don't trigger if clicked on a button
+                if (!event.target.closest('.action-btn')) {
+                    // Mark as read
+                    item.classList.remove('unread');
+                    item.classList.add('read');
+                }
+            });
+        });
+
+        // Pagination functionality
+        const pageItems = document.querySelectorAll('.page-item');
+        
+        pageItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (!item.classList.contains('active') && !item.querySelector('i')) {
+                    // Remove active class from all pages
+                    pageItems.forEach(page => page.classList.remove('active'));
+                    
+                    // Add active class to clicked page
+                    item.classList.add('active');
+                    
+                    // Page navigation logic would go here
+                    console.log(`Navigated to page: ${item.textContent}`);
+                }
+            });
+        });
     </script>
 </body>
 </html>

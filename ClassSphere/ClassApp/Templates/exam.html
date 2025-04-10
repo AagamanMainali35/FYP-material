@@ -1,378 +1,886 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Examinations Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% extends 'base.html'%}
+{% block title%}Examination|Page{% endblock%}
+{% block content%}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* === Core Styles === */
+        :root {
+            --primary: #4263eb;
+            --primary-light: #ffffff;
+            --secondary: #00b8d9;
+            --dark: #243256;
+            --light: #ffffff;
+            --success: #00c853;
+            --warning: #ffab00;
+            --danger: #ff5252;
+            --gray: #6e7a8a;
+            --light-gray: #edf2f7;
+            --border-radius: 12px;
+            --box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+            --transition: all 0.3s ease-in-out;
+        }
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
+            font-family: 'Poppins', sans-serif;
             line-height: 1.6;
+            color: var(--dark);
+            background-color: #f3f4f8;
         }
 
-        /* === Navigation Bar (Matches Your Site) === */
-        nav {
-            background-color: #2c3e50;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        /* Layout Structure */
+        .app-container {
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
+
+        /* Main Content */
+        .main-content {
+            grid-column: 2;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+     
+
+        .toggle-menu {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-right: 1.5rem;
+            display: none;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification {
+            position: relative;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 1.25rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .icon-upcoming {
+            background-color: rgba(66, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .icon-complete {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success);
+        }
+
+        .icon-score {
+            background-color: rgba(0, 184, 217, 0.1);
+            color: var(--secondary);
+        }
+
+        .icon-performance {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-up {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Exam Cards Slider */
+        .exams-slider-container {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .exams-grid {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            padding-bottom: 10px; /* Space for scrollbar */
+            gap: 1.5rem;
+        }
+
+        .exams-grid::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .exam-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            flex: 0 0 auto;
+            width: 350px; /* Fixed width for each card */
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .exam-banner {
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .exam-content {
+            padding: 1.5rem;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .exam-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .exam-status {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-upcoming {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: var(--warning);
+        }
+
+        .status-active {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success);
+        }
+
+        .exam-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .exam-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        /* Slider Navigation */
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            color: var(--primary);
+            border: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 0.5rem;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a56ca;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Table Section */
+        .table-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #3498db;
-        }
-
-        /* === Main Content Container === */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* === Hero Section === */
-        .main-section {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            margin: 3rem 0;
-        }
-
-        .content-left,
-        .content-right {
-            flex: 1;
-        }
-
-        .section-label {
-            color: #3498db;
+        .table-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
         }
 
-        .section-title {
-            font-size: 2.8rem;
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
-
-        .section-description {
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        .content-right img {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* === Buttons === */
-        .button-group {
+        .table-actions {
             display: flex;
             gap: 1rem;
+            align-items: center;
         }
 
-        .start-button,
-        .tour-button {
-            padding: 0.8rem 1.8rem;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .search-bar {
+            position: relative;
         }
 
-        .start-button {
-            background-color: #3498db;
-            color: white;
+        .search-input {
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+            background-color: var(--light);
+            font-size: 0.95rem;
+            width: 250px;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .tour-button {
-            background-color: #f1f1f1;
-            color: #333;
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
-        .start-button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
         }
 
-        .tour-button:hover {
-            background-color: #ddd;
+        .table-container {
+            overflow-x: auto;
         }
 
-        /* === Examination Table === */
-        .exam-table-container {
-            margin: 3rem 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-header p {
-            color: #666;
-        }
-
-        table {
+        .exam-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 2rem 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
-        th,
-        td {
-            padding: 1rem;
+        .exam-table th {
+            background-color: var(--primary-light);
+            padding: 1rem 1.5rem;
             text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
             font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .exam-status {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-weight: 500;
+            color: var(--primary);
             font-size: 0.9rem;
         }
 
-        .upcoming {
-            background-color: #f39c12;
-            color: white;
+        .exam-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 0.95rem;
         }
 
-        .ongoing {
-            background-color: #2ecc71;
-            color: white;
+        .exam-table tr:last-child td {
+            border-bottom: none;
         }
 
-        /* === Resources Section === */
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
+        .exam-table tr:hover {
+            background-color: var(--light);
         }
 
-        .resource-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+        .exam-name {
+            font-weight: 600;
         }
 
-        .resource-card:hover {
-            transform: translateY(-5px);
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
         }
 
-        .resource-icon {
-            font-size: 2rem;
-            color: #3498db;
-            margin-bottom: 1rem;
-        }
-
-        .resource-title {
-            font-size: 1.3rem;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        /* === Footer === */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 2rem;
-            text-align: center;
+        /* Footer */
+        .footer {
             margin-top: 3rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--light-gray);
+            text-align: center;
         }
-        
+
+        .footer-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Alert / Message Box */
+        .alert {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid;
+            box-shadow: var(--box-shadow);
+        }
+
+        .alert-success {
+            border-color: var(--success);
+        }
+
+        .alert-success .alert-icon {
+            color: var(--success);
+        }
+
+        .alert-error {
+            border-color: var(--danger);
+        }
+
+        .alert-error .alert-icon {
+            color: var(--danger);
+        }
+
+        .alert-icon {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-close {
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .app-container {
+                grid-template-columns: 0 1fr;
+            }
+
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+
+            .sidebar.active {
+                width: 280px;
+            }
+
+            .main-content {
+                grid-column: 1 / span 2;
+            }
+
+            .toggle-menu {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .exam-card {
+                width: 280px; /* Smaller card width on mobile */
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .table-actions, .search-bar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content-area {
+                padding: 1.5rem 1rem;
+            }
+
+            .header {
+                padding: 0 1rem;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 1.1rem;
+            }
+        }
     </style>
-</head>
-
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="nav-container">
-            <a href="#" class="logo">Wisdom is Divine</a>
-            <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Academics</a>
-                <a href="#" class="active">Examinations</a>
-                <a href="#">Resources</a>
-                <a href="#">Contact</a>
-            </div>
-        </div>
-    </nav>
+    <div class="app-container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
 
-    <div class="content">
-        <!-- Hero Section -->
-        <section class="main-section">
-            <div class="content-left">
-                <p class="section-label">Academic Excellence</p>
-                <h1 class="section-title">Examinations Portal</h1>
-                <p class="section-description">
-                    Access exam schedules, results, and resources in one place. Stay organized and prepared for your
-                    academic assessments.
-                </p>
-                <div class="button-group">
-                    <button class="start-button">View Schedule</button>
-                    <button class="tour-button">Check Results</button>
-                </div>
-            </div>
-            <div class="content-right">
-                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-                    alt="Students taking exams">
-            </div>
-        </section>
-
-        <!-- Upcoming Examinations Table -->
-        <div class="exam-table-container">
-            <div class="section-header">
-                <h2>Upcoming Examinations</h2>
+            <!-- Content Area -->
+            <div class="content-area">
                 {% if messages %}
-                <div id="message-box">
-                    {% for message in messages %}
-                    <p class="{{ message.tags }}" style="color: Red; font-size: 24px;">{{ message }}</p>
-
-                    {% endfor %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}error{% endif %}">
+                    <div class="alert-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        {% for message in messages %}
+                        <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="alert-close">
+                        <i class="fas fa-times"></i>
+                    </div>
                 </div>
-                {% else %}
-                <p id="default-text">All dates and times are subject to change. Check regularly for updates.</p>
                 {% endif %}
+                <section class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon icon-upcoming">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <span class="stat-badge badge-up">+2 new</span>
+                        </div>
+                        <div class="stat-value">{{ upcoming_exam|length }}</div>
+                        <div class="stat-label">Upcoming Exams</div>
+                    </div>
 
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon icon-complete">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{Attempts}}</div>
+                        <div class="stat-label">Completed Exams</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon icon-score">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{avg_score}}</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon icon-performance">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">{{higest_score}}%</div>
+                        <div class="stat-label">Highest Score</div>
+                    </div>
+                </section>
+
+                <!-- Upcoming Exams as Slider -->
+                <section>
+                    <div class="section-header">
+                        <h2 class="section-title">Available Exams</h2>
+                        <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+
+                    <div class="exams-slider-container">
+                        <div class="slider-controls">
+                            <button class="nav-btn prev-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="nav-btn next-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="exams-grid">
+                            {% for exam in exam %}
+                            <div class="exam-card">
+                                <div class="exam-banner"></div>
+                                <div class="exam-content">
+                                    <div class="exam-header">
+                                        <h3 class="exam-title">{{ exam.Exam_Name }}</h3>
+                                        <span class="exam-status status-upcoming">Upcoming</span>
+                                    </div>
+
+                                    <div class="exam-info">
+                                        <div class="info-item">
+                                            <span class="info-label">Date</span>
+                                            <span class="info-value">{{ exam.Exam_Date }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Duration</span>
+                                            <span class="info-value">90 mins</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Total Marks</span>
+                                            <span class="info-value">{{ exam.Total_Marks }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Created By</span>
+                                            <span class="info-value">{{ exam.Created_by }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="exam-footer">
+                                        <a href="{% url 'exam' exam.id %}" class="btn btn-primary">
+                                            <i class="fas fa-pen"></i> Take Exam
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Exam Schedule Table -->
+                <section>
+                    <div class="table-section">
+                        <div class="table-header">
+                            <h2 class="table-title">Detailed Exam Schedule</h2>
+                            <div class="table-actions">
+                                <div class="search-bar">
+                                    <input type="text" class="search-input" placeholder="Search exams...">
+                                    <i class="fas fa-search search-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="exam-table">
+                                <thead>
+                                    <tr>
+                                        <th>Exam Name</th>
+                                        <th>Date</th>
+                                        <th>Duration</th>
+                                        <th>Total Marks</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for exam in upcoming_exam %}
+                                    <tr>
+                                        <td class="exam-name">{{ exam.Exam_Name }}</td>
+                                        <td>{{ exam.Exam_Date }}</td>
+                                        <td>90 mins</td>
+                                        <td>{{ exam.Total_Marks }}</td>
+                                        <td><span class="exam-status status-upcoming">Upcoming</span></td>
+                                        <td>
+                                            <a href="{% url 'exam' exam.id %}" class="btn btn-primary action-btn">Start</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Exam Name</th>
-                        <th>Date</th>
-                        <th>Created_by</th>
-                        <th>Total_Marks</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {%for exam in exam %}
-                    <tr>
-                        <td>{{exam.Exam_Name}}</td>
-                        <td>{{exam.Exam_Date}}</td>
-                        <td>{{exam.Created_by}}</td>
-                        <td>{{exam.Total_Marks}}</td>
-                        <td>
-                            <a href="{% url 'exam' exam.id %}" class="exam-status upcoming"
-                                style="border: none; background-color: #f39c12; text-decoration:none;">
-                                Take Exam
-                            </a>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Resources Section -->
-        <div class="section-header">
-            <h2>Exam Resources</h2>
-            <p>Download study materials to help with your preparation</p>
-        </div>
-
-        <div class="resources-grid">
-            <div class="resource-card">
-                <div class="resource-icon"><i class="fas fa-file-pdf"></i></div>
-                <h3 class="resource-title">Past Papers (2020-2022)</h3>
-                <p>Complete collection of previous examination papers with model answers.</p>
-            </div>
-            <div class="resource-card">
-                <div class="resource-icon"><i class="fas fa-book-open"></i></div>
-                <h3 class="resource-title">Study Guides</h3>
-                <p>Subject-specific revision materials curated by our faculty members.</p>
-            </div>
-            <div class="resource-card">
-                <div class="resource-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                <h3 class="resource-title">Revision Tutorials</h3>
-                <p>Video lessons covering key examination topics and problem-solving techniques.</p>
-            </div>
-        </div>
+       
+        </main>
     </div>
+    {% include 'Footer.html'%}
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2023 Wisdom is Divine School. All rights reserved.</p>
-        <p>Contact: examinations@wisdomdivine.edu | Phone: (123) 456-7890</p>
-    </footer>
-</body>
-<script>
-    // Wait for the page to load
-    document.addEventListener("DOMContentLoaded", function () {
-        var messageBox = document.getElementById("message-box");
-        var defaultText = document.getElementById("default-text");
-
-        if (messageBox) {
-            setTimeout(function () {
-                messageBox.style.display = "none";
-                if (defaultText) {
-                    defaultText.style.display = "block";
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Toggle sidebar
+            const toggleBtn = document.querySelector('.toggle-menu');
+            const sidebar = document.querySelector('.sidebar');
+            const appContainer = document.querySelector('.app-container');
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            // Close alert messages
+            const alertClose = document.querySelector('.alert-close');
+            const alert = document.querySelector('.alert');
+            
+            if (alertClose && alert) {
+                alertClose.addEventListener('click', function() {
+                    alert.style.display = 'none';
+                });
+                
+                // Auto-hide messages after 5 seconds
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            }
+            
+            // Exam cards slider functionality
+            const slider = document.querySelector('.exams-grid');
+            const nextBtn = document.querySelector('.next-btn');
+            const prevBtn = document.querySelector('.prev-btn');
+            const cardWidth = 350 + 24; // card width + gap
+            
+            if (slider && nextBtn && prevBtn) {
+                nextBtn.addEventListener('click', () => {
+                    slider.scrollBy({ left: cardWidth * 2, behavior: 'smooth' });
+                });
+                
+                prevBtn.addEventListener('click', () => {
+                    slider.scrollBy({ left: -cardWidth * 2, behavior: 'smooth' });
+                });
+                
+                // Hide navigation buttons if not needed
+                function checkSliderButtons() {
+                    if (slider.scrollWidth <= slider.clientWidth) {
+                        nextBtn.style.display = 'none';
+                        prevBtn.style.display = 'none';
+                    } else {
+                        nextBtn.style.display = 'flex';
+                        prevBtn.style.display = 'flex';
+                    }
                 }
-            }, 3000);
-        }
-    });
-</script>
-
-</html>
+                
+                // Check on load and resize
+                checkSliderButtons();
+                window.addEventListener('resize', checkSliderButtons);
+                
+                // Update button states while scrolling
+                slider.addEventListener('scroll', () => {
+                    if (slider.scrollLeft <= 10) {
+                        prevBtn.style.opacity = '0.5';
+                    } else {
+                        prevBtn.style.opacity = '1';
+                    }
+                    
+                    if (Math.ceil(slider.scrollLeft + slider.clientWidth) >= slider.scrollWidth - 10) {
+                        nextBtn.style.opacity = '0.5';
+                    } else {
+                        nextBtn.style.opacity = '1';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+{% endblock%}

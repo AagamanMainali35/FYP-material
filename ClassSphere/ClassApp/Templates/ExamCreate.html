@@ -1,0 +1,758 @@
+{% include 'sidebar.html'%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3f37c9;
+            --success: #4CAF50;
+            --success-light: #81c784;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --text-dark: #333;
+            --text-light: #666;
+            --text-muted: #888;
+            --background: #f8f9fa;
+            --card-bg: #fff;
+            --border: #e0e0e0;
+            --border-light: #f0f0f0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+            --font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            overflow-x: hidden;
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            margin: -3rem 0rem 0rem 17rem;
+            width: 77rem;
+            height: max-content;
+        }
+
+        h2 {
+            color: var(--primary-dark);
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            color: var(--text-dark);
+            font-size: 22px;
+            font-weight: 600;
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        h3::before {
+            content: '\f5cb';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"], 
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            color: var(--text-dark);
+            background-color: var(--card-bg);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        input[type="text"]:focus, 
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        input[type="text"]::placeholder, 
+        input[type="number"]::placeholder,
+        select::placeholder {
+            color: var(--text-muted);
+        }
+
+        .question-block {
+            background-color: var(--background);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .question-block:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .question-number {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .options {
+            margin-top: 20px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: white;
+            border-radius: var(--radius-md);
+            padding: 6px;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .option-row:hover {
+            box-shadow: var(--shadow-sm);
+            border-color: var(--border);
+        }
+
+        .option-row input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .option-row input[type="text"] {
+            flex: 1;
+            border: none;
+            box-shadow: none;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            background-color: transparent;
+        }
+
+        .option-row input[type="text"]:focus {
+            box-shadow: none;
+        }
+
+        .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            color: white;
+            font-weight: bold;
+            margin-left: 6px;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .note {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            display: block;
+        }
+
+        .remove-question {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 18px;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .remove-question:hover {
+            opacity: 1;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .marks-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .marks-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .marks-wrapper i {
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        /* Additional animations and enhancements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-block {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Success notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Console output styling */
+        #console-output {
+            background-color: #2b2b2b;
+            color: #e0e0e0;
+            font-family: monospace;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-top: 40px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            transition: var(--transition);
+        }
+
+        .console-title {
+            margin-bottom: 10px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .shell-prompt {
+            color: #56b6c2;
+            user-select: none;
+        }
+
+        .console-property {
+            color: #e5c07b;
+        }
+
+        .console-value {
+            color: #98c379;
+        }
+
+        .console-separator {
+            color: #abb2bf;
+        }
+
+        .console-command {
+            color: #61afef;
+        }
+        
+        .json-key-1 {
+            color: #c678dd;
+        }
+        
+        .json-key-2 {
+            color: #e06c75;
+        }
+        
+        .json-number {
+            color: #d19a66;
+        }
+        
+        .json-boolean {
+            color: #56b6c2;
+        }
+    </style>
+<body>
+   
+    <div class="container">
+        <h2>Create New Examination</h2>
+        <form method="POST" id="examForm">
+            <div class="form-row">
+                <input id="csrf" value="{{csrf_token}}" hidden>
+                <div class="form-group">    
+                    <label for="exam_name">Exam Name</label>
+                    <input type="text" id="exam_name" name="exam_name" placeholder="Enter exam title" required>
+                </div>
+                <div class="form-group">
+                    <label for="total_marks">Total Marks</label>
+                    <input type="text" id="total_marks" name="total_marks" placeholder="e.g. 100" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="exam_date">Exam Date</label>
+                    <input type="date" id="exam_date" name="exam_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="exam_grade">Grade Level</label>
+                    <select id="exam_grade" name="exam_grade" required>
+                        <option value="" disabled selected>Select grade level</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                    </select>
+                    <span class="note">Choose the appropriate grade level for this exam</span>
+                </div>
+            </div>
+            <h3>Questions</h3>
+            <div id="questionsContainer">
+                <div class="question-block">
+                    <div class="question-number">Question 1</div>
+                    <button type="button" class="remove-question" onclick="removeQuestion(this)" style="display:none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <div class="question-header">
+                        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                            <label for="question_1">Question Text</label>
+                            <input type="text" id="question_1" name="question_1" class="QuestionText" placeholder="Enter question text" required>
+                        </div>
+                        <div style="margin-left: 15px; min-width: 100px;">
+                            <label for="marks_1">Marks</label>
+                            <div class="marks-wrapper">
+                                <i class="fas fa-star"></i>
+                                <input type="number" id="marks_1" name="marks_1" class="marks-input" min="1" value="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="options">
+                        <div class="option-row">
+                            <div class="option-letter">A</div>
+                            <input type="radio" name="correct_1" value="A" required checked>
+                            <input type="text" name="option_1_A" placeholder="Option A" required>
+                        </div>
+                        <div class="option-row">
+                            <div class="option-letter">B</div>
+                            <input type="radio" name="correct_1" value="B">
+                            <input type="text" name="option_1_B" placeholder="Option B" required>
+                        </div>
+                        <div class="option-row">
+                            <div class="option-letter">C</div>
+                            <input type="radio" name="correct_1" value="C">
+                            <input type="text" name="option_1_C" placeholder="Option C" required>
+                        </div>
+                        <div class="option-row">
+                            <div class="option-letter">D</div>
+                            <input type="radio" name="correct_1" value="D">
+                            <input type="text" name="option_1_D" placeholder="Option D" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <button type="button" class="btn btn-primary" onclick="addQuestion()">
+                    <i class="fas fa-plus-circle"></i> Add Question
+                </button>
+                <button type="button" id="submitbtn" class="btn btn-success">
+                    <i class="fas fa-save"></i> Submit Exam
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fa fa-check-circle" aria-hidden="true"></i>
+        <span>Exam saved successfully!</span>
+    </div>
+
+    <script>
+        let questionCount = 1;
+
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questionsContainer');
+            const questionBlock = document.createElement('div');
+            questionBlock.className = 'question-block';
+            questionBlock.innerHTML = `
+                <div class="question-number">Question ${questionCount}</div>
+                <button type="button" class="remove-question" onclick="removeQuestion(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="question-header">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label for="question_${questionCount}">Question Text</label>
+                        <input type="text" id="question_${questionCount}" class='QuestionText' name="question_${questionCount}" placeholder="Enter question text" required>
+                    </div>
+                    <div style="margin-left: 15px; min-width: 100px;">
+                        <label for="marks_${questionCount}">Marks</label>
+                        <div class="marks-wrapper">
+                            <i class="fas fa-star"></i>
+                            <input type="number" id="marks_${questionCount}" name="marks_${questionCount}" class="marks-input" min="1" value="1" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="options">
+                    <div class="option-row">
+                        <div class="option-letter">A</div>
+                        <input type="radio" name="correct_${questionCount}" value="A" required checked>
+                        <input type="text" name="option_${questionCount}_A" placeholder="Option A" required>
+                    </div>
+                    <div class="option-row">
+                        <div class="option-letter">B</div>
+                        <input type="radio" name="correct_${questionCount}" value="B">
+                        <input type="text" name="option_${questionCount}_B" placeholder="Option B" required>
+                    </div>
+                    <div class="option-row">
+                        <div class="option-letter">C</div>
+                        <input type="radio" name="correct_${questionCount}" value="C">
+                        <input type="text" name="option_${questionCount}_C" placeholder="Option C" required>
+                    </div>
+                    <div class="option-row">
+                        <div class="option-letter">D</div>
+                        <input type="radio" name="correct_${questionCount}" value="D">
+                        <input type="text" name="option_${questionCount}_D" placeholder="Option D" required>
+                    </div>
+                </div>
+            `;
+            container.appendChild(questionBlock);
+            
+            // Add subtle animation when adding new question
+            setTimeout(() => {
+                questionBlock.style.transition = 'all 0.3s ease';
+                questionBlock.style.transform = 'none';
+            }, 10);
+            
+            // Scroll to the new question
+            questionBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        function removeQuestion(button) {
+            if (questionCount > 1) {
+                const questionBlock = button.closest('.question-block');
+                questionBlock.style.opacity = '0';
+                questionBlock.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    questionBlock.remove();
+                    renumberQuestions();
+                }, 300);
+            }
+        }
+        
+        function renumberQuestions() {
+            const questions = document.querySelectorAll('.question-block');
+            questionCount = questions.length;
+            
+            questions.forEach((question, index) => {
+                const number = index + 1;
+                question.querySelector('.question-number').textContent = `Question ${number}`;
+                
+                // Update IDs and names for question text
+                const questionInput = question.querySelector('input[type="text"][id^="question_"]');
+                questionInput.id = `question_${number}`;
+                questionInput.name = `question_${number}`;
+                
+                // Update marks input
+                const marksInput = question.querySelector('input[type="number"][id^="marks_"]');
+                marksInput.id = `marks_${number}`;
+                marksInput.name = `marks_${number}`;
+                
+                // Update radio buttons and option inputs
+                const radioButtons = question.querySelectorAll('input[type="radio"]');
+                radioButtons.forEach(radio => {
+                    radio.name = `correct_${number}`;
+                });
+                
+                const optionInputs = question.querySelectorAll('input[type="text"][name^="option_"]');
+                optionInputs.forEach(input => {
+                    const parts = input.name.split('_');
+                    input.name = `option_${number}_${parts[2]}`;
+                });
+            });
+        }
+            
+        // Form submission with question marks and marks per question
+        document.getElementById('submitbtn').addEventListener('click', () => {
+            // Create the main exam data object
+            const examData = {
+                exam_name: document.getElementById('exam_name').value,
+                total_marks: document.getElementById('total_marks').value,
+                exam_date: document.getElementById('exam_date').value,
+                exam_grade: document.getElementById('exam_grade').value,
+                questions: []
+            };
+            
+            // Get all question blocks
+            const questionBlocks = document.querySelectorAll('.question-block');
+            
+            // Calculate total expected marks from individual questions
+            let totalQuestionMarks = 0;
+            
+            // Loop through each question block to collect data
+            for (let i = 0; i < questionBlocks.length; i++) {
+                const block = questionBlocks[i];
+                const questionNumber = i + 1;
+                
+                // Get question text
+                let questionText = block.querySelector(`#question_${questionNumber}`).value.trim();
+                
+                // Add question mark if it doesn't already end with one
+                if (!questionText.endsWith('?')) {
+                    questionText += '?';
+                }
+                
+                // Get marks for this question
+                const marks = parseInt(block.querySelector(`#marks_${questionNumber}`).value);
+                totalQuestionMarks += marks;
+                
+                // Get correct answer
+                const correctOption = block.querySelector(`input[name="correct_${questionNumber}"]:checked`).value;
+                
+                // Get all options
+                const options = {
+                    A: block.querySelector(`input[name="option_${questionNumber}_A"]`).value,
+                    B: block.querySelector(`input[name="option_${questionNumber}_B"]`).value,
+                    C: block.querySelector(`input[name="option_${questionNumber}_C"]`).value,
+                    D: block.querySelector(`input[name="option_${questionNumber}_D"]`).value
+                };
+                
+                // Add question data to questions array
+                examData.questions.push({
+                    question_number: questionNumber,
+                    question_text: questionText,
+                    options: options,
+                    correct_answer: options[correctOption],
+                    marks: marks
+                });
+            }
+            
+            // Check if total marks matches sum of individual question marks
+            const totalMarksInput = parseInt(document.getElementById('total_marks').value);
+            if (totalMarksInput !== totalQuestionMarks) {
+                const confirmSubmit = confirm(`Note: The total marks (${totalMarksInput}) does not match the sum of marks for all questions (${totalQuestionMarks}). Do you want to continue anyway?`);
+                if (!confirmSubmit) {
+                    return; // Stop submission if user cancels
+                }
+            }
+            
+            // Show success notification
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+            
+            try {
+                const csrfElement = document.getElementById('csrf');
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfElement.value
+                };
+
+                fetch('/handle/', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(examData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data sent successfully to backend');
+                    console.log(data);
+                });
+            } 
+            catch (error) {
+                console.error('Error in fetch operation:', error);
+            }
+        });
+    </script>
+    {% if user.profile and user.profile.role != 'Teacher' %}
+    <style>
+        .Create-Exam{
+            display: none;
+        }
+    </style>
+{% endif %}
+
+</body>
+a

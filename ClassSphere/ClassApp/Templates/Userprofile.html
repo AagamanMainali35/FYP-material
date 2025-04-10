@@ -27,158 +27,19 @@
         --text-color: #707070;
         --tran-05: all 0.3s ease;
     }
+    body{
+        overflow-y: hidden;
+    }
 
    .bodyContainer{
     min-height: 100vh;
-    transition: var(--tran-05);
+    transition: all 0.3s ease;
     background-color: #F5F5F5;
     display: flex;
     gap: 10px;
    }
 
-    ::selection {
-        background-color: var(--primary-color);
-        color: #fff;
-    }
-
-    .sidebar {
-        position: relative;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 250px;
-        padding: 10px 14px;
-        background: var(--sidebar-color);
-        transition: var(--tran-05);
-        z-index: 100;
-    }
-
-    .sidebar.close {
-        width: 88px;
-    }
-
-    .sidebar li {
-        height: 50px;
-        list-style: none;
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
-
-    .sidebar .icon {
-        min-width: 60px;
-        border-radius: 6px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        color: var(--text-color);
-        transition: var(--tran-05);
-    }
-
-    .sidebar .text {
-        font-size: 17px;
-        font-weight: 500;
-        white-space: nowrap;
-        color: var(--text-color);
-        transition: var(--tran-05);
-    }
-
-    .sidebar.close .text {
-        opacity: 0;
-    }
-
-    .image-text {
-        display: flex;
-        gap: 10px;
-        margin-top: 13px;
-        margin-bottom: 6px;
-        margin-left: 9px;
-    }
-
-    .sidebar header {
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
-
-    .sidebar header .image img {
-        width: 25px;
-        border-radius: 6px;
-    }
-
-    .sidebar header .toggle {
-        position: absolute;
-        top: 50%;
-        right: -25px;
-        transform: translateY(-50%) rotate(180deg);
-        height: 25px;
-        width: 25px;
-        background-color: var(--primary-color);
-        color: var(--sidebar-color);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-        cursor: pointer;
-        transition: var(--tran-05);
-    }
-
-    .sidebar.close .toggle {
-        transform: translateY(-50%) rotate(0deg);
-    }
-
-    .sidebar .menu-bar {
-        height: calc(100% - 55px);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow-y: auto;
-    }
-
-    .menu-bar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .sidebar li.search-box {
-        border-radius: 6px;
-        background-color: var(--primary-color-light);
-        cursor: pointer;
-    }
-
-    .sidebar li.search-box input {
-        height: 100%;
-        width: 100%;
-        outline: none;
-        border: none;
-        background-color: var(--primary-color-light);
-        color: var(--text-color);
-        border-radius: 6px;
-        font-size: 17px;
-        font-weight: 500;
-    }
-
-    .sidebar li a {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        width: 100%;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: var(--tran-05);
-    }
-
-    .sidebar li a:hover {
-        background-color: var(--primary-color);
-    }
-
-    .sidebar li a:hover .icon,
-    .sidebar li a:hover .text {
-        color: var(--sidebar-color);
-    }
-
+ 
     .home {
         position: absolute;
         top: 0;
@@ -186,13 +47,7 @@
         height: fit-content;
         width: calc(100% - 250px);
         background-color: #f5f5f5;
-        transition: var(--tran-05);
-    }
-
-    .sidebar.close~.home {
-        left: 78px;
-        height: 100vh;
-        width: calc(100% - 78px);
+        transition: all 0.3s ease;
     }
 
     .home .text {
@@ -214,6 +69,7 @@
         width: 100%;
         background-color: #695CFE;
         display: flex;
+        margin-left: 20rem;
     }
 
     .left {
@@ -229,6 +85,7 @@
         font-size: 18px;
         font-family: 'Poppins', sans-serif;
         color: #212121;
+        font-weight: 600;
     }
 
     .img {
@@ -269,10 +126,10 @@
     .change {
         margin: 1rem 0 0 2rem;
         width: 23rem;
-        height: 5rem;
+        height: 3rem;
         background-color: #e0e0e0;
         border-radius: 10px;
-        padding: 19px;
+        border: 2px solid black;
     }
 
     .changebtn {
@@ -354,7 +211,7 @@
         border-radius: 12px;
         padding: 25px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        margin: 10px 0 0 -16px;
+        margin: -25px 0 0 -16px;
     }
 
     .personal-info h2 {
@@ -583,77 +440,22 @@
             gap: 15px;
         }
     }
+   
 </style>
 
 <body>
     <div class="bodyContainer">
-        <nav class="sidebar">
-            <header>
-                <div class="image-text">
-                    <span class="image">
-                        <img src="../static/images/StudySyn.svg" alt="">
-                    </span>
-                    <div class="text logo-text">
-                        <span class="name">ClassSphere</span>
-                    </div>
-                </div>
-            </header>
-            <div class="menu-bar">
-                <div class="menu">
-                    <li class="search-box">
-                        <i class='bx bx-search icon'></i>
-                        <input type="text" placeholder="Search...">
-                    </li>
-                    <ul class="menu-links">
-                        <li class="nav-link">
-                            <a href="/">
-                                <i class='bx bx-home-alt icon'></i>
-                                <span class="text nav-text">Home</span>
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a href="pay/">
-                                <i class='bx bx-bar-chart-alt-2 icon'></i>
-                                <span class="text nav-text">Fees</span>
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a href="#">
-                                <i class='bx bx-bell icon'></i>
-                                <span class="text nav-text">Notifications</span>
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a href="#">
-                                <i class='bx bx-pie-chart-alt icon'></i>
-                                <span class="text nav-text">Exam</span>
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a href="#">
-                                <i class='bx bx-heart icon'></i>
-                                <span class="text nav-text">Attendance</span>
-                            </a>
-                        </li>
-                        <li class="nav-link">
-                            <a href="#" onclick="history.back()">
-                                <i class='bx bx-wallet icon'></i>
-                                <span class="text nav-text">Back</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="bottom-content">
-                    <li class="">
-                        <a href="#">
-                            <i class='bx bx-log-out icon'></i>
-                            <span class="text nav-text">Logout</span>
-                        </a>
-                    </li>
-                </div>
-            </div>
-        </nav>
-    
+        {%include 'sidebar.html'%}
+        {% if role == 'Student' %}
+        <Style>
+            li.nav-link.Create{
+                display: none;
+            }
+            li.nav-link.Attendance{
+                display: none;
+            }
+        </Style>
+        {% endif %}
         <div class="profile">
             <div class="left">
                 <p class="acc">Account Management :</p>
@@ -741,8 +543,9 @@
                             <div class="field-group">
                                 <label for="grade">Grade/Year</label>
                                 <select id="grade" class="info-input" name="grade">
+                                    <option value="{{user_info.grade}}" disabled selected>{{profile_info.grade}}</option>
                                     {% for grade in Grades %}
-                                    <option value="{{ grade.classname }}">{{ grade.classname }}</option>
+                                    <option value="{{ grade.classname }}">{{grade.classname}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -794,6 +597,8 @@
             </div>
         </form>
     </div>
+        
+
 </body>
 <script>
     // Toggle sidebar
@@ -866,4 +671,5 @@
         }
     });
 </script>
+
 </html>

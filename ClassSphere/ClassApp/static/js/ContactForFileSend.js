@@ -34,10 +34,6 @@ const submit = document.getElementById('submit');
         formData.append('message', message.value);
         formData.append('file', fileInput.files[0]);
     
-        // Log the FormData entries for debugging
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
       fetch('http://127.0.0.1:8000/contact/', {
         method: 'POST',
         headers: {

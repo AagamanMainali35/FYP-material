@@ -63,6 +63,17 @@
 .nav-link:hover{
     color: var(--link-color);
 }
+
+
+.nav-link i {
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+
+.nav-link:hover i {
+    transform: scale(1.1);
+}
 .contact-button{
     display: none;
     border: none;
@@ -108,11 +119,11 @@
 }
 
 .main-section{
-    max-width: 1500px;
+    max-width: 1400px;
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 0.6rem;
+    padding: 1.6rem;
     align-items: center;
     margin: 0 auto;
 }

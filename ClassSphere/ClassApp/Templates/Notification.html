@@ -1,0 +1,416 @@
+{%extends 'base.html' %}
+{% block title%}Notification{%endblock%}
+{%block content%}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      min-height: 100vh;
+      background-color: #f9fafb;
+      color: #1f2937;
+    }
+    
+ 
+    
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-name {
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+    
+    .user-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: #4f46e5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    /* Main content styles */
+    .container2 {
+      max-width: 96rem;
+
+      padding: 2rem;
+    }
+    
+    .page-header {
+      margin-bottom: 2rem;
+    }
+    
+    .header-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header-subtitle {
+      font-size: 1rem;
+      color: #000000;
+    }
+    
+    /* Notification styles */
+    .notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    
+    .notification-card {
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .notification-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .notification-card.unread {
+      background-color: #eff6ff;
+      border-color: #bfdbfe;
+    }
+    
+    .notification-content {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .notification-icon {
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+      font-size: 1.5rem;
+    }
+    
+    .notification-icon.fees {
+      color: #ef4444;
+    }
+    
+    .notification-icon.holiday {
+      color: #10b981;
+    }
+    
+    .notification-icon.exam {
+      color: #f59e0b;
+    }
+    
+    .notification-icon.profile {
+      color: #8b5cf6;
+    }
+    
+    .notification-icon.general {
+      color: #3b82f6;
+    }
+    
+    .notification-details {
+      flex: 1;
+    }
+    
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    
+    .notification-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .notification-title.unread {
+      color: #1e40af;
+    }
+    
+    .notification-date {
+      font-size: 0.875rem;
+      color: #6b7280;
+      white-space: nowrap;
+      margin-left: 1rem;
+    }
+    
+    .notification-message {
+      font-size: 0.9375rem;
+      color: #4b5563;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .notification-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    
+    .badge-category {
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+    
+    .badge-category.fees {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .badge-category.holiday {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-category.exam {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-category.profile {
+      background-color: #ede9fe;
+      color: #5b21b6;
+    }
+    
+    .badge-category.general {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-new {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 640px) {
+      header {
+        padding: 1rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .notification-content {
+        flex-direction: column;
+      }
+      
+      .notification-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .notification-date {
+        margin-left: 0;
+      }
+    }
+    .notif{
+    position: relative;
+    color: white;
+    background-color: red;
+    height: 26px;
+    display: inline-flex;
+    width: 29px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    margin: 4px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<body>
+  <main class="container2">
+    <div class="page-header">
+      <p class="header-subtitle">You have <span class="notif">2</span>unread notifications</p>
+    </div>
+    <div class="notifications-list">
+      <div class="notification-card unread">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-file-invoice-dollar notification-icon fees"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title unread">Fee Payment Reminder</h3>
+              <span class="notification-date">April 9, 2025</span>
+            </div>
+            <p class="notification-message">Last date for semester fee payment is April 30, 2025. Please clear all dues to avoid late fees.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category fees">fees</span>
+              <span class="badge badge-new">New</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 2 - Holiday -->
+      <div class="notification-card unread">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-calendar notification-icon holiday"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title unread">Spring Break Announcement</h3>
+              <span class="notification-date">April 8, 2025</span>
+            </div>
+            <p class="notification-message">Spring break will be observed from April 15 to April 22, 2025. All classes will resume on April 23.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category holiday">holiday</span>
+              <span class="badge badge-new">New</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 3 - Exam -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-file-alt notification-icon exam"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">Mid-term Examination Schedule</h3>
+              <span class="notification-date">April 7, 2025</span>
+            </div>
+            <p class="notification-message">Mid-term examinations will begin on May 5, 2025. Please check the detailed schedule on the exam portal.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category exam">exam</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 4 - General -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-bell notification-icon general"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">Campus Maintenance Notice</h3>
+              <span class="notification-date">April 6, 2025</span>
+            </div>
+            <p class="notification-message">The main library will be closed for maintenance from April 12 to April 14, 2025. Online resources will remain accessible.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category general">general</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 5 - Profile -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-user notification-icon profile"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">Update Your Profile Information</h3>
+              <span class="notification-date">April 5, 2025</span>
+            </div>
+            <p class="notification-message">Please ensure your contact information is up to date in the student portal before April 20, 2025.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category profile">profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 6 - Exam -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-file-alt notification-icon exam"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">Final Examination Guidelines</h3>
+              <span class="notification-date">April 4, 2025</span>
+            </div>
+            <p class="notification-message">Guidelines for the end-semester examinations have been published. Review them before May 1, 2025.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category exam">exam</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 7 - General -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-bell notification-icon general"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">New Learning Resources Available</h3>
+              <span class="notification-date">April 3, 2025</span>
+            </div>
+            <p class="notification-message">New e-learning resources have been added to the digital library. Access them using your student credentials.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category general">general</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification 8 - Holiday -->
+      <div class="notification-card">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            <i class="fas fa-calendar notification-icon holiday"></i>
+          </div>
+          <div class="notification-details">
+            <div class="notification-header">
+              <h3 class="notification-title">Labor Day Holiday</h3>
+              <span class="notification-date">April 2, 2025</span>
+            </div>
+            <p class="notification-message">The campus will be closed on May 1, 2025, in observance of Labor Day. No classes will be held.</p>
+            <div class="notification-badges">
+              <span class="badge badge-category holiday">holiday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  {% include 'Footer.html'%}
+</body>
+{% endblock %}
+

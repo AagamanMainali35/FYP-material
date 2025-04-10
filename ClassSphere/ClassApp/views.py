@@ -7,12 +7,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import *
-from .models import  profile,Event,Grade,Notification,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentAnswers
+from .models import  profile,Event,Grade,Notification as notifications,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentAnswers,attendance,User,StudentLeaderBoard,Holiday
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import Eventserializer,NotificationSerilizer
 from django.contrib.auth import update_session_auth_hash 
+import pandas as pd
+from django.db import transaction
+from django.db.models.functions import ExtractMonth
+
 
 
 def LandingPage(request):
@@ -21,8 +24,12 @@ def LandingPage(request):
     else:
         return redirect('login')
 
-def RegisterPage(request):
+def generate_random_id():
+    prefix = "CSP"
+    random_number = random.randint(1000000, 9999999)  # Generates a 7-digit number
+    return f"{prefix}{random_number}"
 
+def RegisterPage(request):
     gradeoptions=Grade.objects.all()
     context={'grade':gradeoptions}
     if request.user.is_authenticated:
@@ -56,7 +63,12 @@ def RegisterPage(request):
                             if "@" in email:
                                 username = email.split("@")[0]
                             newuser = User.objects.create_user(username=username, email=email, password=password)
-                            user_profile = profile.objects.create(newprofile=newuser,role=roleuser,grade=grade,payment_structure=paymentstructure)
+                            instance=profile.objects.all()
+                            data=generate_random_id()  #CSP2033
+                            for i in instance: #all userobject
+                                if i.student_id==data:
+                                    data=generate_random_id()
+                            user_profile = profile.objects.create(newprofile=newuser,role=roleuser,grade=grade,payment_structure=paymentstructure,student_id=data)
                             return redirect('login')
                     else:
                         messages.error(request, "Passwords do not match.")
@@ -126,7 +138,6 @@ def ottp(request):
                     del request.session['email'] 
                     del request.session['isloggedin?']
                     del request.session['workflow']
-                    messages.success(request, "Validation successfull")
                     return redirect('homepage') 
                 else:
                     messages.error(request, "Invalid OTP. Please try again.")   
@@ -139,7 +150,7 @@ def ottp(request):
                      return redirect('reset')
                 return redirect('forgetpass')
     return render(request, 'otp.html')
-   
+
 def logouted(request):
     logout(request)
     return redirect('login')
@@ -205,7 +216,6 @@ def reset(request):
 
 def event(request):
     return render(request,'event.html')
-
 
 @api_view(['POST'])
 def contact(request):
@@ -290,6 +300,8 @@ def filterevents(request):
     event_data=Eventserializer(events,many=True)
     return JsonResponse({'events': event_data.data})
 
+
+@login_required(login_url='/login/')
 def make_payment(request):
     if request.method == 'POST':
         amount_paid = request.POST.get('amount_paid')
@@ -311,13 +323,27 @@ def make_payment(request):
         total_paid = sum(payment.amount_paid for payment in userprofile.fee_payments.all())
         total_fee_left = userprofile.payment_structure.Totalfeeamount - total_paid
     else:
-        total_fee_left = userprofile.payment_structure.Totalfeeamount  # Assuming no payments made yet
+        total_fee_left = userprofile.payment_structure.Totalfeeamount  
+
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
+    current_month_payments = FeePayment.objects.filter(
+        student=userprofile,
+        payment_date__year=current_year,
+        payment_date__month=current_month
+    )
+    is_fee_paid_this_month = current_month_payments.exists()
+    if not is_fee_paid_this_month:
+        notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
+
+    role=request.user.profile.role
     context = {
         'userprofile': userprofile,
         'amount_paid': total_paid,
         'total_fee_left': total_fee_left,
+        'role':role
     }
-    return render(request, 'Payment', context)
+    return render(request, 'Payment.html', context)
 
 def eventdetail(request,id):
     event=Event.objects.get(id=id)
@@ -341,11 +367,11 @@ def send_Notification(request):
 @login_required
 def profilepage(request):
     user = request.user
+    role=request.user.profile.role
     grade_list = Grade.objects.all()
     userprofile_instance = profile.objects.get(newprofile=user)
 
     if request.method == 'POST':
-        # Handle Saving Basic Details
         if 'Savedetails' in request.POST:
             fname = request.POST.get('fname', '').strip()
             lname = request.POST.get('lname', '').strip()
@@ -438,10 +464,10 @@ def profilepage(request):
         'profile_info': {
             'picture':userprofile_instance.profile_picture,
             'grade': userprofile_instance.grade.classname
-        }
+        },
+        'role':role
     }
     return render(request, 'Userprofile.html', context)
-
 
 def exam(request,id):
     questions_list = Questions.objects.filter(Exam_Instace=id) 
@@ -487,36 +513,8 @@ def exam(request,id):
                     print(f'invalid answer for {question.Question_Name}')
             current_exam=Exam.objects.get(id=exam_id)
             StudentLeaderBoard.objects.create(exam_id=current_exam,student_id=currentuser, Total_Question=totalquestion ,total_marks=marks,Correct=Total_Correct_Answers,Answered=Total_quest_Answered,Incorrect=Total_Incorrect_ans)
+            return redirect('leaderboard')
     return render(request, 'examquest.html', context)   
-
-import hmac
-import hashlib
-def genSha256(key, message):
-    key = key.encode('utf-8')
-    message = message.encode('utf-8')
-    hmac_sha256 = hmac.new(key, message, hashlib.sha256)
-    return hmac_sha256.hexdigest() 
-
-def esewa(request):
-    import uuid
-    ids=uuid.uuid4()
-    amunt=100
-    tax=20
-    servicec=0
-    total=amunt+tax+servicec
-    secret_key='8gBm/:&EnhH.1/q'
-    message=f"EPAYTEST,{amunt},{ids}"
-    result=genSha256(secret_key,message)
-    print(result)
-    context={
-        "total":total,
-        "tax":tax,
-        "service":servicec,
-        "amount":amunt,
-        "id":ids,
-        "signature":result
-    }
-    return render(request,'test.html',context)
 
 def leader_board(request):
     leaderboard=StudentLeaderBoard.objects.all().order_by('-total_marks')
@@ -526,6 +524,134 @@ def leader_board(request):
     return render(request,'Leaderboard.html',context)
 
 def schedule(request):
+    user=request.user
+    UserDatas=StudentLeaderBoard.objects.filter(student_id=user)
+    answers=[]
+    taken_exam_ids = StudentLeaderBoard.objects.filter(student_id=request.user).values_list('exam_id')
+    available_exams = Exam.objects.exclude(id__in=taken_exam_ids)
+    totalAttemptedExam=0
+    for data in UserDatas:
+      totalAttemptedExam+=1
+      answers.append(data.total_marks)
+    average = sum(answers) / len(answers)
+    highestScore=max(answers)
     exam=Exam.objects.all()
-    context={'exam':exam}
+    context={
+        'Attempts':totalAttemptedExam,
+        'exam':exam,
+        'avg_score':average,
+        'higest_score':round(highestScore/100*100),
+        'upcoming_exam':available_exams,
+        }
     return render(request,'exam.html',context)
+
+def attendance_view(request):
+    attendance_records = attendance.objects.all().select_related('user')
+    total_students = profile.objects.filter(role='Student').count()
+    present= attendance.objects.filter(Attendance_Status='Present',date=datetime.date.today()).count()
+    absent= attendance.objects.filter(Attendance_Status='absent',date=datetime.date.today()).count()
+    percent=round(present/total_students*100)
+    grades=Grade.objects.all()
+    context = {
+        'attendance':  attendance_records,
+        'total_Student': total_students,
+        'present':present,
+        'absent':absent,
+        'percent':percent,
+        'grades':grades
+    }
+    return render(request, 'attendance.html', context)  
+
+@api_view(['POST'])
+def get_attendance_data(request):
+    if 'file' not in request.FILES:
+        return Response({'Status': 'No file received'}, status=400)
+    uploaded_file = request.FILES['file']
+    if not uploaded_file.name.endswith('.xlsx'):
+                return JsonResponse({'error': 'Only .xlsx files are allowed'}, status=400)
+    else:
+        df=pd.read_excel(uploaded_file)
+        records = df.to_dict('records')  
+        for i in records:
+            print(f'The name is {i['Name']} , email is {i['Email']} , class is {i['Class']} , Date is {i['Date']},{i['Attendance Status']}')
+            user_instance=User.objects.get(email=i['Email'])
+            data=attendance.objects.filter(user=user_instance,date=i['Date'])
+            if not  data:
+                attendance.objects.create(user=user_instance,Grade=user_instance.profile.grade,date=i['Date'],Attendance_Status=i['Attendance Status'])
+    return Response({'Status': f'{uploaded_file.name} file received successfully'})
+
+@api_view(['POST'])
+def get_filter(request):
+    body = request.data
+    filtered_data = attendance.objects.all()
+    if 'class' in body:
+        filtered_data = filtered_data.filter(Grade__classname__icontains=body['class'])
+    if 'date' in body:
+        filtered_data = filtered_data.filter(date=body['date'])
+    if 'status' in body:
+        filtered_data = filtered_data.filter(Attendance_Status__icontains=body['status'])
+    if 'name' in body:
+        filtered_data = filtered_data.filter(user__first_name__icontains=body['name'])
+    filtered_data = filtered_data.order_by('date')  
+    data = []
+    for item in filtered_data:
+        data.append({
+            'student_id': item.user.profile.student_id ,  
+            'Name': f'{item.user.first_name} {item.user.last_name}',
+            'Class': item.Grade.classname,
+            'Date': item.date,
+            'Status': item.Attendance_Status,
+        })
+
+    return Response({'status': data})
+
+@api_view(['POST','GET'])
+def printPDF(request):
+    if request.method=='POST':
+        context={request.data}
+    elif request.method=='GET':
+     return render(request,'attendanceFile.html',context)
+    
+
+def holiday(request):
+    holiday_date=Holiday.objects.all()
+    return render(request,'Holiday.html',{'holiday':holiday_date})
+
+def Exam_create(request):
+    user=request.user
+    return render(request,'ExamCreate.html',{'user':user})
+
+@api_view(['POST'])
+def handlecreate(request):
+    data=request.data   
+    try:
+        with transaction.atomic():
+            grade_instance=Grade.objects.get(classname=data.get('exam_grade')) 
+            exam_instance=Exam.objects.create(Exam_Name=data.get('exam_name'),ExamGrade=grade_instance,Exam_Date=data.get('exam_date'),Created_by=request.user,Total_Marks=data.get('total_marks'))
+            question=data.get('questions')
+            for i in question:
+                question_instance=Questions.objects.create(Exam_Instace=exam_instance,Question_Name=i['question_text'],Question_Marks=i['marks'],correct_answer=i['correct_answer'])
+                for choices,value in i['options'].items():
+                    print(choices,value)
+                    Choice.objects.create(choice_name=value,question_id=question_instance)
+    except Exception as e:
+        print('Somenthing went wonrg:',e)
+    return Response({'status':data})     
+
+def Notification(request):
+    return render(request,'Notification.html')
+
+def adminpage(request):
+    listo = []  # List to store the total for each month
+    for month in range(1, 13):  
+        total = 0  
+        data = FeePayment.objects.annotate(month=ExtractMonth('payment_date')).filter(month=month)
+        for i in data:
+            total += i.amount_paid  
+        listo.append(total)  
+    print(listo)
+    context = {'data': listo}
+    return render(request, 'admin.html', context)
+
+
+

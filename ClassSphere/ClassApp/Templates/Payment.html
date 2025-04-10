@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fee Details</title>
+    <title>Fee Payment Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* General styles */
         :root {
             --primary-color: #4361ee;
             --primary-dark: #3a56d4;
             --secondary-color: #f8f9fa;
-            --text-color: #333;
-            --text-light: #6c757d;
-            --border-color: #e9ecef;
+            --text-color: #2d3748;
+            --text-light: #718096;
+            --border-color: #e2e8f0;
             --success-color: #38b000;
             --warning-color: #ff9e00;
             --danger-color: #d90429;
-            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --sidebar-width: 280px;
         }
 
         * {
@@ -30,280 +30,375 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
+            background-color: #f7fafc;
             color: var(--text-color);
             line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            transition: margin-left 0.3s;
         }
 
         .fee-container {
-            max-width: 1000px;
-            width: 90%;
-            margin: 40px auto;
-            padding: 0;
-            background-color: transparent;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-left: 20rem;
         }
 
+        /* Header Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Card Styles */
         .card {
             background-color: #fff;
             border-radius: 12px;
             box-shadow: var(--card-shadow);
-            padding: 30px;
-            margin-bottom: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
             transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
         }
 
         .card:hover {
             box-shadow: var(--hover-shadow);
         }
 
-        .header-card {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .header-card::before {
-            content: "";
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1;
-        }
-
-        .header-card::after {
-            content: "";
-            position: absolute;
-            bottom: -80px;
-            left: -80px;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            z-index: 1;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        h1 {
-            font-size: 28px;
+        .card-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        .student-info {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        h2 {
             color: var(--primary-color);
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
             display: flex;
             align-items: center;
         }
 
-        h2 i {
-            margin-right: 10px;
+        .card-title i {
+            margin-right: 0.75rem;
+            font-size: 1.1em;
         }
 
-        /* Fee summary card */
-        .fee-summary-grid {
+        /* Fee Summary Grid */
+        .summary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .fee-item {
+        .summary-item {
             background-color: var(--secondary-color);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
             transition: transform 0.3s ease;
+            border-left: 4px solid var(--primary-color);
         }
 
-        .fee-item:hover {
+        .summary-item:hover {
             transform: translateY(-5px);
         }
 
-        .fee-item-label {
-            font-size: 14px;
-            color: var(--text-light);
-            margin-bottom: 5px;
+        .summary-item.highlight {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left-color: var(--success-color);
         }
 
-        .fee-item-value {
-            font-size: 22px;
+        .summary-label {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--text-color);
         }
 
-        .fee-item.highlight {
-            background-color: rgba(67, 97, 238, 0.1);
+        .summary-item.highlight .summary-value {
+            color: var(--primary-dark);
         }
 
-        .fee-item.highlight .fee-item-value {
-            color: var(--primary-color);
-        }
-
-        /* Payment form */
+        /* Payment Form */
         .payment-form {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 30px;
-        }
-
-        .payment-form form {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
 
         .form-group {
-            flex: 1;
-            min-width: 250px;
+            margin-bottom: 1.25rem;
         }
 
-        .payment-form label {
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
             display: block;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             color: var(--text-light);
         }
 
-        .payment-form input[type="number"] {
+        .form-control {
             width: 100%;
-            padding: 12px 15px;
-            font-size: 16px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             transition: all 0.3s ease;
+            background-color: #fff;
         }
 
-        .payment-form input[type="number"]:focus {
+        .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
             outline: none;
         }
 
-        .payment-form button {
-            padding: 12px 25px;
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 16px;
+        .form-control.invalid {
+            border-color: var(--danger-color);
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .form-error {
+            color: var(--danger-color);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            flex: 1;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary-color);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .payment-method i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-method-name {
             font-weight: 500;
-            border: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            border: none;
+            gap: 0.5rem;
         }
 
-        .payment-form button:hover {
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
             background-color: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
-        /* Payment history */
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-block {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Payment History */
         .payment-history {
             overflow-x: auto;
         }
 
-        .payment-history table {
+        .table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            border-radius: 8px;
-            overflow: hidden;
+            margin-top: 1rem;
+            font-size: 0.875rem;
         }
 
-        .payment-history table th {
+        .table th {
             background-color: var(--primary-color);
-            color: #fff;
-            padding: 15px;
-            font-size: 15px;
-            font-weight: 500;
+            color: white;
+            padding: 1rem;
             text-align: left;
+            font-weight: 500;
         }
 
-        .payment-history table td {
-            padding: 15px;
-            font-size: 15px;
+        .table td {
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
-            background-color: white;
         }
 
-        .payment-history table tr:last-child td {
+        .table tr:last-child td {
             border-bottom: none;
         }
 
-        .payment-history table tr:hover td {
-            background-color: rgba(67, 97, 238, 0.05);
+        .table tr:hover td {
+            background-color: rgba(67, 97, 238, 0.03);
         }
 
-        .payment-history table td[colspan="3"] {
-            text-align: center;
-            color: var(--text-light);
-            padding: 30px;
-        }
-
-        /* Status badges */
-        .status-badge {
+        /* Status Badges */
+        .badge {
             display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
             font-weight: 500;
         }
 
-        .status-paid {
+        .badge-success {
             background-color: rgba(56, 176, 0, 0.1);
             color: var(--success-color);
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .fee-container {
-                width: 95%;
-            }
-            
-            .fee-summary-grid {
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-success {
+            background-color: rgba(56, 176, 0, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(217, 4, 41, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        /* Progress Bar */
+        .payment-progress {
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #edf2f7;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .payment-form {
                 grid-template-columns: 1fr;
             }
-            
-            .payment-form form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .payment-form button {
-                width: 100%;
+            .form-group.full-width {
+                grid-column: span 1;
             }
         }
 
-        /* Animation */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem;
+                margin-left: 0;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            .payment-methods {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -324,93 +419,211 @@
 </head>
 
 <body>
-    <div class="fee-container">
-        <!-- Header Card -->
-        <div class="header-card">
-            <div class="header-content">
-                <h1>Fee Details</h1>
+    {% include 'sidebar.html' %}
+    {% if role == 'Student' %}
+    <Style>
+        li.nav-link.Create{
+            display: none;
+        }
+        li.nav-link.Attendance{
+            display: none;
+        }
+    </Style>
+    {% endif %}
+    <div class="main-content">
+        <div class="fee-container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1 class="page-title">Fee Payment Portal</h1>
                 <div class="student-info">
-                    <p><strong>{{ userprofile.newprofile.username }}</strong> | {{ userprofile.grade.classname }} - {{ userprofile.grade.academic_year }}</p>
+                    <span class="badge badge-success">
+                        <i class="fas fa-user-graduate"></i> {{ userprofile.grade.classname }}
+                    </span>
                 </div>
             </div>
-        </div>
 
-        <!-- Fee Summary Card -->
-        <div class="card">
-            <h2><i class="fas fa-file-invoice-dollar"></i> Fee Summary</h2>
-            
-            <div class="fee-summary-grid">
-                <div class="fee-item">
-                    <div class="fee-item-label">Total Fee</div>
-                    <div class="fee-item-value">{{ userprofile.payment_structure.Totalfeeamount }}</div>
+            <!-- Alert Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+                    {{ message }}
                 </div>
-                
-                <div class="fee-item">
-                    <div class="fee-item-label">Admission Fee</div>
-                    <div class="fee-item-value">{{ userprofile.payment_structure.AdmissionFee }}</div>
-                </div>
-                
-                <div class="fee-item">
-                    <div class="fee-item-label">Monthly Fee</div>
-                    <div class="fee-item-value">{{ userprofile.payment_structure.monthlyfee }}</div>
-                </div>
-                
-                <div class="fee-item">
-                    <div class="fee-item-label">Amount Paid</div>
-                    <div class="fee-item-value">{{ amount_paid }}</div>
-                </div>
-                
-                <div class="fee-item highlight">
-                    <div class="fee-item-label">Total Fee Left</div>
-                    <div class="fee-item-value">{{ total_fee_left }}</div>
-                </div>
-            </div>
-        </div>
+                {% endfor %}
+            {% endif %}
 
-        <!-- Payment Form Card -->
-        <div class="card">
-            <h2><i class="fas fa-credit-card"></i> Make a Payment</h2>
-            
-            <div class="payment-form">
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="amount">Amount to Pay</label>
-                        <input type="number" id="amount" name="amount_paid" required min="1" placeholder="Enter amount">
+            <!-- Fee Summary Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Fee Summary</h2>
+                    <div class="progress-label">
                     </div>
-                    <button type="submit"><i class="fas fa-paper-plane"></i> Make Payment</button>
+                </div>
+                
+    
+                
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Total Fee</div>
+                        <div class="summary-value">{{ userprofile.payment_structure.Totalfeeamount }}</div>
+                    </div>
+                
+                    <div class="summary-item">
+                        <div class="summary-label">Monthly Fee</div>
+                        <div class="summary-value">{{ userprofile.payment_structure.monthlyfee }}</div>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <div class="summary-label">Amount Paid</div>
+                        <div class="summary-value">{{ amount_paid }}</div>
+                    </div>
+                    
+                    <div class="summary-item highlight">
+                        <div class="summary-label">Balance Due</div>
+                        <div class="summary-value">{{ total_fee_left }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Form Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-credit-card"></i> Make Payment</h2>
+                    <div class="form-hint">
+                        <i class="fas fa-info-circle"></i> Minimum payment: 5,000
+                    </div>
+                </div>
+                
+                <form method="POST" action="" id="paymentForm" onsubmit="return validatePayment()">
+                    {% csrf_token %}
+                    
+                    <div class="payment-form">
+                        <div class="form-group">
+                            <label for="amount" class="form-label">Payment Amount </label>
+                            <input type="number" id="amount" name="amount_paid" class="form-control" 
+                                   min="5000" max="{{ total_fee_left }}" step="100" 
+                                   placeholder="Enter amount (min ₹5,000)" required>
+                            <div class="form-error" id="amountError">
+                                <i class="fas fa-exclamation-circle"></i> Payment must be at least 5,000
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paymentDate" class="form-label">Payment Date</label>
+                            <input type="date" id="paymentDate" name="payment_date" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">Payment Method</label>
+                            <div class="payment-methods">
+                                <div class="payment-method selected" onclick="selectPaymentMethod(this, 'khalti')">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <div class="payment-method-name">Khalti</div>
+                                    <input type="radio" name="payment_method" value="khalti" checked hidden>
+                                </div>
+                                <div class="payment-method" onclick="selectPaymentMethod(this, 'cash')">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <div class="payment-method-name">Cash</div>
+                                    <input type="radio" name="payment_method" value="cash" hidden>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-paper-plane"></i> Process Payment
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
-        </div>
-        <div class="card">
-            <h2><i class="fas fa-history"></i> Payment History</h2>
-            <div class="payment-history">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Payment Date</th>
-                            <th>Amount Paid</th>
-                            <th>Total Fee Left</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for payment in userprofile.fee_payments.all %}
-                        <tr>
-                            <td>{{ payment.payment_date }}</td>
-                            <td>{{ payment.amount_paid }}</td>
-                            <td>{{ payment.total_fee_left }}</td>
-                            <td><span class="status-badge status-paid">Paid</span></td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4">No payments made yet. Make your first payment today!</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+
+            <!-- Payment History Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-history"></i> Payment History</h2>
+                    <div class="form-hint">
+                        <i class="fas fa-filter"></i> Last 10 transactions
+                    </div>
+                </div>
+                
+                <div class="payment-history">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Balance</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in userprofile.fee_payments.all|slice:":10" %}
+                            <tr>
+                                <td>{{ payment.payment_date|date:"d M Y" }}</td>
+                                <td>₹{{ payment.amount_paid }}</td>
+                                <td>₹{{ payment.total_fee_left }}</td>
+                                <td>{{ payment.payment_method|title }}</td>
+                                <td><span class="badge badge-success">Paid</span></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 2rem;">
+                                    <i class="fas fa-wallet" style="font-size: 2rem; color: var(--text-light); margin-bottom: 1rem;"></i>
+                                    <p>No payment records found</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Payment method selection
+        function selectPaymentMethod(element, method) {
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            document.querySelector(`input[value="${method}"]`).checked = true;
+        }
+
+        // Payment validation
+        function validatePayment() {
+            const amountInput = document.getElementById('amount');
+            const amountError = document.getElementById('amountError');
+            const amount = parseFloat(amountInput.value);
+            const minAmount = 5000;
+            
+            if (amount < minAmount) {
+                amountInput.classList.add('invalid');
+                amountError.style.display = 'block';
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Real-time validation
+        document.getElementById('amount').addEventListener('input', function() {
+            const amount = parseFloat(this.value);
+            const amountError = document.getElementById('amountError');
+            
+            if (amount < 5000 && this.value) {
+                this.classList.add('invalid');
+                amountError.style.display = 'block';
+            } else {
+                this.classList.remove('invalid');
+                amountError.style.display = 'none';
+            }
+        });
+
+        // Set default payment date to today
+        document.getElementById('paymentDate').valueAsDate = new Date();
+    </script>
 </body>
 </html>

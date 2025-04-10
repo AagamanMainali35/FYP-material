@@ -1,0 +1,438 @@
+{% extends 'base.html'%}
+{% block title%}Holiday{% endblock%}
+{% block content%}
+<title>School Holiday Schedule</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary: #4263eb;
+        --primary-light: #edf2ff;
+        --secondary: #00b8d9;
+        --dark: #243256;
+        --light: #f8fafc;
+        --success: #00c853;
+        --warning: #ffab00;
+        --danger: #ff5252;
+        --gray: #6e7a8a;
+        --light-gray: #edf2f7;
+        --border-radius: 12px;
+        --box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+        --transition: all 0.3s ease-in-out;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.6;
+        color: var(--dark);
+        background-color: #f3f4f8;
+    }
+
+    .Pagecontainer {
+        max-width: 96rem;
+        padding: 2rem;
+
+    }
+
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border: none;
+        font-size: 0.95rem;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+    }
+
+    .btn-outline:hover {
+        background-color: var(--primary-light);
+        transform: translateY(-2px);
+    }
+
+    .page-title-section {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1rem;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--gray);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .info-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .info-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .info-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .icon-calendar {
+        background-color: rgba(66, 99, 235, 0.1);
+        color: var(--primary);
+    }
+
+    .icon-note {
+        background-color: rgba(0, 184, 217, 0.1);
+        color: var(--secondary);
+    }
+
+    .icon-bell {
+        background-color: rgba(255, 171, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .info-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .info-text {
+        color: var(--gray);
+        margin-bottom: 1rem;
+    }
+
+    .info-link {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+    }
+
+    .info-link:hover {
+        gap: 0.75rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid var(--primary);
+        display: inline-block;
+    }
+
+    .holiday-table-section {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 3rem;
+    }
+
+    .holiday-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .year-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .year-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--light-gray);
+        background-color: white;
+        color: var(--gray);
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .year-btn.active {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .holiday-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .holiday-table th {
+        background-color: var(--primary-light);
+        padding: 1rem 1.5rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: 1rem;
+    }
+
+    .holiday-table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--light-gray);
+        font-size: 1rem;
+    }
+
+    .holiday-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .holiday-table tr:hover {
+        background-color: var(--light);
+    }
+
+    .holiday-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+
+    .badge-Exams {
+        background-color: rgba(66, 99, 235, 0.1);
+        color: var(--primary);
+    }
+
+    .badge-Governmental {
+        background-color: rgba(0, 200, 83, 0.1);
+        color: var(--success);
+    }
+
+    .badge-General {
+        background-color: rgba(255, 171, 0, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-Festival {
+        background-color: rgba(255, 82, 82, 0.1);
+        color: var(--danger);
+    }
+
+    .calendar-section {
+        background-color: white;
+        border-radius: var(--border-radius);
+        padding: 2rem;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 3rem;
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .important-note {
+        background-color: rgba(255, 171, 0, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 3rem;
+    }
+
+    .note-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .note-icon {
+        color: var(--warning);
+    }
+
+    .note-text {
+        color: var(--gray);
+    }
+
+    .note-list {
+        margin-top: 1rem;
+        padding-left: 1.5rem;
+    }
+
+    .note-list li {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .container {
+            padding: 1.5rem;
+        }
+
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .info-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .holiday-table-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .year-selector {
+            overflow-x: auto;
+            width: 100%;
+            padding-bottom: 0.5rem;
+        }
+
+
+    }
+</style>
+
+<body>
+    <div class="Pagecontainer">
+        <div class="page-title-section">
+            <h1 class="page-title"> Holiday Schedule</h1>
+            <p class="page-subtitle">Plan your year with our comprehensive school holiday calendar. Find all upcoming
+                holidays and school resumption dates in one place.</p>
+        </div>
+
+
+        <div class="holiday-table-section">
+            <div class="holiday-table-header">
+                <h2 class="section-title">Upcoming Holidays</h2>
+                <div class="year-selector">
+                    <button class="year-btn active">2024</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="holiday-table">
+                    <thead>
+                        <tr>
+                            <th>Holiday</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>School Resumes</th>
+                            <th>Duration</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for holiday in holiday%}
+                        <tr>
+                            <td>{{holiday.Holiday_Name}}</td>
+                            <td>{{ holiday.Holiday_Date|date:"d/m/y" }}</td>
+                            <td>{{ holiday.End_DateField|date:"d/m/y" }}</td>
+                            <td>{{ holiday.School_ResumeDate|date:"d/m/y" }}</td>
+
+                            <td>{{holiday.Duration}}</td>
+                            <td><span class="holiday-badge badge-{{holiday.Type}}">{{holiday.Type}}</span></td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="important-note">
+            <h3 class="note-title">
+                <span class="note-icon"><i class="fas fa-exclamation-circle"></i></span>
+                Important Information
+            </h3>
+            <p class="note-text">Please note the following regarding school holidays and attendance:</p>
+            <ul class="note-list">
+                <li>All dates are subject to change with prior notice.</li>
+                <li>Additional holidays may be declared by the government or school administration.</li>
+                <li>Students are expected to return to school on the specified resumption dates.</li>
+                <li>School assignments may be given during longer breaks to keep students engaged.</li>
+                <li>The school office will remain open on select days during major breaks for administrative purposes.
+                </li>
+            </ul>
+        </div>
+
+
+        {% include 'Footer.html'%}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Year selection
+            const yearBtns = document.querySelectorAll('.year-btn');
+            yearBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    yearBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+{%endblock%}

@@ -2,7 +2,7 @@ window.onload = function () {
     const fileInput = document.getElementById("fileInput");
     const uploadButton = document.getElementById("uploadButton");
 
-    // Handle file input change event
+
     fileInput.addEventListener("change", function () {
         const fileName = this.files[0]?.name;
         if (fileName) {
@@ -16,7 +16,6 @@ window.onload = function () {
     });
 
     uploadButton.addEventListener("click", function () {
-        e.preventDefault();
         fileInput.click();
     });
 };
