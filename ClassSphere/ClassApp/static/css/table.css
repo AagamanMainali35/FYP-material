@@ -215,7 +215,7 @@ header {
 }
 
 .table-wrapper {
-    max-height: 500px;
+    max-height: 525px;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;

@@ -15,12 +15,24 @@ from django.contrib.auth import update_session_auth_hash
 import pandas as pd
 from django.db import transaction
 from django.db.models.functions import ExtractMonth
+from django.db.models.functions import Cast
+from django.db.models import IntegerField
 
 
 
+
+def base_page(request):
+ return render(request,'UserPages/base.html',{'user':request.user})
+
+def sidebar(request):
+    return render(request,'sidebar.html',{'user':request.user})
+
+
+
+@login_required(login_url='login/')
 def LandingPage(request):
     if request.user.is_authenticated:
-        return render(request, 'landingpage.html')
+        return render(request, 'UserPages/landingpage.html',{'user':request.user})
     else:
         return redirect('login')
 
@@ -69,12 +81,13 @@ def RegisterPage(request):
                                 if i.student_id==data:
                                     data=generate_random_id()
                             user_profile = profile.objects.create(newprofile=newuser,role=roleuser,grade=grade,payment_structure=paymentstructure,student_id=data)
+                            user_profile.save()
                             return redirect('login')
                     else:
                         messages.error(request, "Passwords do not match.")
             elif 'back' in request.POST:
                 return redirect('login')
-    return render(request, 'Register.html',context)
+    return render(request, 'UserPages/Register.html',context)
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -117,7 +130,7 @@ def loginPage(request):
                         messages.error(request, "Invalid Username or Password.")
             except User.DoesNotExist:
                     messages.error(request, "Invalid Username or Password.")
-    return render(request, 'Login.html')
+    return render(request, 'UserPages/Login.html')
 
 def ottp(request):
     if not request.session.get('isloggedin?',False):
@@ -149,14 +162,14 @@ def ottp(request):
                      print(stored_otp)
                      return redirect('reset')
                 return redirect('forgetpass')
-    return render(request, 'otp.html')
+    return render(request, 'UserPages/otp.html')
 
+@login_required(login_url='login/')
 def logouted(request):
     logout(request)
     return redirect('login')
 
 def forgetpass(request):
-
         if request.method=='POST':
             email=request.POST.get('forgotemail')
             request.session['workflow']='Forgetpassword'
@@ -176,7 +189,7 @@ def forgetpass(request):
                     print(f"Error sending email: {e}")
                     messages.error(request, "Error sending OTP. Please try again.")
             return redirect('ottp')
-        return render(request,'ForgotPassword.html')
+        return render(request,'UserPages/ForgotPassword.html')
 
 def reset(request):
     if not request.session.get('isloggedin?',False):
@@ -212,10 +225,10 @@ def reset(request):
                             messages.error(request, "User not found.")
                     else:
                         messages.error(request, "Session has expired. Please log in again.")
-        return render(request, 'passwordreset.html')
+        return render(request, 'UserPages/passwordreset.html')
 
 def event(request):
-    return render(request,'event.html')
+    return render(request,'UserPages/event.html')
 
 @api_view(['POST'])
 def contact(request):
@@ -343,12 +356,14 @@ def make_payment(request):
         'total_fee_left': total_fee_left,
         'role':role
     }
-    return render(request, 'Payment.html', context)
+    return render(request, 'UserPages/Payment.html', context)
 
+@login_required
 def eventdetail(request,id):
     event=Event.objects.get(id=id)
     event_obj={'obj':event}
-    return render(request,'eventdetail.html',context=event_obj)
+    return render(request,'UserPages/eventdetail.html',context=event_obj)
+
 
 @api_view(['POST'])
 def send_Notification(request):
@@ -453,22 +468,41 @@ def profilepage(request):
                 profile_ins.profile_picture=profilepicture
                 profile_ins.save()
                 return redirect('userprofile')
-    context = {
-        'Grades': grade_list,
-        'user_info': {
-            'username': user.username,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-        },
-        'profile_info': {
-            'picture':userprofile_instance.profile_picture,
-            'grade': userprofile_instance.grade.classname
-        },
-        'role':role
-    }
-    return render(request, 'Userprofile.html', context)
+        
+    if userprofile_instance.grade:
+        context = {
+            'Grades': grade_list,
+            'user_info': {
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            },
+            'profile_info': {
+                'picture':userprofile_instance.profile_picture,
+                'grade': userprofile_instance.grade.classname
+            },
+            'role':role
+        }
+    else:
+        context = {
+            'Grades': grade_list,
+            'user_info': {
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            },
+            'profile_info': {
+                'picture':userprofile_instance.profile_picture,
+                'grade': ""
+            },
+            'role':role
+        }
 
+    return render(request, 'UserPages/Userprofile.html', context)
+
+@login_required
 def exam(request,id):
     questions_list = Questions.objects.filter(Exam_Instace=id) 
     question_data = [] 
@@ -514,27 +548,33 @@ def exam(request,id):
             current_exam=Exam.objects.get(id=exam_id)
             StudentLeaderBoard.objects.create(exam_id=current_exam,student_id=currentuser, Total_Question=totalquestion ,total_marks=marks,Correct=Total_Correct_Answers,Answered=Total_quest_Answered,Incorrect=Total_Incorrect_ans)
             return redirect('leaderboard')
-    return render(request, 'examquest.html', context)   
+    return render(request, 'UserPages/examquest.html', context)   
 
 def leader_board(request):
     leaderboard=StudentLeaderBoard.objects.all().order_by('-total_marks')
     context={   
         "context":leaderboard
     } 
-    return render(request,'Leaderboard.html',context)
-
+    return render(request,'UserPages/Leaderboard.html',context)
+    
+@login_required
 def schedule(request):
     user=request.user
     UserDatas=StudentLeaderBoard.objects.filter(student_id=user)
     answers=[]
-    taken_exam_ids = StudentLeaderBoard.objects.filter(student_id=request.user).values_list('exam_id')
+    taken_exam_ids = StudentLeaderBoard.objects.filter(student_id=user).values_list('exam_id')
     available_exams = Exam.objects.exclude(id__in=taken_exam_ids)
     totalAttemptedExam=0
+
     for data in UserDatas:
-      totalAttemptedExam+=1
-      answers.append(data.total_marks)
-    average = sum(answers) / len(answers)
-    highestScore=max(answers)
+        totalAttemptedExam+=1
+        answers.append(data.total_marks)
+    if answers:
+        average = sum(answers) / len(answers)
+        highestScore=max(answers)
+    else:
+        average = 0
+        highestScore = 0
     exam=Exam.objects.all()
     context={
         'Attempts':totalAttemptedExam,
@@ -543,8 +583,9 @@ def schedule(request):
         'higest_score':round(highestScore/100*100),
         'upcoming_exam':available_exams,
         }
-    return render(request,'exam.html',context)
+    return render(request,'UserPages/exam.html',context)
 
+@login_required
 def attendance_view(request):
     attendance_records = attendance.objects.all().select_related('user')
     total_students = profile.objects.filter(role='Student').count()
@@ -558,9 +599,10 @@ def attendance_view(request):
         'present':present,
         'absent':absent,
         'percent':percent,
-        'grades':grades
+        'grades':grades,
+        'user':request.user
     }
-    return render(request, 'attendance.html', context)  
+    return render(request, 'AdminPages/attendance.html', context)  
 
 @api_view(['POST'])
 def get_attendance_data(request):
@@ -604,22 +646,15 @@ def get_filter(request):
         })
 
     return Response({'status': data})
-
-@api_view(['POST','GET'])
-def printPDF(request):
-    if request.method=='POST':
-        context={request.data}
-    elif request.method=='GET':
-     return render(request,'attendanceFile.html',context)
     
 
 def holiday(request):
     holiday_date=Holiday.objects.all()
-    return render(request,'Holiday.html',{'holiday':holiday_date})
+    return render(request,'UserPages/Holiday.html',{'holiday':holiday_date})
 
 def Exam_create(request):
     user=request.user
-    return render(request,'ExamCreate.html',{'user':user})
+    return render(request,'AdminPages/ExamCreate.html',{'user':user})
 
 @api_view(['POST'])
 def handlecreate(request):
@@ -639,9 +674,13 @@ def handlecreate(request):
     return Response({'status':data})     
 
 def Notification(request):
-    return render(request,'Notification.html')
+    return render(request,'UserPages/Notification.html')
 
 def adminpage(request):
+    total_user=User.objects.count()
+    total_eaxms=Exam.objects.count()
+    total_tecahers=profile.objects.filter(role='Teacher').count()
+    print(total_tecahers)
     listo = []  # List to store the total for each month
     for month in range(1, 13):  
         total = 0  
@@ -649,9 +688,79 @@ def adminpage(request):
         for i in data:
             total += i.amount_paid  
         listo.append(total)  
-    print(listo)
-    context = {'data': listo}
-    return render(request, 'admin.html', context)
+    sumd=sum(listo)/1000
+    context = {
+        'data': listo,
+        'total_user':total_user,
+        'total_exams':total_eaxms,
+        'total_revenue':round(sumd),
+        'total_tecahers':total_tecahers
+        }
+    return render(request, 'AdminPages/admin.html', context)
 
+def holidayCRUD(request):
+    holiday_data = Holiday.objects.all()
+    types = Holiday.objects.values('Type').distinct()
+    return render(request, 'AdminPages/Holidayadmin.html', {'holiday': holiday_data, 'Type': types})
 
+@api_view(['POST'])
+def add_holiday(request):
+    name = request.data.get('holiday')
+    sdate = datetime.datetime.strptime(request.data.get('start_date'), "%Y-%m-%d").date()
+    edate = datetime.datetime.strptime(request.data.get('end_date'), "%Y-%m-%d").date()
+    rdate = datetime.datetime.strptime(request.data.get('resume_date'), "%Y-%m-%d").date()
+    type = request.data.get('holiday_type')
 
+    overlapping_holidays = Holiday.objects.filter(Holiday_Date__lte=edate).filter(End_DateField__gte=sdate)
+    if overlapping_holidays.exists():
+        return Response({
+            "Status": "Failed",
+            "Message": "A holiday already exists within the selected date range."
+        }, status=400)
+
+    with transaction.atomic():
+        Holiday.objects.create(
+            Holiday_Name=name,
+            Holiday_Date=sdate,
+            End_DateField=edate,
+            School_ResumeDate=rdate,
+            Type=type
+        )
+        users = User.objects.all()
+        for user in users:
+            notifications.objects.create(
+                NotificationMsg=f'The school will remain closed from {sdate} to {edate} for {name}, a {type}. Classes will continue from {rdate}.',
+                user_instance=user.profile,
+                created_at=datetime.datetime.today(),
+                tag='Holiday',
+                is_read=False
+            )
+    return Response({"Status": "Holiday Created Successfully"})
+ 
+
+@api_view(['DELETE'])
+def deleteHoliday(request,id):
+    instance=Holiday.objects.get(id=id)
+    instance.delete()
+    return Response({"Status":"Holiday Deleted Sucessfully"})
+
+def fee_setup(request):
+    user=request.user
+    fees = PaymentStructure.objects.annotate(classname_int=Cast('grade__classname', output_field=IntegerField())).order_by('classname_int')
+    return render(request,'AdminPages/feesetup.html',{'user':user,'fees':fees})
+
+@api_view(['UPDATE'])
+def updatefee(request,id):
+    body=request.data
+    print(body)
+    grade=int(request.data.get('Grade'))
+    instance=Grade.objects.get(classname=grade)
+    data=PaymentStructure.objects.filter(id=id).update(grade=instance,Totalfeeamount=request.data.get('total_fee'),AdmissionFee=request.data.get('admission_fee'))
+    return Response({'status':'Sucessfully Updated The  data'})
+
+@api_view(['DELETE'])
+def deletefee(request,id):
+    data=PaymentStructure.objects.get(id=id)
+    print(data)
+    data.delete()
+    return Response({'status':'Data Deleted sucessfully'})

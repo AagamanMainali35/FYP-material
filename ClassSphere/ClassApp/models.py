@@ -46,17 +46,32 @@ class profile(models.Model):
     ROLE = [
         ('Teacher', 'Teacher'),
         ('Student', 'Student'),
+        ('Admin', 'Admin'),
     ]
     student_id=models.CharField(null=True,blank=True)
     newprofile = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(verbose_name='Role', choices=ROLE, max_length=10)
-    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True)
-    payment_structure = models.ForeignKey(PaymentStructure, on_delete=models.CASCADE, null=True, related_name='profiles')
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True ,blank=True)
+    payment_structure = models.ForeignKey(PaymentStructure, on_delete=models.CASCADE, null=True,blank=True, related_name='profiles')
     profile_picture=models.ImageField(verbose_name='Enter Your Profile Picture here' ,null=True,blank=True ,upload_to='profilePictures0,',default='profilePictures/DefaultPP.jpg')
 
     def clean(self):
-        if self.role == 'Student' and not self.grade:
-            raise ValidationError({'grade': 'Grade is required for students.'})
+        if self.role == 'Student':
+            if not self.grade:
+                raise ValidationError({'grade': 'Grade is required for students.'})
+            if not self.payment_structure:
+                raise ValidationError({'payment_structure': 'Payment structure is required for students.'})
+        elif self.role == 'Teacher':
+            if not self.grade:
+                raise ValidationError({'grade': 'Grade is required for teachers.'})
+            if self.payment_structure:
+                raise ValidationError({'payment_structure': 'Teachers should not have a payment structure.'})
+        elif self.role == 'Admin':
+            if self.grade:
+                raise ValidationError({'grade': 'Admins should not have a grade.'})
+            if self.payment_structure:
+                raise ValidationError({'payment_structure': 'Admins should not have a payment structure.'})
+
 
     def __str__(self):
         return self.newprofile.email
@@ -88,7 +103,6 @@ class Event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
     form = models.FileField(upload_to='forms/', null=True, blank=True)
-
     def __str__(self):
         return self.title
 

@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Dashboard Sidebar Menu</title>  
+    <title>Dashboard Sidebar Menu</title>
 </head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-    *{
+
+    * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
         font-family: 'Poppins', sans-serif;
     }
-    :root{
+
+    :root {
         /* ===== Colors ===== */
         --body-color: #ffffff;
         --sidebar-color: #FFF;
@@ -38,15 +43,18 @@
         --tran-04: all 0.3s ease;
         --tran-05: all 0.3s ease;
     }
-    body{
+
+    body {
         min-height: 100vh;
         transition: var(--tran-05);
     }
-    ::selection{
+
+    ::selection {
         background-color: var(--primary-color);
         color: #fff;
     }
-    body.dark{
+
+    body.dark {
         --body-color: #18191a;
         --sidebar-color: #242526;
         --primary-color: #3a3b3c;
@@ -54,8 +62,9 @@
         --toggle-color: #fff;
         --text-color: #ccc;
     }
+
     /* ===== Sidebar ===== */
-     .sidebar{
+    .sidebar {
         position: fixed;
         top: 0;
         left: 0;
@@ -64,24 +73,28 @@
         padding: 10px 14px;
         background: var(--sidebar-color);
         transition: var(--tran-05);
-        z-index: 100;  
-        margin-top:62px;
-    
+        z-index: 100;
+        margin-top: 55px;
+        box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+
     }
+
     /* ===== Reusable code - Here ===== */
-    .sidebar li{
+    .sidebar li {
         height: 50px;
         list-style: none;
         display: flex;
         align-items: center;
         margin-top: 10px;
     }
+
     .sidebar header .image,
-    .sidebar .icon{
+    .sidebar .icon {
         min-width: 60px;
         border-radius: 6px;
     }
-    .sidebar .icon{
+
+    .sidebar .icon {
         min-width: 60px;
         border-radius: 6px;
         height: 100%;
@@ -90,50 +103,59 @@
         justify-content: center;
         font-size: 20px;
     }
+
     .sidebar .text,
-    .sidebar .icon{
+    .sidebar .icon {
         color: var(--text-color);
         transition: var(--tran-03);
     }
-    .sidebar .text{
+
+    .sidebar .text {
         font-size: 17px;
         font-weight: 500;
         white-space: nowrap;
         opacity: 1;
     }
-    
+
     /* =========================== */
-    .sidebar header{
+    .sidebar header {
         position: relative;
     }
-    .sidebar header .image-text{
+
+    .sidebar header .image-text {
         display: flex;
         align-items: center;
     }
-    .sidebar header .logo-text{
+
+    .sidebar header .logo-text {
         display: flex;
         flex-direction: column;
     }
+
     header .image-text .name {
         margin-top: 2px;
         font-size: 18px;
         font-weight: 600;
     }
-    header .image-text .profession{
+
+    header .image-text .profession {
         font-size: 16px;
         margin-top: -2px;
         display: block;
     }
-    .sidebar header .image{
+
+    .sidebar header .image {
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    .sidebar header .image img{
+
+    .sidebar header .image img {
         width: 40px;
         border-radius: 6px;
     }
-    .sidebar header .toggle{
+
+    .sidebar header .toggle {
         position: absolute;
         top: 50%;
         right: -25px;
@@ -150,20 +172,23 @@
         cursor: pointer;
         transition: var(--tran-05);
     }
-    body.dark .sidebar header .toggle{
+
+    body.dark .sidebar header .toggle {
         color: var(--text-color);
     }
-    .sidebar.close .toggle{
+
+    .sidebar.close .toggle {
         transform: translateY(-50%) rotate(0deg);
     }
-    
-    .sidebar li.search-box{
+
+    .sidebar li.search-box {
         border-radius: 6px;
         background-color: var(--primary-color-light);
         cursor: pointer;
         transition: var(--tran-05);
     }
-    .sidebar li.search-box input{
+
+    .sidebar li.search-box input {
         height: 100%;
         width: 100%;
         outline: none;
@@ -175,7 +200,8 @@
         font-weight: 500;
         transition: var(--tran-05);
     }
-    .sidebar li a{
+
+    .sidebar li a {
         list-style: none;
         height: 100%;
         background-color: transparent;
@@ -187,50 +213,62 @@
         text-decoration: none;
         transition: var(--tran-03);
     }
-    .sidebar li a:hover{
+
+    .sidebar li a:hover {
         background-color: var(--primary-color);
     }
+
     .sidebar li a:hover .icon,
-    .sidebar li a:hover .text{
+    .sidebar li a:hover .text {
         color: var(--sidebar-color);
     }
+
     body.dark .sidebar li a:hover .icon,
-    body.dark .sidebar li a:hover .text{
+    body.dark .sidebar li a:hover .text {
         color: var(--text-color);
     }
-    .sidebar .menu-bar{
+
+    .sidebar .menu-bar {
         height: calc(100% - 55px);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         overflow-y: scroll;
     }
-    .menu-bar::-webkit-scrollbar{
+
+    .menu-bar::-webkit-scrollbar {
         display: none;
     }
-    .sidebar .menu-bar .mode{
+
+    .sidebar .menu-bar .mode {
         border-radius: 6px;
         background-color: var(--primary-color-light);
         position: relative;
         transition: var(--tran-05);
     }
-    .menu-bar .mode .sun-moon{
+
+    .menu-bar .mode .sun-moon {
         height: 50px;
         width: 60px;
     }
-    .mode .sun-moon i{
+
+    .mode .sun-moon i {
         position: absolute;
     }
-    .mode .sun-moon i.sun{
+
+    .mode .sun-moon i.sun {
         opacity: 0;
     }
-    body.dark .mode .sun-moon i.sun{
+
+    body.dark .mode .sun-moon i.sun {
         opacity: 1;
     }
-    body.dark .mode .sun-moon i.moon{
+
+    body.dark .mode .sun-moon i.moon {
         opacity: 0;
     }
-    .menu-bar .bottom-content .toggle-switch{
+
+    .menu-bar .bottom-content .toggle-switch {
         position: absolute;
         right: 0;
         height: 100%;
@@ -241,7 +279,8 @@
         border-radius: 6px;
         cursor: pointer;
     }
-    .toggle-switch .switch{
+
+    .toggle-switch .switch {
         position: relative;
         height: 22px;
         width: 40px;
@@ -249,7 +288,8 @@
         background-color: var(--toggle-color);
         transition: var(--tran-05);
     }
-    .switch::before{
+
+    .switch::before {
         content: '';
         position: absolute;
         height: 15px;
@@ -261,10 +301,12 @@
         background-color: var(--sidebar-color);
         transition: var(--tran-04);
     }
-    body.dark .switch::before{
+
+    body.dark .switch::before {
         left: 20px;
     }
-    .home{
+
+    .home {
         position: absolute;
         top: 0;
         top: 0;
@@ -274,20 +316,21 @@
         background-color: var(--body-color);
         transition: var(--tran-05);
     }
-    .home .text{
+
+    .home .text {
         font-family: 'Poppins';
         font-size: 23px;
         font-weight: 500;
         color: #5a5656;
         margin-left: 18px;
     }
-    
-    body.dark .home .text{
+
+    body.dark .home .text {
         color: var(--text-color);
     }
 
     .horizontal-nav {
-        z-index:2;
+        z-index: 2;
         width: 100%;
         background: #ffffff;
         color: #000000;
@@ -309,7 +352,7 @@
         width: 20rem;
     }
 
-    .sidebar.close + .horizontal-nav {
+    .sidebar.close+.horizontal-nav {
         left: 80px;
         width: calc(100% - 80px);
     }
@@ -375,7 +418,7 @@
     .notification-popup {
         display: none;
         position: absolute;
-        top: 35px; 
+        top: 35px;
         right: 0;
         background: white;
         border: 1px solid #ccc;
@@ -384,8 +427,8 @@
         padding: 10px;
         border-radius: 5px;
         z-index: 1000;
-        max-height: 26rem; 
-        overflow-y: auto;  
+        max-height: 26rem;
+        overflow-y: auto;
     }
 
     .notification-popup p {
@@ -394,14 +437,15 @@
         text-align: center;
         color: #333;
     }
+
     .notification-popup::-webkit-scrollbar {
-     display: none;
+        display: none;
     }
 
-    
+
 
     .notification-popup::-webkit-scrollbar-thumb:hover {
-        background: #555; 
+        background: #555;
     }
 
     .alert {
@@ -415,7 +459,7 @@
         border: 1px solid black;
         background-color: transparent;
     }
-    
+
     .alert svg {
         flex-shrink: 0;
         display: inline;
@@ -423,7 +467,7 @@
         height: 1rem;
         margin-right: 0.75rem;
     }
-    
+
     .alert .sr-only {
         position: absolute;
         width: 1px;
@@ -435,105 +479,130 @@
         clip-path: inset(50%);
         overflow: hidden;
     }
-    
+
     .alert .font-medium {
         font-weight: 500;
     }
-    .statcards{
-        display: flex;
-        gap:20px;
-    }
-    .leftstats{
-    position: relative;
-    display: flex;
-    right:0;
-    height:22.25rem;
-    width:39rem;
-    background-image: url(../static/images/AdminLogo.png);
-    margin-top: 1rem;
-    margin-left: 1.25rem;
-    border-radius: 25px;
-    }
-    .text{
+
+    .statcards {
         display: flex;
         gap: 20px;
     }
+    .left{
+        width: 230px;
+        box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1)
+    }
+
+    .leftstats {
+        position: relative;
+        display: flex;
+        right: 0;
+        height: 22.25rem;
+        width: 39rem;
+        background-image: url(../static/images/AdminLogo.png);
+        margin-top: 1rem;
+        margin-left: 1.25rem;
+        border-radius: 25px;
+    }
+
+    .text {
+        display: flex;
+        gap: 20px;
+    }
+
     .text img {
         margin-top: 6px;
         height: 24px;
         margin-left: -6px;
     }
-    .left{
+
+    .left {
         display: flex;
         gap: 46px;
     }
-    .bx-sun{
+
+    .bx-sun {
         margin-top: 5px;
         font-size: 50px;
     }
-    .dayinfo{
+
+    .dayinfo {
         margin-left: 30px;
         position: relative;
         display: flex;
         margin-left: 21rem;
-        gap:8px;
-        margin-top:16px;
+        gap: 8px;
+        margin-top: 16px;
     }
-    .temperature{
+
+    .temperature {
         font-size: 40px;
         font-weight: 300;
     }
-    .detail{
+
+    .detail {
         display: flex;
-        gap:20px;
+        gap: 20px;
     }
-    .locationcard{
+
+    .locationcard {
         margin-top: 10px;
     }
-    .locationcard span{
+
+    .locationcard span {
         font-weight: 300
     }
+
     .welcome {
         margin-left: 28px;
         margin-top: 89px;
     }
-  .Welcome-txt{
+
+    .Welcome-txt {
         font-family: "Roboto Condensed", serif;
         font-size: 30px;
     }
-    .welcome>p>span{
+
+    .welcome>p>span {
         color: #6366f1;
     }
-    .rightstats{
+
+    .rightstats {
         margin-top: 34px;
         height: 22rem;
         width: 36.5625rem;
         border-radius: 20px;
     }
+
     .rightstats {
         display: grid;
-        grid-template-columns: repeat(2, 1fr); 
-        grid-template-rows: repeat(2, 1fr); 
-        gap: 10px; 
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 10px;
     }
-    
+
     .box {
         border-radius: 10px;
         background-color: #ccc;
         height: 167px;
     }
-    .box1{
+
+    .box1 {
         background-color: #96B2FB;
     }
-    .box2{
+
+    .box2 {
         background-color: #4747A1;
     }
-    .box3{
+
+    .box3 {
         background-color: #7978E9;
     }
-    .box4{
+
+    .box4 {
         background-color: #F3797E;
     }
+
     .box {
         display: flex;
         flex-direction: column;
@@ -542,32 +611,35 @@
         color: white;
         padding: 15px;
     }
-    
+
     .box i {
         font-size: 24px;
         margin-bottom: 10px;
     }
-    
+
     .box h3 {
         font-size: 28px;
         font-weight: 700;
         margin-bottom: 5px;
     }
-    
+
     .box p {
         font-size: 14px;
         font-weight: 500;
     }
-    .nav-link{
+
+    .nav-link {
         color: #718096;
         font-size: 1.125rem;
         font-weight: 600;
         transform: color 0.1s;
         text-decoration: none;
     }
-    .nav-link:hover{
+
+    .nav-link:hover {
         color: var(--link-color);
     }
+
     .chart-container {
         background-color: var(--sidebar-color);
         padding: 20px;
@@ -576,12 +648,11 @@
         margin-left: 1.25rem;
         margin-top: 1rem;
     }
-    
+
     #feeChart {
         width: 100% !important;
         height: 400px !important;
     }
-    
 </style>
 
 <body>
@@ -589,13 +660,57 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
-                    <li class="nav-link"><a href="#"><i class='bx bx-home-alt icon'></i> <span class="text nav-text">Dashboard</span></a></li>
-                    <li class="nav-link"><a href="#"><i class="bx bx-money icon"></i><span class="text nav-text">Revenue</span></a></li>
-                    <li class="nav-link"><a href="#"><i class='bx bx-pie-chart-alt icon'></i> <span class="text nav-text">Attendnace</span></a></li>
-                    <li class="nav-link"><a href="#"><i class='bx bx-clipboard icon'></i> <span class="text nav-text">Exams</span></a></li>
-                    <li class="nav-link"><a href="#"><i class="bx bx-calendar-event icon"></i><span class="text nav-text">Events</span></a></li>
-                    <li class="nav-link"><a href="#"><i class='bx bx-bell icon'></i> <span class="text nav-text">notification</span></a></li>
+                    <li class="nav-link">
+                        <a href="/">
+                            <i class='bx bx-home-alt icon'></i>
+                            <span class="text nav-text">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-chart icon'></i>  
+                            <span class="text nav-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="bx bx-money icon"></i>
+                            <span class="text nav-text">SetUp fee</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{% url 'userprofile'%}">
+                            <i class='bx bxs-user-detail icon'></i>
+                            <span class="text nav-text">Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{% url 'attendance' %}">
+                            <i class='bx bx-pie-chart-alt icon'></i>
+                            <span class="text nav-text">Attendance</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{% url 'holidaycrud'%}">
+                            <i class="fas fa-umbrella-beach icon"></i>
+                            <span class="text nav-text">Holiday</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="bx bx-calendar-event icon"></i>
+                            <span class="text nav-text">Events</span>
+                        </a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class='bx bx-bell icon'></i>
+                            <span class="text nav-text">Notification</span>
+                        </a>
+                    </li>
+                    
                 </ul>
+                
             </div>
 
             <div class="bottom-content">
@@ -624,76 +739,103 @@
                     <span class="notification-badge">5</span>
                     <div class="notification-popup" id="notification-popup">
                         <div class="alert" role="alert">
-                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                             </svg>
                             <span class="sr-only">Info</span>
                             <div>
-                                <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
                             </div>
-                        </div><div class="alert" role="alert">
-                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
                             </svg>
                             <span class="sr-only">Info</span>
                             <div>
-                                <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
                             </div>
-                        </div><div class="alert" role="alert">
-    <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-        <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-    </div>
-</div><div class="alert" role="alert">
-    <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-        <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-    </div>
-</div><div class="alert" role="alert">
-    <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-        <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-    </div>
-</div><div class="alert" role="alert">
-    <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-        <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-    </div>
-</div>
-<div class="alert" role="alert">
-    <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-        <span class="font-medium">Success alert!</span> Change a few things up and try submitting again.
-    </div>
-</div>
-                    </div> 
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
+                            </div>
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
+                            </div>
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
+                            </div>
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
+                            </div>
+                        </div>
+                        <div class="alert" role="alert">
+                            <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                            </svg>
+                            <span class="sr-only">Info</span>
+                            <div>
+                                <span class="font-medium">Success alert!</span> Change a few things up and try
+                                submitting again.
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="user-info">
-                    <img src="https://plus.unsplash.com/premium_photo-1736780097484-180ac570f2ad?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D" 
-                         alt="User Profile">
-                    <span class="user-name">John Doe</span>
-                </div>
+                <a href="{% url 'userprofile'%}">
+                    <div class="user-info">
+                        <img src="{{user.profile.profile_picture.url}}" alt="User Profile">
+                        <span class="user-name">{{user.username}}</span>
+                    </div>
+                </a>
             </div>
         </div>
         <div class="welcome">
-            <p class="Welcome-txt">Welcome John</p>
+            <p class="Welcome-txt">Welcome {{user.username}}</p>
             <p id="listdata" style="display: none;">{{data}}</p>
-            
+
         </div>
         <div class="statcards">
             <div class="leftstats">
@@ -707,36 +849,36 @@
                             <span class="location text-black text-lg font-medium">Kathmandu</span>
                             <span class="location text-black text-lg font-medium">Nepal</span>
                         </div>
-    
+
                     </div>
                 </div>
             </div>
             <div class="rightstats">
                 <div class="box box1">
                     <i class='bx bx-user-circle'></i>
-                    <h3>842</h3>
+                    <h3>{{total_user}}</h3>
                     <p>Total Users</p>
                 </div>
                 <div class="box box2">
                     <i class='bx bx-clipboard'></i>
-                    <h3>127</h3>
+                    <h3>{{total_exams}}</h3>
                     <p>Total Exams</p>
                 </div>
                 <div class="box box3">
                     <i class='bx bx-chalkboard'></i>
-                    <h3>56</h3>
+                    <h3>{{total_tecahers}}</h3>
                     <p>Total Teachers</p>
                 </div>
                 <div class="box box4">
                     <i class='bx bx-money-withdraw'></i>
-                    <h3>$24.5K</h3>
+                    <h3>${{total_revenue}}K</h3>
                     <p>Total Revenue</p>
                 </div>
             </div>
-                    
+
         </div>
-              
-            </div>
+
+        </div>
         </div>
         <div class="chart-container" style="margin: 20px; width: 95%;">
             <h2 style="margin-bottom: 20px; font-size: 1.5rem; color: var(--text-color);">Monthly Fee Revenue</h2>
@@ -746,110 +888,111 @@
     <script>
         const rawData = document.getElementById('listdata').textContent;
         const feeData = JSON.parse(rawData.replace(/&quot;/g, '"')); // Handle Django's HTML escaping
-const ctx = document.getElementById('feeChart').getContext('2d');
-const feeChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-            label: 'Fee Revenue ($)',
-            data: feeData,
-            backgroundColor: 'rgba(105, 92, 254, 0.2)',
-            borderColor: 'rgba(105, 92, 254, 1)',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true,
-            pointBackgroundColor: 'rgba(105, 92, 254, 1)',
-            pointRadius: 4,
-            pointHoverRadius: 6
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'top',
-                labels: {
-                    color: 'var(--text-color)'
-                }
+        const ctx = document.getElementById('feeChart').getContext('2d');
+        const feeChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Fee Revenue ($)',
+                    data: feeData,
+                    backgroundColor: 'rgba(105, 92, 254, 0.2)',
+                    borderColor: 'rgba(105, 92, 254, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: 'rgba(105, 92, 254, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
             },
-            tooltip: {
-                mode: 'index',
-                intersect: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                ticks: {
-                    color: 'var(--text-color)',
-                    callback: function(value) {
-                        return '$' + value.toLocaleString();
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: 'var(--text-color)'
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
                     }
                 },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.1)'
-                }
-            },
-            x: {
-                ticks: {
-                    color: 'var(--text-color)'
-                },
-                grid: {
-                    color: 'rgba(0, 0, 0, 0.1)'
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            color: 'var(--text-color)',
+                            callback: function (value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'var(--text-color)'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
                 }
             }
-        }
-    }
-});
+        });
     </script>
     <script>
         const apiKey = '8dc0cbf4974c6aedad778352cfaa48f2';
-    const city = 'Kathmandu';
-    const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;-
-    fetch(apiURL)
-      .then(response => response.json())
-      .then(data => {
-        // Extract the temperature
-        const temp = Math.round(data.main.temp);;
-        document.getElementById('temp').textContent = `${temp}°C`;
-      })
-      .catch(error => {
-        console.error('Error fetching weather data:', error);
-        document.getElementById('temp').textContent = '❌';
-      });
+        const city = 'Kathmandu';
+        const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`; -
+            fetch(apiURL)
+                .then(response => response.json())
+                .then(data => {
+                    // Extract the temperature
+                    const temp = Math.round(data.main.temp);;
+                    document.getElementById('temp').textContent = `${temp}°C`;
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('temp').textContent = '❌';
+                });
 
-      
-        document.getElementById("notification-icon").addEventListener("click", function() {
+
+        document.getElementById("notification-icon").addEventListener("click", function () {
             let stats = document.querySelector(".stats");
-            
+
             if (stats.style.zIndex === "-1") {
-                stats.style.zIndex = "0"; 
+                stats.style.zIndex = "0";
             } else {
-                stats.style.zIndex = "-1"; 
+                stats.style.zIndex = "-1";
             }
         });
-        
+
         document.addEventListener("DOMContentLoaded", function () {
             const notificationIcon = document.getElementById("notification-icon");
             const notificationPopup = document.getElementById("notification-popup");
-        
+
             notificationIcon.addEventListener("click", function (event) {
-                event.stopPropagation(); 
-                notificationPopup.style.display = 
+                event.stopPropagation();
+                notificationPopup.style.display =
                     (notificationPopup.style.display === "block") ? "none" : "block";
             });
-        
+
             document.addEventListener("click", function (event) {
-                if (!notificationIcon.contains(event.target) && 
+                if (!notificationIcon.contains(event.target) &&
                     !notificationPopup.contains(event.target)) {
                     notificationPopup.style.display = "none";
                 }
             });
         });
-        
+
     </script>
 
 </body>
+
 </html>

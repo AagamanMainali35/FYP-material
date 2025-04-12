@@ -25,10 +25,15 @@ urlpatterns = [
     path('attendance/',views.attendance_view,name='attendance'),
     path('upload-data/',views.get_attendance_data,name='uplaoddata'),
     path('get_filter/',views.get_filter,name='getfilter'),
-    path('get_data/',views.printPDF,name='pdf'),
     path('holiday/',views.holiday,name='holiday'),
     path('create/',views.Exam_create,name='createExam'),
     path('handle/',views.handlecreate,name='handledata'),
     path('user/Notification/',views.Notification,name='Notification'),
-    path('admin2/',views.adminpage)
+    path('admin2/',views.adminpage,name='adminpage'),
+    path('admin2/holiday/',views.holidayCRUD,name='holidaycrud'),
+    path('add_holiday/',views.add_holiday,name='add_holiday'),
+    path('deleteHoliday/<int:id>/',views.deleteHoliday,name='DeleteHoliday'),
+    path('fee_setup/',views.fee_setup,name='feesetup'),
+    path('update/fee_setup/<int:id>',views.updatefee,name='update'),
+    path('delete/fee_setup/<int:id>',views.deletefee,name='deletfee')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

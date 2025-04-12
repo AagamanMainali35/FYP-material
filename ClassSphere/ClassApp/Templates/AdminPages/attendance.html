@@ -12,12 +12,32 @@
         <link rel="stylesheet" href="{% static 'css/table.css' %}">
     </head>
     <body>
-        {% include 'sidebar.html'%}
+        {% include 'Include and Base Pages/sidebar.html'%}
+        {% if user.profle.role == 'Student' %}
+        <Style>
+            li.nav-link.Create{
+                display: none;
+            }
+            li.nav-link.Attendance{
+                display: none;
+            }
+        </Style>
+        {% endif %}
+        {% if user.profile.role == 'Admin' %}
+        <style>
+            li.nav-link.Fees{
+                display: none;
+            }
+            li.nav-link.Exam{
+                display: none;
+            }
+        </style>
+        {% endif %} 
         <div class="container"> 
             <input type="hidden" id="csrf" value="{{ csrf_token }}">
 
             <section class="upload-section">
-                <h2>Upload Attendance File</h2>
+                <h2>Upload Attendance File: </h2>
                 <p id="apistatus">Please upload an Excel (.xlsx) file with student attendance data</p>
                 
                 <div class="file-upload" id="dropArea">
