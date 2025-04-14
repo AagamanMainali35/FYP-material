@@ -17,17 +17,13 @@ from django.db import transaction
 from django.db.models.functions import ExtractMonth
 from django.db.models.functions import Cast
 from django.db.models import IntegerField
-
-
-
+from ClassSphere.decorators import role_required
 
 def base_page(request):
  return render(request,'UserPages/base.html',{'user':request.user})
 
 def sidebar(request):
     return render(request,'sidebar.html',{'user':request.user})
-
-
 
 @login_required(login_url='login/')
 def LandingPage(request):
@@ -38,7 +34,7 @@ def LandingPage(request):
 
 def generate_random_id():
     prefix = "CSP"
-    random_number = random.randint(1000000, 9999999)  # Generates a 7-digit number
+    random_number = random.randint(1000000, 9999999)  
     return f"{prefix}{random_number}"
 
 def RegisterPage(request):
@@ -230,6 +226,7 @@ def reset(request):
 def event(request):
     return render(request,'UserPages/event.html')
 
+
 @api_view(['POST'])
 def contact(request):
     postdata = request.data
@@ -258,6 +255,7 @@ def getevents(request):
  serializer=Eventserializer(events,many=True)
  return JsonResponse(serializer.data,safe=False)
 
+@role_required('admin')
 @api_view(['POST'])
 def create_event(request):
     potsdata=request.data
@@ -267,7 +265,8 @@ def create_event(request):
         return Response(serializer.data)
     else:
         return Response({" Status ":serializer.errors})
-
+    
+@role_required('admin')
 @api_view(['DELETE'])
 def delete(request,id):
     event=get_object_or_404(Event,pk=id)
@@ -277,6 +276,7 @@ def delete(request,id):
         return Response('Event not found')
     return Response('Event deleted successfully')
 
+@role_required('admin')
 @api_view(['DELETE'])
 def deleteall(request):
     data=Event.objects.all()
@@ -284,12 +284,15 @@ def deleteall(request):
         i.delete()
     return JsonResponse({"Status":"Events Deleted Sucessfully"})
 
+@role_required('admin')
 @api_view(['GET'])
 def geteventbyid(request,id):
     event=Event.objects.get(id=id)
     serializer=Eventserializer(event)
     return JsonResponse(serializer.data)
 
+
+@role_required('admin')
 @api_view(['POST'])
 def filterevents(request):
     title = request.data.get('title', None)
@@ -313,7 +316,7 @@ def filterevents(request):
     event_data=Eventserializer(events,many=True)
     return JsonResponse({'events': event_data.data})
 
-
+@role_required('Student')
 @login_required(login_url='/login/')
 def make_payment(request):
     if request.method == 'POST':
@@ -364,7 +367,7 @@ def eventdetail(request,id):
     event_obj={'obj':event}
     return render(request,'UserPages/eventdetail.html',context=event_obj)
 
-
+@role_required('admin')
 @api_view(['POST'])
 def send_Notification(request):
     data=NotificationSerilizer(data=request.data)
@@ -502,8 +505,10 @@ def profilepage(request):
 
     return render(request, 'UserPages/Userprofile.html', context)
 
+@role_required('Student')
 @login_required
 def exam(request,id):
+    ins=Exam.objects.get(id=id)
     questions_list = Questions.objects.filter(Exam_Instace=id) 
     question_data = [] 
     for question in questions_list:
@@ -518,6 +523,9 @@ def exam(request,id):
     if check :
         messages.error(request,'Exam Already Taken')
         return redirect('schedule')
+    elif ins.Exam_Date != datetime.date.today():
+        messages.error(request,f'Please try again on {ins.Exam_Date}')
+        return redirect('schedule')  
     else:
         if request.method=='POST':
             answers = {}
@@ -550,13 +558,15 @@ def exam(request,id):
             return redirect('leaderboard')
     return render(request, 'UserPages/examquest.html', context)   
 
+
 def leader_board(request):
     leaderboard=StudentLeaderBoard.objects.all().order_by('-total_marks')
     context={   
         "context":leaderboard
     } 
     return render(request,'UserPages/Leaderboard.html',context)
-    
+
+@role_required('Student')
 @login_required
 def schedule(request):
     user=request.user
@@ -565,7 +575,7 @@ def schedule(request):
     taken_exam_ids = StudentLeaderBoard.objects.filter(student_id=user).values_list('exam_id')
     available_exams = Exam.objects.exclude(id__in=taken_exam_ids)
     totalAttemptedExam=0
-
+    today=datetime.date.today()
     for data in UserDatas:
         totalAttemptedExam+=1
         answers.append(data.total_marks)
@@ -582,9 +592,11 @@ def schedule(request):
         'avg_score':average,
         'higest_score':round(highestScore/100*100),
         'upcoming_exam':available_exams,
+        'today':today
         }
     return render(request,'UserPages/exam.html',context)
 
+@role_required('admin')
 @login_required
 def attendance_view(request):
     attendance_records = attendance.objects.all().select_related('user')
@@ -647,15 +659,16 @@ def get_filter(request):
 
     return Response({'status': data})
     
-
 def holiday(request):
     holiday_date=Holiday.objects.all()
     return render(request,'UserPages/Holiday.html',{'holiday':holiday_date})
 
+@role_required('Teacher')
 def Exam_create(request):
     user=request.user
     return render(request,'AdminPages/ExamCreate.html',{'user':user})
 
+@role_required('Teacher')
 @api_view(['POST'])
 def handlecreate(request):
     data=request.data   
@@ -676,6 +689,8 @@ def handlecreate(request):
 def Notification(request):
     return render(request,'UserPages/Notification.html')
 
+
+@role_required('Teacher','Admin')
 def adminpage(request):
     total_user=User.objects.count()
     total_eaxms=Exam.objects.count()
@@ -698,6 +713,7 @@ def adminpage(request):
         }
     return render(request, 'AdminPages/admin.html', context)
 
+@role_required('Admin')
 def holidayCRUD(request):
     holiday_data = Holiday.objects.all()
     types = Holiday.objects.values('Type').distinct()
@@ -714,41 +730,43 @@ def add_holiday(request):
     overlapping_holidays = Holiday.objects.filter(Holiday_Date__lte=edate).filter(End_DateField__gte=sdate)
     if overlapping_holidays.exists():
         return Response({
-            "Status": "Failed",
+            "Status": "Same Holiday Dates Found ",
             "Message": "A holiday already exists within the selected date range."
         }, status=400)
 
-    with transaction.atomic():
-        Holiday.objects.create(
+   
+    Holiday.objects.create(
             Holiday_Name=name,
             Holiday_Date=sdate,
             End_DateField=edate,
             School_ResumeDate=rdate,
             Type=type
         )
-        users = User.objects.all()
-        for user in users:
+    users = profile.objects.filter(role__in=['Student','Teacher'])
+    for user in users:
             notifications.objects.create(
                 NotificationMsg=f'The school will remain closed from {sdate} to {edate} for {name}, a {type}. Classes will continue from {rdate}.',
-                user_instance=user.profile,
+                user_instance=user,
                 created_at=datetime.datetime.today(),
                 tag='Holiday',
                 is_read=False
             )
     return Response({"Status": "Holiday Created Successfully"})
- 
 
+@role_required('Admin')
 @api_view(['DELETE'])
 def deleteHoliday(request,id):
     instance=Holiday.objects.get(id=id)
     instance.delete()
     return Response({"Status":"Holiday Deleted Sucessfully"})
 
+@role_required('Admin')
 def fee_setup(request):
     user=request.user
     fees = PaymentStructure.objects.annotate(classname_int=Cast('grade__classname', output_field=IntegerField())).order_by('classname_int')
     return render(request,'AdminPages/feesetup.html',{'user':user,'fees':fees})
 
+@role_required('Admin')
 @api_view(['UPDATE'])
 def updatefee(request,id):
     body=request.data
@@ -758,6 +776,7 @@ def updatefee(request,id):
     data=PaymentStructure.objects.filter(id=id).update(grade=instance,Totalfeeamount=request.data.get('total_fee'),AdmissionFee=request.data.get('admission_fee'))
     return Response({'status':'Sucessfully Updated The  data'})
 
+@role_required('Admin')
 @api_view(['DELETE'])
 def deletefee(request,id):
     data=PaymentStructure.objects.get(id=id)

@@ -428,10 +428,10 @@
                                     <td id='afee-{{i.id}}'>${{i.AdmissionFee}}</td>
                                     <td id='mfee-{{i.id}}'>${{i.monthlyfee|floatformat:2}}</td>
                                     <td class="action-btns">
-                                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editFeeStructure({{i.id}})" data-bs-toggle="tooltip" title="Edit">
+                                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editFeeStructure('{{i.id}}')" data-bs-toggle="tooltip" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete({{i.id}})" data-bs-toggle="tooltip" title="Delete">
+                                        <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{i.id}}')" data-bs-toggle="tooltip" title="Delete">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -650,6 +650,8 @@
             
             // Edit fee structure
             function editFeeStructure(id) { 
+                id=parseInt(id)
+                console.log(typeof(id))
                 const modal = new bootstrap.Modal(document.getElementById('editFeeStructureModal'));
                 const grade =document.getElementById(`grade-${id}`).textContent
                 const totfee=document.getElementById(`tfee-${id}`).textContent.replace('$',"")
@@ -670,7 +672,8 @@
 
             // Confirm delete
             function confirmDelete(id) {
-                console.log(id)
+                id=parseInt(id)
+                console.log(typeof(id))
                 const grade=document.getElementById(`grade-${id}`).textContent
                 console.log(grade)
                 const modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
@@ -743,7 +746,9 @@
                     return response.json()
                 })
                 .then(data=>{
-                    console.log(data)
+                    setTimeout(()=>{
+                        location.reload()
+                    },2000)
                 })
             });
     

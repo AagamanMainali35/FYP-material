@@ -102,7 +102,7 @@ class Event(models.Model):
     description = models.TextField()
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
-    form = models.FileField(upload_to='forms/', null=True, blank=True)
+    form = models.URLField(blank=True,null=True)
     def __str__(self):
         return self.title
 

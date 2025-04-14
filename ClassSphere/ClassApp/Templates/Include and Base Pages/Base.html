@@ -12,6 +12,9 @@
     body::-webkit-scrollbar{
         display: none;
     }
+    .icon{
+        display: none;
+    }
 </style>
 <body>
      <div class="header">
@@ -22,19 +25,15 @@
             </a>
             <nav class="nav">
                 <a href="/" class="nav-link">
-                    <i class='bx bx-home-alt'></i>
                     <span>Home</span>
                 </a>
                 <a href="/event" class="nav-link">
-                    <i class='bx bx-calendar-event'></i>
                     <span>Events</span>
                 </a>
                 <a href="/schedule" class="nav-link Exam">
-                    <i class='bx bx-clipboard'></i>
                     <span>Exams</span>
                 </a>
                 <a href="/holiday" class="nav-link">
-                    <i class='bx bx-sun'></i>
                     <span>Holiday</span>
                 </a>
                 <!-- <a href="{% url 'userprofile' %}" class="nav-link profile">
@@ -43,12 +42,10 @@
                 </a> -->
                 {% if user.profile.role == 'Admin'%}
             <a href="{% url 'adminpage' %}" class="nav-link profile">
-              <i class='bx bx-user-circle'></i>
               <span>DashBoard</span>
             </a>
             {%else%}
             <a href="{% url 'userprofile' %}" class="nav-link profile">
-              <i class='bx bx-user-circle'></i>
               <span>Profile</span>
             </a>
             {%endif%}

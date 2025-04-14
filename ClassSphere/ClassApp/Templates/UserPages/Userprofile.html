@@ -446,7 +446,7 @@
 <body>
     <div class="bodyContainer">
         {%include 'Include and Base Pages/sidebar.html'%}
-        {% if user.profle.role == 'Student' %}
+        {% if role == 'Student' %}
         <Style>
             li.nav-link.Create{
                 display: none;
@@ -454,9 +454,20 @@
             li.nav-link.Attendance{
                 display: none;
             }
+            li.nav-link.setupfees{
+                display: none;
+            }
+            li.nav-link.dashboard{
+                display: none;
+            }
+            li.nav-link.holiday{
+                display: none;
+            }
+            
+
         </Style>
         {% endif %}
-        {% if user.profile.role == 'Admin' %}
+        {% if role == 'Admin' %}
         <style>
             li.nav-link.Fees{
                 display: none;

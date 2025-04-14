@@ -254,7 +254,7 @@
             box-shadow: var(--box-shadow);
             transition: var(--transition);
             flex: 0 0 auto;
-            width: 350px; /* Fixed width for each card */
+            width: 390px; /* Fixed width for each card */
         }
 
         .exam-card:hover {
@@ -720,7 +720,13 @@
                                 <div class="exam-content">
                                     <div class="exam-header">
                                         <h3 class="exam-title">{{ exam.Exam_Name }}</h3>
+                                        {% if exam.Exam_Date > today %}
                                         <span class="exam-status status-upcoming">Upcoming</span>
+                                        {% elif exam.Exam_Date == today %}
+                                        <span class="exam-status status-ongoing">Ongoing</span>
+                                        {% else %}
+                                        <span class="exam-status status-active">Completed</span>
+                                        {% endif %}
                                     </div>
 
                                     <div class="exam-info">

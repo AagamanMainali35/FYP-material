@@ -395,3 +395,13 @@ cursor: pointer;
     flex: 1;
     text-align: right;
 }
+.category.active {
+    background-color: #6366F1;
+    color: white;
+    border: 1px solid #434190;
+}
+
+.category.active i {
+    color: white;
+}
+
