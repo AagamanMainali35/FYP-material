@@ -128,10 +128,12 @@ class Notification(models.Model):
     tag=[
         ('Fees','Fees'),
         ('General','General'),
-        ('Holiday','Holiday'),
+        ('Government','Government'),
         ('Exam','Exam'),
-        ('Profile','Profile')
+        ('Profile','Profile'),
+        ('Holiday','Holiday')
     ]
+    Notificationtitle=models.CharField(verbose_name='title name ', null=True,blank=True)
     NotificationMsg = models.CharField(max_length=500)
     user_instance = models.ForeignKey(profile, on_delete=models.CASCADE)
     created_at=models.DateField(default=datetime.date.today)
@@ -195,10 +197,8 @@ class attendance(models.Model):
 class Holiday(models.Model):
     Holiday_Name=models.CharField(max_length=300)
     Holiday_Date=models.DateField()
-    End_DateField=models.DateField()
     School_ResumeDate=models.DateField()
     Duration=models.CharField(max_length=255,null=True,blank=True)
-    Type=models.CharField(verbose_name='Type of Holiday')
     def save(self, *args, **kwargs):
         if self.Holiday_Date and self.School_ResumeDate:
             days = (self.School_ResumeDate - self.Holiday_Date).days

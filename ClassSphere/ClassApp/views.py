@@ -291,8 +291,6 @@ def geteventbyid(request,id):
     serializer=Eventserializer(event)
     return JsonResponse(serializer.data)
 
-
-@role_required('admin')
 @api_view(['POST'])
 def filterevents(request):
     title = request.data.get('title', None)
@@ -304,6 +302,7 @@ def filterevents(request):
         events = events.filter(title__icontains=title)
     if tag:
         events=events.filter(tag__icontains=tag)
+
     if paidstatus:
         if paidstatus == "paid":
             events = events.filter(is_paid=True)
@@ -317,7 +316,17 @@ def filterevents(request):
             start_of_month = datetime.datetime.now().replace(day=1)
             events = events.filter(date__gte=start_of_month)
     event_data=Eventserializer(events,many=True)
-    return JsonResponse({'events': event_data.data})
+    return Response({'events': event_data.data})
+
+@api_view(['POST'])
+def filterontag(request):
+    data=request.data
+    for key,value in data.items():
+        events = Event.objects.all() 
+        event_ins=events.filter(tag__icontains=value)
+        event_data=Eventserializer(event_ins,many=True)
+        print(event_data.data)
+    return Response({'events':event_data.data})
 
 @role_required('Student')
 @login_required(login_url='/login/')
@@ -380,7 +389,7 @@ def send_Notification(request):
         for user in users:
             print(user)
             message=data.validated_data['NotificationMsg']
-            Notification.objects.create(NotificationMsg=message,user_instance=user)
+            notifications.objects.create(NotificationMsg=message,user_instance=user)
         return JsonResponse({'Status':'Message sent Sucessfully'})
     else:
         return JsonResponse({'Status':data.errors})
@@ -697,8 +706,7 @@ def handlecreate(request):
         print('Somenthing went wonrg:',e)
     return Response({'status':data})     
 
-def Notification(request):
-    return render(request,'UserPages/Notification.html')
+
 
 
 @role_required('Teacher','Admin')
@@ -727,18 +735,14 @@ def adminpage(request):
 @role_required('Admin')
 def holidayCRUD(request):
     holiday_data = Holiday.objects.all()
-    types = Holiday.objects.values('Type').distinct()
-    return render(request, 'AdminPages/Holidayadmin.html', {'holiday': holiday_data, 'Type': types})
+    return render(request, 'AdminPages/Holidayadmin.html',{'holiday':holiday_data})
 
 @api_view(['POST'])
 def add_holiday(request):
     name = request.data.get('holiday')
     sdate = datetime.datetime.strptime(request.data.get('start_date'), "%Y-%m-%d").date()
-    edate = datetime.datetime.strptime(request.data.get('end_date'), "%Y-%m-%d").date()
     rdate = datetime.datetime.strptime(request.data.get('resume_date'), "%Y-%m-%d").date()
-    type = request.data.get('holiday_type')
-
-    overlapping_holidays = Holiday.objects.filter(Holiday_Date__lte=edate).filter(End_DateField__gte=sdate)
+    overlapping_holidays = Holiday.objects.filter(Holiday_Date__lte=rdate).filter(School_ResumeDate__gte=sdate)
     if overlapping_holidays.exists():
         return Response({
             "Status": "Same Holiday Dates Found ",
@@ -749,17 +753,16 @@ def add_holiday(request):
     Holiday.objects.create(
             Holiday_Name=name,
             Holiday_Date=sdate,
-            End_DateField=edate,
             School_ResumeDate=rdate,
-            Type=type
         )
-    users = profile.objects.filter(role__in=['Student','Teacher'])
+    users = profile.objects.all()
     for user in users:
             notifications.objects.create(
-                NotificationMsg=f'The school will remain closed from {sdate} to {edate} for {name}, a {type}. Classes will continue from {rdate}.',
+                Notificationtitle='Test Holiday',
+                NotificationMsg=f'The school will remain closed from {sdate}  . Classes will continue from {rdate}.',
                 user_instance=user,
                 created_at=datetime.datetime.today(),
-                tag='Holiday',
+                tag='General',
                 is_read=False
             )
     return Response({"Status": "Holiday Created Successfully"})
@@ -794,3 +797,14 @@ def deletefee(request,id):
     print(data)
     data.delete()
     return Response({'status':'Data Deleted sucessfully'})
+
+
+@login_required(login_url='/login/')
+def notificationpage(request):
+    user=request.user
+    data=notifications.objects.filter(user_instance=user.profile)
+    data_ins=notifications.objects.filter(user_instance=request.user.profile)
+    for notification_object in data_ins:
+        notification_object.is_read=True
+        notification_object.save()
+    return render(request,'UserPages/Notification.html',{'objects':data})

@@ -1,223 +1,312 @@
-{% extends "Include and Base Pages/base.html" %}   
+{% extends "Include and Base Pages/base.html" %}
 {% load static %}
 {% block content %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/Event.css' %}">
-  <div class="MainContainer">
-      <div class="sidebar">
-          <h2>Filter Events :</h2>
-          <div class="filters-container">
-            <form method="post">
-              {% csrf_token %}
-              <div class="searchbytitle">
-                  <input type="text" name="title" id="title" placeholder="Search by Title">
-                  <hr>
-              </div>
-              <div class="selection-group">
-                  <label class="ios-checkbox red">
-                      <input type="checkbox" name="paidstatus" value="paid" id="paidstatus" onclick="toggleCheckbox2(this)">
-                      <div class="checkbox-wrapper">
-                        <div class="checkbox-bg"></div>
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                          <path
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="3"
-                            stroke="currentColor"
-                            d="M4 12L10 18L20 6"
-                            class="check-path"
-                          ></path>
-                        </svg>
-                      </div>
-                      <span>Paid</span>
-                  </label>
-                  <label class="ios-checkbox red">
-                      <input type="checkbox" name="paidstatus" id="paidstatus"  onclick="toggleCheckbox2(this)">
-                      <div class="checkbox-wrapper">
-                        <div class="checkbox-bg"></div>
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                          <path
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="3"
-                            stroke="currentColor"
-                            d="M4 12L10 18L20 6"
-                            class="check-path"
-                          ></path>
-                        </svg>
-                      </div>
-                      <span>Unpaid</span>
-                  </label>
-              </div>
-              <div class="selection-group">
-                  <label class="ios-checkbox blue">
-                      <input type="checkbox" name="timeFilter"  id="timeFilter" value="Month" onclick="toggleCheckbox(this)">
-                      <div class="checkbox-wrapper">
-                        <div class="checkbox-bg"></div>
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                          <path
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="3"
-                            stroke="currentColor"
-                            d="M4 12L10 18L20 6"
-                            class="check-path"
-                          ></path>
-                        </svg>
-                      </div>
-                      <span>This Month</span>
-                  </label>
-                  <label class="ios-checkbox blue">
-                      <input type="checkbox" name="timeFilter"  value="week" id="timeFilter" onclick="toggleCheckbox(this)">
-                      <div class="checkbox-wrapper">
-                        <div class="checkbox-bg"></div>
-                        <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
-                          <path
-                            stroke-linejoin="round"
-                            stroke-linecap="round"
-                            stroke-width="3"
-                            stroke="currentColor"
-                            d="M4 12L10 18L20 6"
-                            class="check-path"
-                          ></path>
-                        </svg>
-                      </div>
-                      <span>This Week</span>
-                  </label>
-              </div>
-              <div class="button-group">
-                  <button class="filter-btn apply-btn" id="Filter" >Search</button>
-                  <button class="filter-btn clear-btn" id="Clear">Clear</button>
-              </div>
-            </form>
-          </div>
-          <!-- form below -->
-          <h4>Search by Category</h4>
-          <div class="category-container">
-            <form action="" hidden>
-              <input type="text" name="category" id="category-input">
-            </form>
-            <button type="button" class="category"><i class="fas fa-music"></i>Music</button>
-            <button  type="button" class="category"><i class="fas fa-paint-brush"></i> Arts</button>
-            <button type="button"  class="category"><i class="fas fa-futbol"></i> Sports</button>
-            <button type="button"  class="category"><i class="fas fa-chalkboard-teacher"></i> Education</button>
-            <button type="button"  class="category"><i class="fas fa-theater-masks"></i> Drama</button>
-            <button type="button"  class="category"><i class="fas fa-book"></i> Literature</button>
-            <button type="button"  class="category"><i class="fas fa-laptop-code"></i> Computer Science</button>
-            <button type="button"  class="category"><i class="fas fa-flask"></i> Science</button>
-            <button type="button"  class="category"><i class="fas fa-calculator"></i> Mathematics</button>
-            <button type="button"  class="category"><i class="fas fa-language"></i> Languages</button>
-            <button type="button"  class="category"><i class="fas fa-school"></i> School Events</button>
-            <button type="button"  class="category"><i class="fas fa-users"></i> Club Activities</button>
-            <button type="button"  class="category"><i class="fas fa-cogs"></i> Robotics</button>
-            <button type="button"  class="category"><i class="fas fa-palette"></i> Design</button>
-            <button type="button"  class="category"><i class="fas fa-people-arrows"></i> Leadership</button>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+  rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/Event.css' %}">
+<div class="MainContainer">
+  <div class="sidebar">
+    <h2>Filter Events :</h2>
+    <div class="filters-container">
+      <form method="post">
+        {% csrf_token %}
+        <input type="text" id="csrf" hidden value="{{csrf_token}}">
+        <div class="searchbytitle">
+          <input type="text" name="title" id="title" placeholder="Search by Title">
+          <hr>
         </div>
-        
-      </div>
-      <!-- Dynamic Events Loaded here By Detch JavScript -->
-      <div class="main" id="eventsContainer"></div>
-      </div>
-  </div>
-  <br>
-{% include 'Include and Base Pages/Footer.html'%}
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const buttons = document.querySelectorAll(".category");
-      buttons.forEach((btn) => {
-        btn.addEventListener("click", function () {
-          buttons.forEach((b) => b.classList.remove("active")); 
-          this.classList.add("active"); 
-        });
-      });
-    });
+        <div class="selection-group">
+          <label class="ios-checkbox red">
+            <input type="checkbox" name="paidstatus" value="paid" id="paidstatus" onclick="toggleCheckbox2(this)">
+            <div class="checkbox-wrapper">
+              <div class="checkbox-bg"></div>
+              <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor"
+                  d="M4 12L10 18L20 6" class="check-path"></path>
+              </svg>
+            </div>
+            <span>Paid</span>
+          </label>
+          <label class="ios-checkbox red">
+            <input type="checkbox" name="paidstatus" id="paidstatus" onclick="toggleCheckbox2(this)">
+            <div class="checkbox-wrapper">
+              <div class="checkbox-bg"></div>
+              <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor"
+                  d="M4 12L10 18L20 6" class="check-path"></path>
+              </svg>
+            </div>
+            <span>Unpaid</span>
+          </label>
+        </div>
+        <div class="selection-group">
+          <label class="ios-checkbox blue">
+            <input type="checkbox" name="timeFilter" id="timeFilter" value="Month" onclick="toggleCheckbox(this)">
+            <div class="checkbox-wrapper">
+              <div class="checkbox-bg"></div>
+              <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor"
+                  d="M4 12L10 18L20 6" class="check-path"></path>
+              </svg>
+            </div>
+            <span>This Month</span>
+          </label>
+          <label class="ios-checkbox blue">
+            <input type="checkbox" name="timeFilter" value="week" id="timeFilter" onclick="toggleCheckbox(this)">
+            <div class="checkbox-wrapper">
+              <div class="checkbox-bg"></div>
+              <svg fill="none" viewBox="0 0 24 24" class="checkbox-icon">
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="currentColor"
+                  d="M4 12L10 18L20 6" class="check-path"></path>
+              </svg>
+            </div>
+            <span>This Week</span>
+          </label>
+        </div>
+        <div class="button-group">
+          <button class="filter-btn apply-btn" id="Filter">Search</button>
+          <button type="reset" class="filter-btn clear-btn" id="Clear">Clear</button>
+        </div>
+      </form>
+    </div>
+    <!-- form below -->
+    <h4>Search by Category</h4>
+    <div class="category-container">
+      <form action="" hidden>
+        <input type="text" name="category" id="category-input">
+      </form>
+      <button type="button" class="category"><i class="fas fa-music"></i>Music</button>
+      <button type="button" class="category"><i class="fas fa-paint-brush"></i> Arts</button>
+      <button type="button" class="category"><i class="fas fa-futbol"></i> Sports</button>
+      <button type="button" class="category"><i class="fas fa-chalkboard-teacher"></i> Education</button>
+      <button type="button" class="category"><i class="fas fa-theater-masks"></i> Drama</button>
+      <button type="button" class="category"><i class="fas fa-book"></i> Literature</button>
+      <button type="button" class="category"><i class="fas fa-laptop-code"></i> Computer Science</button>
+      <button type="button" class="category"><i class="fas fa-flask"></i> Science</button>
+      <button type="button" class="category"><i class="fas fa-calculator"></i> Mathematics</button>
+      <button type="button" class="category"><i class="fas fa-language"></i> Languages</button>
+      <button type="button" class="category"><i class="fas fa-school"></i> School Events</button>
+      <button type="button" class="category"><i class="fas fa-users"></i> Club Activities</button>
+      <button type="button" class="category"><i class="fas fa-cogs"></i> Robotics</button>
+      <button type="button" class="category"><i class="fas fa-palette"></i> Design</button>
+      <button type="button" class="category"><i class="fas fa-people-arrows"></i> Leadership</button>
+    </div>
 
-const buttons = document.querySelectorAll('.category');
-const input = document.querySelector('input');
-buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const categoryText = btn.textContent.trim();
-        input.value = categoryText;
-        const formData = new FormData();
-        formData.append('category', categoryText);
-        fetch('/your-backend-endpoint', {
-          method: 'POST',
-          body: formData
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
+  </div>
+  <!-- Dynamic Events Loaded here By Detch JavScript -->
+  <div class="main" id="eventsContainer"></div>
+</div>
+</div>
+<br>
+{% include 'Include and Base Pages/Footer.html'%}
+
+<style>
+  .no-events-message {
+    padding: 20px;
+    text-align: center;
+    background-color: transparent;
+    border-radius: 8px;
+    margin:13rem 0rem 0rem -3rem;
+    ;
+    width: 100%;
+  }
+  
+  .no-events-message i {
+    font-size: 2.5rem;
+    color: #dc3545;
+    margin-bottom: 15px;
+    display: block;
+  }
+  
+  .no-events-message h3 {
+    color: #343a40;
+    margin-bottom: 10px;
+  }
+  
+  .no-events-message p {
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".category");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        buttons.forEach((b) => b.classList.remove("active"));
+        this.classList.add("active");
       });
     });
-    function toggleCheckbox(selectedCheckbox) {
-      let checkboxes = document.getElementsByName("timeFilter");  
-      checkboxes.forEach((checkbox) => {
-          if (checkbox !== selectedCheckbox) {
-              checkbox.checked = false;
+  });
+
+  const buttons = document.querySelectorAll('.category');
+  const input = document.querySelector('input');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const categoryText = btn.textContent.trim();
+      const csrf = document.getElementById('csrf').value
+      input.value = categoryText;
+      const formData = new FormData();
+      formData.append('category', categoryText);
+      domain = 'http://127.0.0.1:8000/events/tag/'
+      fetch(domain, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrf,
+        },
+        body: formData
+      })
+        .then(response => { return response.json() })
+        .then(data => {
+          let eventsContainer = document.getElementById('eventsContainer');
+          eventsContainer.innerHTML = "";
+          console.log(data.events.length)
+          if (data.events.length === 0) {
+            // Replace modal with inline message
+            eventsContainer.innerHTML = `
+              <div class="no-events-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>No Events Found</h3>
+                <p>There are no events available in this category right now. Please try another category or adjust your filters.</p>
+              </div>
+            `;
+            
+            const activeElem = document.querySelector('.category.active');
+            if (activeElem) {
+              setTimeout(() => {
+                activeElem.classList.remove('active');
+              }, 1700)
+            }
+          } else {
+            for (let i = 0; i < data.events.length; i++) {
+              eventsContainer.innerHTML += `
+                     <div class="card">
+                        <div class="card-img-holder">
+                            <img src="${data.events[i].eventbanner}" alt="Event Image">
+                        </div>
+                        <h3 class="blog-title">${data.events[i].title}</h3>
+                        <div class="address">
+                        <span class="blog-time">
+                            <i class="fas fa-clock"></i> 
+                            ${new Date(data.events[i].date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                            <span class="location">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                ${data.events[i].location}
+                            </span>
+                        </div>
+                        <p class="description">${data.events[i].description}</p>
+                        <div class="options">
+                            <span><a href="/detail/${data.events[i].id}" style="text-decoration: none;">Read More</a></span>
+                             <a href='${data.events[i].form}' target='_blank'><button class="btn">Register</button></a>
+                        </div>
+                    </div>
+                  `;
+            }
           }
-      });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          let eventsContainer = document.getElementById('eventsContainer');
+          eventsContainer.innerHTML = `
+            <div class="no-events-message">
+              <i class="fas fa-exclamation-circle"></i>
+              <h3>Error Loading Events</h3>
+              <p>There was an error loading events. Please try again later.</p>
+            </div>
+          `;
+        });
+    });
+  });
+
+  function toggleCheckbox(selectedCheckbox) {
+    let checkboxes = document.getElementsByName("timeFilter");
+    checkboxes.forEach((checkbox) => {
+      if (checkbox !== selectedCheckbox) {
+        checkbox.checked = false;
+      }
+    });
   }
 
   function toggleCheckbox2(selectedCheckbox) {
-      let checkboxes = document.getElementsByName("paidstatus");  
-      checkboxes.forEach((checkbox) => {
-          if (checkbox !== selectedCheckbox) {
-              checkbox.checked = false;
-          }
-      });
+    let checkboxes = document.getElementsByName("paidstatus");
+    checkboxes.forEach((checkbox) => {
+      if (checkbox !== selectedCheckbox) {
+        checkbox.checked = false;
+      }
+    });
   }
-   document.addEventListener("DOMContentLoaded", () => {
+  
+  document.addEventListener("DOMContentLoaded", () => {
     fetch('http://127.0.0.1:8000/events/all/')
-        .then(response =>{
-          console.log(response)
-          return response.json()
-        } )
-        .then(data => {
-            let eventsContainer = document.getElementById('eventsContainer');
-            eventsContainer.innerHTML = ""; 
-            data.forEach(event => {
-                eventsContainer.innerHTML += `
-                   <div class="card">
-                      <div class="card-img-holder">
-                          <img src="${event.eventbanner}" alt="Event Image">
-                      </div>
-                      <h3 class="blog-title">${event.title}</h3>
-                      <div class="address">
-                      <span class="blog-time">
-                          <i class="fas fa-clock"></i> 
-                          ${new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                          <span class="location">
-                              <i class="fas fa-map-marker-alt"></i> 
-                              ${event.location}
-                          </span>
-                      </div>
-                      <p class="description">${event.description}</p>
-                      <div class="options">
-                          <span><a href="/detail/${event.id}" style="text-decoration: none;">Read More</a></span>
-                           <a href='${event.form}' target='_blank'><button class="btn">Register</button></a>
-                      </div>
-                  </div>
-                `;
-            });
-        })
-        .catch(error => console.error("Error fetching events:", error));
-});
+      .then(response => {
+        console.log(response)
+        return response.json()
+      })
+      .then(data => {
+        let eventsContainer = document.getElementById('eventsContainer');
+        eventsContainer.innerHTML = "";
+        if (data.length === 0) {
+          // Show no events message if initial load has no events
+          eventsContainer.innerHTML = `
+            <div class="no-events-message">
+              <i class="fas fa-calendar-times"></i>
+              <h3>No Events Available</h3>
+              <p>There are currently no events available. Please check back later.</p>
+            </div>
+          `;
+        } else {
+          data.forEach(event => {
+            eventsContainer.innerHTML += `
+                     <div class="card">
+                        <div class="card-img-holder">
+                            <img src="${event.eventbanner}" alt="Event Image">
+                        </div>
+                        <h3 class="blog-title">${event.title}</h3>
+                        <div class="address">
+                        <span class="blog-time">
+                            <i class="fas fa-clock"></i> 
+                            ${new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                            <span class="location">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                ${event.location}
+                            </span>
+                        </div>
+                        <p class="description">${event.description}</p>
+                        <div class="options">
+                            <span><a href="/detail/${event.id}" style="text-decoration: none;">Read More</a></span>
+                             <a href='${event.form}' target='_blank'><button class="btn">Register</button></a>
+                        </div>
+                    </div>
+                  `;
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching events:", error);
+        let eventsContainer = document.getElementById('eventsContainer');
+        eventsContainer.innerHTML = `
+          <div class="no-events-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Error Loading Events</h3>
+            <p>There was an error loading events. Please try again later.</p>
+          </div>
+        `;
+      });
+  });
 
-document.getElementById('Filter').addEventListener("click", function(event) {
-  event.preventDefault()
-    const csrf = "{{ csrf_token }}";  
+  document.getElementById('Filter').addEventListener("click", function (event) {
+    event.preventDefault()
+    const csrf = "{{ csrf_token }}";
     console.log(csrf)
     const header = {
-        'X-CSRFToken': csrf,  
-        'Content-Type': 'application/json'
+      'X-CSRFToken': csrf,
+      'Content-Type': 'application/json'
     };
 
     const title = document.getElementById('title').value;
@@ -227,57 +316,133 @@ document.getElementById('Filter').addEventListener("click", function(event) {
     const unpaid = document.querySelector('input[name="paidstatus"]:not([value="paid"])').checked;
 
     const formData = {
-        title: title,
-        timeFilter: week ? 'week' : (month ? 'month' : ''),
-        paidstatus: paid ? 'paid' : (unpaid ? 'unpaid' : '')
+      title: title,
+      timeFilter: week ? 'week' : (month ? 'month' : ''),
+      paidstatus: paid ? 'paid' : (unpaid ? 'unpaid' : '')
     };
 
-    fetch('http://127.0.0.1:8000/events/filter/',{
-        method: 'POST',
-        headers: header,
-        body: JSON.stringify(formData)
+    fetch('http://127.0.0.1:8000/events/filter/', {
+      method: 'POST',
+      headers: header,
+      body: JSON.stringify(formData)
     })
-    .then(response => {
-      console.log(response)
-      return response.json()
-    })
-    .then(data => {
-      console.log(data)
+      .then(response => {
+        console.log(response)
+        return response.json()
+      })
+      .then(data => {
+        console.log(data)
         let eventsContainer = document.getElementById('eventsContainer');
-        eventsContainer.innerHTML = "";  
-        data.events.forEach(event => {
+        eventsContainer.innerHTML = "";
+        
+        if (data.events.length === 0) {
+          // Show no events message for filter results
+          eventsContainer.innerHTML = `
+            <div class="no-events-message">
+              <i class="fas fa-filter"></i>
+              <h3>No Matching Events</h3>
+              <p>No events match your current filter criteria. Try adjusting your filters or categories to see more events.</p>
+            </div>
+          `;
+        } else {
+          data.events.forEach(event => {
             eventsContainer.innerHTML += `
-                <div class="card">
-                    <div class="card-img-holder">
-                        <img src="${event.eventbanner}" alt="Event Image">
-                    </div>
-                    <h3 class="blog-title">${event.title}</h3>
-                    <div class="address">
-                        <span class="blog-time">
-                            <i class="fas fa-clock"></i> 
-                            ${new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <span class="location">
-                            <i class="fas fa-map-marker-alt"></i> 
-                            ${event.location}
-                        </span>
-                    </div>
-                    <p class="description">${event.description}</p>
-                    <div class="options">
-                        <span><a href="/events/${event.id}"  style="text-decoration: none;">Read More</a></span>
-                         <a href="${event.form}" target="_blank"><button class="btn">Register</button></a>
-                    </div>
-                </div>
+                  <div class="card">
+                      <div class="card-img-holder">
+                          <img src="${event.eventbanner}" alt="Event Image">
+                      </div>
+                      <h3 class="blog-title">${event.title}</h3>
+                      <div class="address">
+                          <span class="blog-time">
+                              <i class="fas fa-clock"></i> 
+                              ${new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          <span class="location">
+                              <i class="fas fa-map-marker-alt"></i> 
+                              ${event.location}
+                          </span>
+                      </div>
+                      <p class="description">${event.description}</p>
+                      <div class="options">
+                          <span><a href="/events/${event.id}"  style="text-decoration: none;">Read More</a></span>
+                           <a href="${event.form}" target="_blank"><button class="btn">Register</button></a>
+                      </div>
+                  </div>
+              `;
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching events:", error);
+        let eventsContainer = document.getElementById('eventsContainer');
+        eventsContainer.innerHTML = `
+          <div class="no-events-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>Error Loading Events</h3>
+            <p>There was an error filtering events. Please try again later.</p>
+          </div>
+        `;
+      });
+  });
+  
+  // Add event listener for Clear button
+  document.getElementById('Clear').addEventListener("click", function() {
+    setTimeout(() => {
+      // Fetch all events again after clearing filters
+      fetch('http://127.0.0.1:8000/events/all/')
+        .then(response => response.json())
+        .then(data => {
+          let eventsContainer = document.getElementById('eventsContainer');
+          eventsContainer.innerHTML = "";
+          if (data.length === 0) {
+            eventsContainer.innerHTML = `
+              <div class="no-events-message">
+                <i class="fas fa-calendar-times"></i>
+                <h3>No Events Available</h3>
+                <p>There are currently no events available. Please check back later.</p>
+              </div>
             `;
+          } else {
+            data.forEach(event => {
+              eventsContainer.innerHTML += `
+                <div class="card">
+                  <div class="card-img-holder">
+                    <img src="${event.eventbanner}" alt="Event Image">
+                  </div>
+                  <h3 class="blog-title">${event.title}</h3>
+                  <div class="address">
+                    <span class="blog-time">
+                      <i class="fas fa-clock"></i> 
+                      ${new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <span class="location">
+                      <i class="fas fa-map-marker-alt"></i> 
+                      ${event.location}
+                    </span>
+                  </div>
+                  <p class="description">${event.description}</p>
+                  <div class="options">
+                    <span><a href="/detail/${event.id}" style="text-decoration: none;">Read More</a></span>
+                    <a href='${event.form}' target='_blank'><button class="btn">Register</button></a>
+                  </div>
+                </div>
+              `;
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching events:", error);
+          let eventsContainer = document.getElementById('eventsContainer');
+          eventsContainer.innerHTML = `
+            <div class="no-events-message">
+              <i class="fas fa-exclamation-circle"></i>
+              <h3>Error Loading Events</h3>
+              <p>There was an error loading events. Please try again later.</p>
+            </div>
+          `;
         });
-    })
-    .catch(error => console.error("Error fetching events:", error));
-});
+    }, 100); // Small delay to ensure form reset completes
+  });
 </script>
 
-  {% endblock %}
-
-
-
-
-  
+{% endblock %}
