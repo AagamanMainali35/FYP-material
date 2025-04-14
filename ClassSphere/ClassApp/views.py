@@ -596,7 +596,7 @@ def schedule(request):
         }
     return render(request,'UserPages/exam.html',context)
 
-@role_required('admin')
+@role_required('Admin')
 @login_required
 def attendance_view(request):
     attendance_records = attendance.objects.all().select_related('user')
@@ -622,16 +622,24 @@ def get_attendance_data(request):
         return Response({'Status': 'No file received'}, status=400)
     uploaded_file = request.FILES['file']
     if not uploaded_file.name.endswith('.xlsx'):
-                return JsonResponse({'error': 'Only .xlsx files are allowed'}, status=400)
+                return Response({'error': 'Only .xlsx files are allowed'}, status=400)
     else:
+        required_columns=['Name','Email','Class','Date','Attendance Status']
         df=pd.read_excel(uploaded_file)
         records = df.to_dict('records')  
+        colums=df.columns
+        for i in required_columns:
+            if i  not in  colums:
+                print(f'{i} is not found in the excel sheet')   
+                return Response({'ColumnError': f'No Column named {i} not  Found .Please check the File Format  '})
         for i in records:
-            print(f'The name is {i['Name']} , email is {i['Email']} , class is {i['Class']} , Date is {i['Date']},{i['Attendance Status']}')
-            user_instance=User.objects.get(email=i['Email'])
-            data=attendance.objects.filter(user=user_instance,date=i['Date'])
-            if not  data:
-                attendance.objects.create(user=user_instance,Grade=user_instance.profile.grade,date=i['Date'],Attendance_Status=i['Attendance Status'])
+            if not User.objects.filter(email=i['Email']).exists():
+                return Response({"UserError": f"No user {i['Name']} exists in the system"})
+            else:
+                user_instance=User.objects.get(email=i['Email'])
+                data=attendance.objects.filter(user=user_instance,date=i['Date'])
+                if not  data:
+                    attendance.objects.create(user=user_instance,Grade=user_instance.profile.grade,date=i['Date'],Attendance_Status=i['Attendance Status'])
     return Response({'Status': f'{uploaded_file.name} file received successfully'})
 
 @api_view(['POST'])
