@@ -1,757 +1,616 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Fee Structure Management | School System</title>
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font Awesome for icons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <style>
-            :root {
-                --primary: #4263eb;
-                --primary-light: #edf2ff;
-                --secondary: #00b8d9;
-                --dark: #243256;
-                --light: #f8fafc;
-                --success: #00c853;
-                --warning: #ffab00;
-                --danger: #ff5252;
-                --gray: #6e7a8a;
-                --light-gray: #edf2f7;
-                --border-radius: 12px;
-                --box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
-                --transition: all 0.3s ease-in-out;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Structure Management | School System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4263eb;
+            --primary-light: #edf2ff;
+            --secondary: #00b8d9;
+            --dark: #243256;
+            --light: #f8fafc;
+            --success: #00c853;
+            --warning: #ffab00;
+            --danger: #ff5252;
+            --gray: #6e7a8a;
+            --light-gray: #edf2f7;
+            --border-radius: 12px;
+            --box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+            --transition: all 0.3s ease-in-out;
+        }
 
-            body {
-                background-color: var(--light);
-                color: var(--dark);
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-            .navbar-brand {
-                font-weight: 700;
-                color: var(--dark);
-            }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--dark);
+        }
 
-            .main-content {
-                margin-left: 300px;
-                padding: 20px;
-            }
+        .main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
 
-            .page-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 30px;
-            }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-            .page-title {
-                font-weight: 600;
-                color: var(--dark);
-                margin: 0;
-            }
+        .page-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
 
-            .card {
-                border-radius: var(--border-radius);
-                box-shadow: var(--box-shadow);
-                border: none;
-                transition: var(--transition);
-                margin-bottom: 20px;
-            }
+        .card {
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: none;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
 
-            .card-header {
-                border-top-left-radius: var(--border-radius);
-                border-top-right-radius: var(--border-radius);
-                font-weight: 600;
-                padding: 15px 20px;
-                background-color: white;
-                border-bottom: 1px solid var(--light-gray);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .card-header {
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            font-weight: 600;
+            padding: 15px 20px;
+            background-color: white;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .card-title {
-                margin: 0;
-                font-size: 1.1rem;
-                color: var(--dark);
-            }
+        .card-title {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
 
-            .btn {
-                border-radius: var(--border-radius);
-                transition: var(--transition);
-                font-weight: 500;
-                padding: 8px 16px;
-            }
+        .btn {
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-weight: 500;
+            padding: 8px 16px;
+        }
 
-            .btn-primary {
-                background-color: var(--primary);
-                border-color: var(--primary);
-            }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
 
-            .btn-primary:hover {
-                background-color: #3b58d5;
-                border-color: #3b58d5;
-            }
+        .btn-primary:hover {
+            background-color: #3b58d5;
+            border-color: #3b58d5;
+        }
 
-            .btn-outline-primary {
-                color: var(--primary);
-                border-color: var(--primary);
-            }
+        .btn-outline-primary {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
 
-            .btn-outline-primary:hover {
-                background-color: var(--primary);
-                color: white;
-            }
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
 
-            .btn-secondary {
-                background-color: var(--secondary);
-                border-color: var(--secondary);
-            }
+        .btn-secondary {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
 
-            .btn-secondary:hover {
-                background-color: #00a6c4;
-                border-color: #00a6c4;
-            }
+        .btn-secondary:hover {
+            background-color: #00a6c4;
+            border-color: #00a6c4;
+        }
 
-            .btn-success {
-                background-color: var(--success);
-                border-color: var(--success);
-            }
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
 
-            .btn-success:hover {
-                background-color: #00b84d;
-                border-color: #00b84d;
-            }
+        .btn-success:hover {
+            background-color: #00b84d;
+            border-color: #00b84d;
+        }
 
-            .btn-warning {
-                background-color: var(--warning);
-                border-color: var(--warning);
-                color: var(--dark);
-            }
+        .btn-warning {
+            background-color: var(--warning);
+            border-color: var(--warning);
+            color: var(--dark);
+        }
 
-            .btn-warning:hover {
-                background-color: #f0a000;
-                border-color: #f0a000;
-                color: var(--dark);
-            }
+        .btn-warning:hover {
+            background-color: #f0a000;
+            border-color: #f0a000;
+            color: var(--dark);
+        }
 
-            .btn-danger {
-                background-color: var(--danger);
-                border-color: var(--danger);
-            }
+        .btn-danger {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
 
-            .btn-danger:hover {
-                background-color: #e04848;
-                border-color: #e04848;
-            }
+        .btn-danger:hover {
+            background-color: #e04848;
+            border-color: #e04848;
+        }
 
-            .alert {
-                border-radius: var(--border-radius);
-                padding: 15px;
-            }
+        .alert {
+            border-radius: var(--border-radius);
+            padding: 15px;
+        }
 
-            .alert-success {
-                background-color: var(--success);
-                color: white;
-                border-color: var(--success);
-            }
+        .alert-success {
+            background-color: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
 
-            .alert-danger {
-                background-color: var(--danger);
-                color: white;
-                border-color: var(--danger);
-            }
+        .alert-danger {
+            background-color: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
 
-            .table {
-                border-radius: var(--border-radius);
-                overflow: hidden;
-                margin-bottom: 0;
-            }
+        .table {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 0;
+        }
 
-            .table th {
-                background-color: var(--primary-light);
-                color: var(--dark);
-                font-weight: 600;
-                padding: 12px 15px;
-                border-bottom: 2px solid var(--light-gray);
-            }
+        .table th {
+            background-color: var(--primary-light);
+            color: var(--dark);
+            font-weight: 600;
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
 
-            .table td {
-                padding: 12px 15px;
-                vertical-align: middle;
-                border-top: 1px solid var(--light-gray);
-            }
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-top: 1px solid var(--light-gray);
+        }
 
-            .table tr:last-child td {
-                border-bottom: none;
-            }
+        .table tr:last-child td {
+            border-bottom: none;
+        }
 
-            .form-control, .form-select {
-                border-radius: var(--border-radius);
-                border: 1px solid var(--light-gray);
-                padding: 10px 15px;
-                transition: var(--transition);
-                height: auto;
-            }
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            border: 1px solid var(--light-gray);
+            padding: 10px 15px;
+            transition: var(--transition);
+            height: auto;
+        }
 
-            .form-control:focus, .form-select:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 0.2rem var(--primary-light);
-            }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem var(--primary-light);
+        }
 
-            .form-control:disabled {
-                background-color: var(--light-gray);
-                opacity: 1;
-            }
+        .form-control:disabled {
+            background-color: var(--light-gray);
+            opacity: 1;
+        }
 
-            .modal-content {
-                border-radius: var(--border-radius);
-                border: none;
-                box-shadow: var(--box-shadow);
-            }
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--box-shadow);
+        }
 
-            .modal-header {
-                border-bottom: 1px solid var(--light-gray);
-                padding: 15px 20px;
-            }
+        .modal-header {
+            border-bottom: 1px solid var(--light-gray);
+            padding: 15px 20px;
+        }
 
-            .modal-title {
-                font-weight: 600;
-                color: var(--dark);
-            }
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
 
-            .modal-footer {
-                border-top: 1px solid var(--light-gray);
-                padding: 15px 20px;
-            }
+        .modal-footer {
+            border-top: 1px solid var(--light-gray);
+            padding: 15px 20px;
+        }
 
-            .badge {
-                border-radius: var(--border-radius);
-                padding: 6px 10px;
-                font-weight: 500;
-            }
+        .badge {
+            border-radius: var(--border-radius);
+            padding: 6px 10px;
+            font-weight: 500;
+        }
 
-            .badge-primary {
-                background-color: var(--primary-light);
-                color: var(--primary);
-            }
+        .badge-primary {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
 
-            .badge-success {
-                background-color: rgba(0, 200, 83, 0.1);
-                color: var(--success);
-            }
+        .badge-success {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: var(--success);
+        }
 
-            .search-box {
-                position: relative;
-                max-width: 300px;
-            }
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
 
-            .search-box .form-control {
-                padding-left: 40px;
-            }
+        .search-box .form-control {
+            padding-left: 40px;
+        }
 
-            .search-box i {
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--gray);
-            }
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
 
-            .hidden {
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-active {
+            background-color: var(--success);
+        }
+
+        .status-inactive {
+            background-color: var(--danger);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .text-muted {
+            color: var(--gray) !important;
+        }
+
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
+        .text-success {
+            color: var(--success) !important;
+        }
+
+        .text-danger {
+            color: var(--danger) !important;
+        }
+
+        .text-warning {
+            color: var(--warning) !important;
+        }
+
+        .bg-primary-light {
+            background-color: var(--primary-light);
+        }
+
+        .action-btns .btn {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input span {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .currency-input input {
+            padding-left: 30px;
+        }
+
+        .tooltip-inner {
+            border-radius: var(--border-radius);
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'Include and Base Pages/sidebar.html'%}
+    {% if user.profle.role == 'Student' %}
+        <Style>
+            li.nav-link.Create{
                 display: none;
             }
-
-            .fade-in {
-                animation: fadeIn 0.3s ease-in-out;
+            li.nav-link.Attendance{
+                display: none;
             }
-
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
+        </Style>
+        {% endif %}
+        {% if user.profile.role == 'Admin' %}
+        <style>
+            li.nav-link.Fees{
+                display: none;
             }
-
-            .status-indicator {
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                margin-right: 5px;
+            li.nav-link.Exam{
+                display: none;
             }
-
-            .status-active {
-                background-color: var(--success);
-            }
-
-            .status-inactive {
-                background-color: var(--danger);
-            }
-
-            .form-label {
-                font-weight: 500;
-                color: var(--dark);
-                margin-bottom: 5px;
-            }
-
-            .text-muted {
-                color: var(--gray) !important;
-            }
-
-            .text-primary {
-                color: var(--primary) !important;
-            }
-
-            .text-success {
-                color: var(--success) !important;
-            }
-
-            .text-danger {
-                color: var(--danger) !important;
-            }
-
-            .text-warning {
-                color: var(--warning) !important;
-            }
-
-            .bg-primary-light {
-                background-color: var(--primary-light);
-            }
-
-            .action-btns .btn {
-                padding: 5px 10px;
-                font-size: 0.85rem;
-            }
-
-            .currency-input {
-                position: relative;
-            }
-
-            .currency-input span {
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--gray);
-            }
-
-            .currency-input input {
-                padding-left: 30px;
-            }
-
-            .tooltip-inner {
-                border-radius: var(--border-radius);
-                padding: 5px 10px;
+            li.nav-link.Create{
+                display: none;
             }
         </style>
-    </head>
-    <body>
-        {% include 'Include and Base Pages/sidebar.html'%}
-        {% if user.profle.role == 'Student' %}
-            <Style>
-                li.nav-link.Create{
-                    display: none;
-                }
-                li.nav-link.Attendance{
-                    display: none;
-                }
-            </Style>
-            {% endif %}
-            {% if user.profile.role == 'Admin' %}
-            <style>
-                li.nav-link.Fees{
-                    display: none;
-                }
-                li.nav-link.Exam{
-                    display: none;
-                }
-                li.nav-link.Create{
-                    display: none;
-                }
-            </style>
-            {% endif %} 
-        <div class="main-content">
-            <!-- Page Header -->
-            <div class="page-header">
-                <div>
-                    <h1 class="page-title">
-                        Fee Structure Management
-                    </h1>
+        {% endif %} 
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    Fee Structure Management
+                </h1>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div id="alertSuccess" class="alert alert-success alert-dismissible fade hidden" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span id="successMessage"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div id="alertError" class="alert alert-danger alert-dismissible fade hidden" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span id="errorMessage"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Fee Structures Card -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list-alt text-primary me-2"></i> Current Fee Structures
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="feeTable">
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Total Annual Fee</th>
+                                <th>Admission Fee</th>
+                                <th>Monthly Fee</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feeTableBody">
+                            {% for i in fees %}
+                            <tr>
+                                <td id='grade-{{i.id}}'>Grade {{i.grade.classname}}</td>
+                                <td id='tfee-{{i.id}}'>${{i.Totalfeeamount}}</td>
+                                <td id='afee-{{i.id}}'>${{i.AdmissionFee}}</td>
+                                <td id='mfee-{{i.id}}'>${{i.monthlyfee|floatformat:2}}</td>
+                                <td class="action-btns">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editFeeStructure('{{i.id}}')" data-bs-toggle="tooltip" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-                <div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newFeeStructureModal">
-                        <i class="fas fa-plus me-2"></i> New Fee Structure
-                    </button>
-                </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Alert Messages -->
-            <div id="alertSuccess" class="alert alert-success alert-dismissible fade hidden" role="alert">
-                <i class="fas fa-check-circle me-2"></i>
-                <span id="successMessage"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
 
-            <div id="alertError" class="alert alert-danger alert-dismissible fade hidden" role="alert">
-                <i class="fas fa-exclamation-circle me-2"></i>
-                <span id="errorMessage"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-
-            <!-- Fee Structures Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-list-alt text-primary me-2"></i> Current Fee Structures
+    <!-- Edit Fee Structure Modal -->
+    <div class="modal fade" id="editFeeStructureModal" tabindex="-1" aria-labelledby="editFeeStructureModalLabel" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFeeStructureModalLabel">
+                        <i class="fas fa-edit text-primary me-2"></i> Edit Fee Structure
                     </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="feeTable">
-                            <thead>
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>Total Annual Fee</th>
-                                    <th>Admission Fee</th>
-                                    <th>Monthly Fee</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="feeTableBody">
-                                {% for i in fees %}
-                                <tr>
-                                    <td id='grade-{{i.id}}' >Grade {{i.grade.classname}}</td>
-                                    <td id='tfee-{{i.id}}'>${{i.Totalfeeamount}}</td>
-                                    <td id='afee-{{i.id}}'>${{i.AdmissionFee}}</td>
-                                    <td id='mfee-{{i.id}}'>${{i.monthlyfee|floatformat:2}}</td>
-                                    <td class="action-btns">
-                                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editFeeStructure('{{i.id}}')" data-bs-toggle="tooltip" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete('{{i.id}}')" data-bs-toggle="tooltip" title="Delete">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- New Fee Structure Modal -->
-        <div class="modal fade" id="newFeeStructureModal" tabindex="-1" aria-labelledby="newFeeStructureModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="newFeeStructureModalLabel">
-                            <i class="fas fa-plus-circle text-primary me-2"></i> Create New Fee Structure
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="newFeeForm">
-                        <input type="text" id="csrf" value="{{csrf_token}}" hidden>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="newGrade" class="form-label">Grade Level</label>
-                                    <select class="form-select" id="newGrade" required>
-                                        <option value="" selected disabled>Select grade level</option>
-                                        <option value="Grade 1">Grade 1</option>
-                                        <option value="Grade 2">Grade 2</option>
-                                        <option value="Grade 3">Grade 3</option>
-                                        <option value="Grade 4">Grade 4</option>
-                                        <option value="Grade 5">Grade 5</option>
-                                        <option value="Grade 6">Grade 6</option>
-                                        <option value="Grade 7">Grade 7</option>
-                                        <option value="Grade 8">Grade 8</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="newTotalFee" class="form-label">Total Annual Fee</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="number" class="form-control" id="newTotalFee" placeholder="0.00" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="newAdmissionFee" class="form-label">Admission Fee</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="number" class="form-control" id="newAdmissionFee" placeholder="0.00" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Monthly Fee (calculated)</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="text" class="form-control" id="newMonthlyFee" disabled>
-                                    </div>
-                                    <small class="text-muted">Calculated as Total Annual Fee ÷ 12 months</small>
-                                </div>
-                            </div>
-                                            
-                            <div class="mb-3">
-                                <label for="newNotes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="newNotes" rows="3" placeholder="Optional notes about this fee structure"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i> Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-2"></i> Save Fee Structure
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Fee Structure Modal -->
-        <div class="modal fade" id="editFeeStructureModal" tabindex="-1" aria-labelledby="editFeeStructureModalLabel" >
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editFeeStructureModalLabel">
-                            <i class="fas fa-edit text-primary me-2"></i> Edit Fee Structure
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="editFeeForm">
-                        <input type="hidden" id="editGradeId" >
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="editGrade" class="form-label">Grade Level</label>
-                                    <input type="text" class="form-control" id="editGrade" disabled>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="editTotalFee" class="form-label">Total Annual Fee</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="number" class="form-control" id="editTotalFee" placeholder="0.00" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="editAdmissionFee" class="form-label">Admission Fee</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="number" class="form-control" id="editAdmissionFee" placeholder="0.00" required>
-                                    </div>                       
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Monthly Fee (calculated)</label>
-                                    <div class="currency-input">
-                                        <span>$</span>
-                                        <input type="number" class="form-control"  id="editMonthlyFee" disabled>
-                                    </div>
-                                    <small class="text-muted">Calculated as Total Annual Fee ÷ 12 months</small>
-                                </div>
-                            </div>
-                            
-                            
-                            <div class="mb-3">
-                                <label for="editNotes" class="form-label">Notes</label>
-                                <textarea class="form-control" id="editNotes" rows="3" placeholder="Optional notes about this fee structure"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-2"></i> Cancel
-                            </button>
-                            <button type="button" class="btn btn-primary" id="editbtn">
-                                <i class="fas fa-save me-2"></i> Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Confirmation Modal -->
-        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteConfirmationModalLabel">
-                            <i class="fas fa-exclamation-triangle me-2"></i> Confirm Deletion
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                <form id="editFeeForm">
+                    <input type="hidden" id="editGradeId">
                     <div class="modal-body">
-                        <p>Are you sure you want to delete the fee structure for <strong id="deleteGradeName"></strong>?</p>
-                        <p class="text-danger">This action cannot be undone. All associated data will be permanently removed.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editGrade" class="form-label">Grade Level</label>
+                                <input type="text" class="form-control" id="editGrade" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editTotalFee" class="form-label">Total Annual Fee</label>
+                                <div class="currency-input">
+                                    <span>$</span>
+                                    <input type="number" class="form-control" id="editTotalFee" placeholder="0.00" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editAdmissionFee" class="form-label">Admission Fee</label>
+                                <div class="currency-input">
+                                    <span>$</span>
+                                    <input type="number" class="form-control" id="editAdmissionFee" placeholder="0.00" required>
+                                </div>                       
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Monthly Fee (calculated)</label>
+                                <div class="currency-input">
+                                    <span>$</span>
+                                    <input type="number" class="form-control"  id="editMonthlyFee" disabled>
+                                </div>
+                                <small class="text-muted">Calculated as Total Annual Fee ÷ 12 months</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editNotes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="editNotes" rows="3" placeholder="Optional notes about this fee structure"></textarea>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i> Cancel
                         </button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
-                            <i class="fas fa-trash-alt me-2"></i> Delete Permanently
+                        <button type="button" class="btn btn-primary" id="editbtn">
+                            <i class="fas fa-save me-2"></i> Save Changes
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!-- Bootstrap and JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-        const csrf=document.getElementById('csrf').value
-        
-            // Show success alert
-            function showSuccessAlert(message) {
-                const alert = document.getElementById('alertSuccess');
-                document.getElementById('successMessage').textContent = message;
-                alert.classList.remove('hidden');
-                alert.classList.add('show');
-                
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    alert.classList.add('hidden');
-                    alert.classList.remove('show');
-                }, 5000);
-            }
-
-            // Show error alert
-            function showErrorAlert(message) {
-                const alert = document.getElementById('alertError');
-                document.getElementById('errorMessage').textContent = message;
-                alert.classList.remove('hidden');
-                alert.classList.add('show');
-                
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    alert.classList.add('hidden');
-                    alert.classList.remove('show');
-                }, 5000);
-            }
-
-            // Calculate monthly fee
-            function calculateMonthlyFee(totalFee) {
-                return (totalFee / 12).toFixed(2);
-            }
-
-
-            
-            // Edit fee structure
-            function editFeeStructure(id) { 
-                id=parseInt(id)
-                console.log(typeof(id))
-                const modal = new bootstrap.Modal(document.getElementById('editFeeStructureModal'));
-                const grade =document.getElementById(`grade-${id}`).textContent
-                const totfee=document.getElementById(`tfee-${id}`).textContent.replace('$',"")
-                const monfee= document.getElementById(`mfee-${id}`).textContent.replace('$',"")
-                const afee= document.getElementById(`afee-${id}`).textContent.replace('$',"")
-                document.getElementById('editGradeId').value=id;
-                document.getElementById('editGrade').value = grade;
-                document.getElementById('editAdmissionFee').value = afee;
-                document.getElementById('editTotalFee').value = totfee;
-                document.getElementById('editMonthlyFee').value =parseFloat(totfee/12).toFixed(2);
-                modal.show();
-                document.getElementById('editTotalFee').addEventListener('input', function() {
-                    const annualFee = parseFloat(this.value) || 0;  
-                    const monthlyFee = (annualFee / 12).toFixed(2);
-                    document.getElementById('editMonthlyFee').value = monthlyFee;
-                });
-            }
-
-            // Confirm delete
-            function confirmDelete(id) {
-                id=parseInt(id)
-                console.log(typeof(id))
-                const grade=document.getElementById(`grade-${id}`).textContent
-                console.log(grade)
-                const modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-                modal.show();
-                document.getElementById('confirmDeleteBtn').addEventListener('click',()=>{
-                    domain=`http://127.0.0.1:8000/delete/fee_setup/${id}`
-                    fetch(domain,{
-                        method:'DELETE',
-                        headers:{
-                            'X-CSRFToken':csrf
-                        }
-                        
-                    })
-                    .then(response=>{
-                        return response.json()
-                    })
-                    .then(data=>{
-                        console.log
-                    });
-                    
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal'));
-                    modal.hide();
-                    showSuccessAlert(`Fee structure for  ${grade} has been deleted successfully.`);
-                }) 
-            };
-            
-
-
-
-            document.getElementById('newFeeForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const grade = document.getElementById('newGrade').value;
-                const totalFee = parseFloat(document.getElementById('newTotalFee').value);
-                const admissionFee = parseFloat(document.getElementById('newAdmissionFee').value);
-                
-                // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('newFeeStructureModal'));
-                modal.hide();
-                        
-                // Show success message
-                showSuccessAlert(`New fee structure for ${grade} has been created successfully.`);
-            });
-
-
-            document.getElementById('editbtn').addEventListener('click', function() {
-                formdata=new FormData()
-                const id=document.getElementById('editGradeId').value
-                const grade = document.getElementById('editGrade').value.replace('Grade','');
-                const totalFee = parseFloat(document.getElementById('editTotalFee').value);
-                const admissionFee = parseFloat(document.getElementById('editAdmissionFee').value);
-                const monthlyfee=document.getElementById('editMonthlyFee').value
-                const modal = bootstrap.Modal.getInstance(document.getElementById('editFeeStructureModal'));
-                modal.hide();
-                showSuccessAlert(`Fee structure for Grade ${grade} has been updated successfully.`);
-                formdata.append('Grade',grade)
-                formdata.append('total_fee',totalFee)
-                formdata.append('admission_fee',admissionFee)
-                formdata.append('monthly_fee',monthlyfee)
-                domain=`http://127.0.0.1:8000/update/fee_setup/${id}`
-                
-                fetch(domain,{
-                    method:'UPDATE',
-                    headers:{
-                        'X-CSRFToken':csrf
-                    },
-                    body:formdata
-                })
-                .then(response=>{
-                    return response.json()
-                })
-                .then(data=>{
-                    setTimeout(()=>{
-                        location.reload()
-                    },2000)
-                })
-            });
+    <!-- Bootstrap and JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const csrf=document.getElementById('csrf').value
     
-        </script>
-    </body>
-    </html>
+        // Show success alert
+        function showSuccessAlert(message) {
+            const alert = document.getElementById('alertSuccess');
+            document.getElementById('successMessage').textContent = message;
+            alert.classList.remove('hidden');
+            alert.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alert.classList.add('hidden');
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Show error alert
+        function showErrorAlert(message) {
+            const alert = document.getElementById('alertError');
+            document.getElementById('errorMessage').textContent = message;
+            alert.classList.remove('hidden');
+            alert.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alert.classList.add('hidden');
+                alert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Calculate monthly fee
+        function calculateMonthlyFee(totalFee) {
+            return (totalFee / 12).toFixed(2);
+        }
+
+        
+        // Edit fee structure
+        function editFeeStructure(id) { 
+            id=parseInt(id)
+            console.log(typeof(id))
+            const modal = new bootstrap.Modal(document.getElementById('editFeeStructureModal'));
+            const grade =document.getElementById(`grade-${id}`).textContent
+            const totfee=document.getElementById(`tfee-${id}`).textContent.replace('$',"")
+            const monfee= document.getElementById(`mfee-${id}`).textContent.replace('$',"")
+            const afee= document.getElementById(`afee-${id}`).textContent.replace('$',"")
+            document.getElementById('editGradeId').value=id;
+            document.getElementById('editGrade').value = grade;
+            document.getElementById('editAdmissionFee').value = afee;
+            document.getElementById('editTotalFee').value = totfee;
+            document.getElementById('editMonthlyFee').value =parseFloat(totfee/12).toFixed(2);
+            modal.show();
+            document.getElementById('editTotalFee').addEventListener('input', function() {
+                const annualFee = parseFloat(this.value) || 0;  
+                const monthlyFee = (annualFee / 12).toFixed(2);
+                document.getElementById('editMonthlyFee').value = monthlyFee;
+            });
+        }
+
+        document.getElementById('newFeeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const grade = document.getElementById('newGrade').value;
+            const totalFee = parseFloat(document.getElementById('newTotalFee').value);
+            const admissionFee = parseFloat(document.getElementById('newAdmissionFee').value);
+            
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newFeeStructureModal'));
+            modal.hide();
+                    
+            // Show success message
+            showSuccessAlert(`New fee structure for ${grade} has been created successfully.`);
+        });
+
+
+        document.getElementById('editbtn').addEventListener('click', function() {
+            formdata=new FormData()
+            const id=document.getElementById('editGradeId').value
+            const grade = document.getElementById('editGrade').value.replace('Grade','');
+            const totalFee = parseFloat(document.getElementById('editTotalFee').value);
+            const admissionFee = parseFloat(document.getElementById('editAdmissionFee').value);
+            const monthlyfee=document.getElementById('editMonthlyFee').value
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editFeeStructureModal'));
+            modal.hide();
+            showSuccessAlert(`Fee structure for Grade ${grade} has been updated successfully.`);
+            formdata.append('Grade',grade)
+            formdata.append('total_fee',totalFee)
+            formdata.append('admission_fee',admissionFee)
+            formdata.append('monthly_fee',monthlyfee)
+            domain=`http://127.0.0.1:8000/update/fee_setup/${id}`
+            
+            fetch(domain,{
+                method:'UPDATE',
+                headers:{
+                    'X-CSRFToken':csrf
+                },
+                body:formdata
+            })
+            .then(response=>{
+                return response.json()
+            })
+            .then(data=>{
+                setTimeout(()=>{
+                    location.reload()
+                },2000)
+            })
+        });
+
+    </script>
+</body>
+</html>

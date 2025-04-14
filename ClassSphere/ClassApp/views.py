@@ -298,9 +298,12 @@ def filterevents(request):
     title = request.data.get('title', None)
     paidstatus = request.data.get('paidstatus', None)
     time_filter = request.data.get('timeFilter', None)
+    tag=request.data.get('category',None)
     events = Event.objects.all() 
     if title:
         events = events.filter(title__icontains=title)
+    if tag:
+        events=events.filter(tag__icontains=tag)
     if paidstatus:
         if paidstatus == "paid":
             events = events.filter(is_paid=True)

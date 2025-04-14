@@ -96,6 +96,23 @@ class FeePayment(models.Model):
 
 
 class Event(models.Model):
+    tagchoices = [
+    ('Music', 'Music'),
+    ('Arts', 'Arts'),
+    ('Sports', 'Sports'),
+    ('Education', 'Education'),
+    ('Drama', 'Drama'),
+    ('Literature', 'Literature'),
+    ('Computer Science', 'Computer Science'),
+    ('Science', 'Science'),
+    ('Mathematics', 'Mathematics'),
+    ('Languages', 'Languages'),
+    ('School Events', 'School Events'),
+    ('Club Activities', 'Club Activities'),
+    ('Robotics', 'Robotics'),
+    ('Design', 'Design'),
+    ('Leadership', 'Leadership'),
+]
     title = models.CharField(max_length=100)
     is_paid = models.BooleanField(default=False)
     eventbanner = models.ImageField(upload_to='EventBanners')
@@ -103,6 +120,7 @@ class Event(models.Model):
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
     form = models.URLField(blank=True,null=True)
+    tag=models.CharField(choices=tagchoices,null=True,blank=True)
     def __str__(self):
         return self.title
 
