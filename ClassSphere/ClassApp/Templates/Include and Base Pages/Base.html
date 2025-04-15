@@ -17,6 +17,8 @@
     }
 </style>
 <body>
+    {% include 'Include and Base Pages/rolerestriction.html'%}
+
      <div class="header">
         <header class="header-content">
             <a href="#logo" class="logo">
@@ -24,22 +26,21 @@
                 <span class="logo-text">ClassSphere</span>
             </a>
             <nav class="nav">
-                <a href="/" class="nav-link">
+                <a href="/" class="nav-link Home" >
                     <span>Home</span>
                 </a>
-                <a href="/event" class="nav-link">
+                <a href="/event" class="nav-link Events">
                     <span>Events</span>
                 </a>
+                {% if user.profile.role == 'Student'%}
                 <a href="/schedule" class="nav-link Exam">
                     <span>Exams</span>
                 </a>
-                <a href="/holiday" class="nav-link">
+                {%endif%}
+                <a href="/holiday" class="nav-link Holiday">
                     <span>Holiday</span>
                 </a>
-                <!-- <a href="{% url 'userprofile' %}" class="nav-link profile">
-                    <i class='bx bx-user-circle'></i>
-                    <span>Profile</span>
-                </a> -->
+
                 {% if user.profile.role == 'Admin'%}
             <a href="{% url 'adminpage' %}" class="nav-link profile">
               <span>DashBoard</span>

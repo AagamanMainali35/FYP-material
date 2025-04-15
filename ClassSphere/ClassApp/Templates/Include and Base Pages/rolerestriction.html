@@ -1,0 +1,66 @@
+{% if user.profile.role == 'Student' %}
+        <Style>
+            li.nav-link.Create{
+                display: none;
+            }
+            li.nav-link.Attendance{
+                display: none;
+            }
+            li.nav-link.setupfees{
+                display: none;
+            }
+            li.nav-link.eventManage{
+                display: none;
+            }
+            li.nav-link.dashboard{
+                display: none;
+            }
+            li.nav-link.holiday{
+                display: none;
+            }
+           
+        </Style>
+        {% endif %}
+        {% if user.profile.role == 'Admin' %}
+        <style>
+            li.nav-link.Create{
+                display: none;
+            }
+            li.nav-link.Fees{
+                display: none;
+            }
+            li.nav-link.Fees{
+                display: none;
+            }
+            li.nav-link.Exam{
+                display: none;
+            }
+
+        </style>
+        {% endif %} 
+        {% if user.profile.role == 'Teacher' %}
+        <style>
+            li.nav-link.dashboard{
+                display: none;
+            }
+            li.nav-link.setupfees{
+                display: none;
+            }
+            li.nav-link.eventManage{
+                display: none;
+            }
+            li.nav-link.holiday{
+                display: none;
+            }
+            li.nav-link.Fees{
+                display: none;
+            }
+            li.nav-link.Attendance{
+                display: none;
+            }
+            li.nav-link.Exam{
+                display: none;
+            }
+
+        </style>
+        {% endif %} 

@@ -1,4 +1,5 @@
 {% extends "Include and Base Pages/base.html" %}
+{% include "Include and Base Pages/rolerestriction.html"%}
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/landing.css' %}">
@@ -26,13 +27,6 @@
     text-transform: uppercase
   }
 </style>
-{%if user.profile.role == 'Admin'%}
-<style>
-  a.Exam {
-    display: none
-  }
-</style>
-{%endif%}
 <div class="content">
   <section class="main-section">
     <div class="content-left" style="text-align: justify;">
@@ -183,7 +177,7 @@
   </div>
 
 </div>
-<div class="Contact-header ">
+<div  id='ContactForm' class="Contact-header ">
   <h2>Contact US</h2>
 
   <p id="contacttext">Let us help you get back on track</p>

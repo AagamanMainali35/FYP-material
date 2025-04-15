@@ -18,6 +18,8 @@ from django.db.models.functions import ExtractMonth
 from django.db.models.functions import Cast
 from django.db.models import IntegerField
 from ClassSphere.decorators import role_required
+from rest_framework import status
+
 
 def base_page(request):
  return render(request,'UserPages/base.html',{'user':request.user})
@@ -255,18 +257,30 @@ def getevents(request):
  serializer=Eventserializer(events,many=True)
  return JsonResponse(serializer.data,safe=False)
 
-@role_required('admin')
 @api_view(['POST'])
 def create_event(request):
-    potsdata=request.data
-    serializer=Eventserializer(data=potsdata)
+    serializer=Eventserializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     else:
         return Response({" Status ":serializer.errors})
     
-@role_required('admin')
+@api_view(['PATCH'])
+def update_events(request,id):
+    try:
+        instance = Event.objects.get(id=id)
+    except Event.DoesNotExist:
+        return Response({'Error': f'Event with id {id} not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer= Eventserializer(instance,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response({'Error': f' Error code : {status.HTTP_400_BAD_REQUEST} , Invalid Payload '})
+    
+@role_required('Admin')
 @api_view(['DELETE'])
 def delete(request,id):
     event=get_object_or_404(Event,pk=id)
@@ -284,12 +298,16 @@ def deleteall(request):
         i.delete()
     return JsonResponse({"Status":"Events Deleted Sucessfully"})
 
-@role_required('admin')
 @api_view(['GET'])
 def geteventbyid(request,id):
     event=Event.objects.get(id=id)
     serializer=Eventserializer(event)
     return JsonResponse(serializer.data)
+
+@login_required(login_url='/login')
+@role_required('Admin')
+def eventCRUD(request):
+    return render(request,'AdminPages/eventCrud.html')
 
 @api_view(['POST'])
 def filterevents(request):
@@ -364,12 +382,12 @@ def make_payment(request):
     if not is_fee_paid_this_month:
         notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
 
-    role=request.user.profile.role
+    user=request.user
     context = {
         'userprofile': userprofile,
         'amount_paid': total_paid,
         'total_fee_left': total_fee_left,
-        'role':role
+        'user':user
     }
     return render(request, 'UserPages/Payment.html', context)
 
@@ -512,7 +530,7 @@ def profilepage(request):
                 'picture':userprofile_instance.profile_picture,
                 'grade': ""
             },
-            'role':role
+            'user':request.user
         }
 
     return render(request, 'UserPages/Userprofile.html', context)
@@ -569,6 +587,36 @@ def exam(request,id):
             StudentLeaderBoard.objects.create(exam_id=current_exam,student_id=currentuser, Total_Question=totalquestion ,total_marks=marks,Correct=Total_Correct_Answers,Answered=Total_quest_Answered,Incorrect=Total_Incorrect_ans)
             return redirect('leaderboard')
     return render(request, 'UserPages/examquest.html', context)   
+
+@api_view(['GET'])
+def getallExam(request):
+    exams = Exam.objects.all()
+    result = {}
+    for exam in exams:
+        exam_key = f"{exam.Exam_Name}-{exam.id}"
+        result[exam_key] = {
+            'Exam_Date': str(exam.Exam_Date),
+            'Total_Marks': exam.Total_Marks,
+            'Questions': []
+        }
+        questions = Questions.objects.filter(Exam_Instace=exam)
+        for q in questions:
+            question_data = {
+                'Question_Name': q.Question_Name,
+                'Question_Marks': q.Question_Marks,
+                'Correct_Answer': q.correct_answer,
+                'Choices': []
+            }
+
+            choices = Choice.objects.filter(question_id=q.id)
+            for c in choices:
+                question_data['Choices'].append({
+                    'Choice': c.choice_name
+                })
+
+            result[exam_key]['Questions'].append(question_data)
+
+    return Response({"status": True, "data": result})
 
 
 def leader_board(request):
@@ -808,3 +856,8 @@ def notificationpage(request):
         notification_object.is_read=True
         notification_object.save()
     return render(request,'UserPages/Notification.html',{'objects':data})
+
+
+
+def erropage(request):
+    return render(request,'Include and Base Pages/ErrorPage.html')

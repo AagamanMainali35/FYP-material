@@ -531,29 +531,7 @@
 
 <body>
     {% include 'Include and Base Pages/sidebar.html'%}
-    {% if user.profle.role == 'Student' %}
-    <Style>
-        li.nav-link.Create{
-            display: none;
-        }
-        li.nav-link.Attendance{
-            display: none;
-        }
-    </Style>
-    {% endif %}
-    {% if user.profile.role == 'Admin' %}
-    <style>
-        li.nav-link.Fees{
-            display: none;
-        }
-        li.nav-link.Exam{
-            display: none;
-        }
-        li.nav-link.Create{
-            display: none;
-        }
-    </style>
-    {% endif %} 
+    {% include 'Include and Base Pages/rolerestriction.html'%}
     <div class="Pagecontainer">
         <div class="holiday-table-section">
             <div class="alert alert-success" style="display: none;">

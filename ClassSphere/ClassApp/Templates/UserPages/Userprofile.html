@@ -446,43 +446,10 @@
 <body>
     <div class="bodyContainer">
         {%include 'Include and Base Pages/sidebar.html'%}
-        {% if role == 'Student' %}
-        <Style>
-            li.nav-link.Create{
-                display: none;
-            }
-            li.nav-link.Attendance{
-                display: none;
-            }
-            li.nav-link.setupfees{
-                display: none;
-            }
-            li.nav-link.dashboard{
-                display: none;
-            }
-            li.nav-link.holiday{
-                display: none;
-            }
-            
-
-        </Style>
-        {% endif %}
-        {% if role == 'Admin' %}
-        <style>
-            li.nav-link.Fees{
-                display: none;
-            }
-            li.nav-link.Exam{
-                display: none;
-            }
-            li.nav-link.Create{
-                display: none;
-            }
-        </style>
-        {% endif %} 
+            {% include 'Include and Base Pages/rolerestriction.html'%}
         <div class="profile">
             <div class="left">
-                <p class="acc">Account Management :</p>
+                <p class="acc">Account Management : {{user.profile.role}}</p>
                 <div class="img">
                     <div class="xcross">
                         <p>&times;</p>

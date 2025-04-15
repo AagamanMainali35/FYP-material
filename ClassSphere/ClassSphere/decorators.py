@@ -13,7 +13,7 @@ def role_required(*required_roles):
                 if profile_isntace.role in required_roles:
                     return view_func(request, *args, **kwargs)
                 else:
-                    return HttpResponseForbidden("You do not have permission to access this page.")
+                    return redirect('errorpage')
             except profile.DoesNotExist:
                 return HttpResponseForbidden("Profile not found.")
         return _wrapped_view

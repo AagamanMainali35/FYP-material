@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,8 +32,8 @@
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 136rem;
+            margin: 1rem 0 0 19rem;
             padding: 2rem;
         }
 
@@ -275,6 +276,10 @@
             padding: 2rem 1rem;
         }
 
+        modal::-webkit-scrollbar {
+            display: none;
+        }
+
         .modal-content {
             background-color: white;
             margin: 0 auto;
@@ -300,6 +305,7 @@
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -427,7 +433,7 @@
             border-color: var(--primary-color);
         }
 
-        .checkbox-group input:checked ~ .checkbox-custom {
+        .checkbox-group input:checked~.checkbox-custom {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
@@ -445,7 +451,7 @@
             transform: rotate(45deg);
         }
 
-        .checkbox-group input:checked ~ .checkbox-custom:after {
+        .checkbox-group input:checked~.checkbox-custom:after {
             display: block;
         }
 
@@ -612,8 +618,12 @@
         }
     </style>
 </head>
+
 <body>
+    {% include 'Include and Base Pages/sidebar.html'%}
+    {% include 'Include and Base Pages/rolerestriction.html'%}
     <div class="container">
+        <input type="text" id="csrf" hidden value="{{csrf_token}}">
         <header class="header">
             <h1>Event Management System</h1>
             <button id="addEventBtn" class="btn btn-primary">
@@ -621,7 +631,7 @@
             </button>
         </header>
 
-        <div class="search-container">
+        <div class="search-container" style="display: none;">
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="searchInput" placeholder="Search events...">
@@ -646,22 +656,97 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination">
-                <button class="pagination-btn"><i class="fas fa-chevron-left"></i> Previous</button>
-                <span class="pagination-current">1</span>
-                <button class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
-            </div>
+            
         </div>
     </div>
 
-    <!-- Event Modal -->
+    <!-- Add Data Modal -->
+    <div id="adddatamodal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Event</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <form id="addDataForm" method="post">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="addTitle">Title</label>
+                        <input type="text" id="addTitle" name="title" required>
+                        <span class="error-message" id="addTitleError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="addLocation">Location</label>
+                        <input type="text" id="addLocation" name="location" required>
+                        <span class="error-message" id="addLocationError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDate">Date & Time</label>
+                        <input type="datetime-local" id="addDate" name="date" required>
+                        <span class="error-message" id="addDateError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="addTag">Tag</label>
+                        <select id="addTag" name="tag">
+                            <option value="">Select a tag</option>
+                            <option value="Music">Music</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Education">Education</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Literature">Literature</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Science">Science</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Languages">Languages</option>
+                            <option value="School Events">School Events</option>
+                            <option value="Club Activities">Club Activities</option>
+                            <option value="Robotics">Robotics</option>
+                            <option value="Design">Design</option>
+                            <option value="Leadership">Leadership</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addForm">Registration Form URL (optional)</label>
+                        <input type="url" id="addForm" name="form" placeholder="https://example.com/register">
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-group">
+                            <input type="checkbox" id="addIsPaid" name="isPaid">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-label">This is a paid event</span>
+                        </label>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="addEventbanner">Event Banner</label>
+                        <input type="file" id="addEventbanner" name="eventbanner" accept="image/*">
+                        <span class="error-message" id="addEventbannerError"></span>
+                        <div class="image-preview" id="addImagePreview">
+                            <img id="addPreviewImage" src="/placeholder.svg" alt="Event Banner Preview">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="addDescription">Description</label>
+                        <textarea id="addDescription" name="description" rows="5" required></textarea>
+                        <span class="error-message" id="addDescriptionError"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="addCancelBtn" class="btn btn-outline">Cancel</button>
+                    <button type="button" id="addSaveBtn" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Event Modal -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Add Event</h2>
+                <h2>Edit Event</h2>
                 <span class="close-btn">&times;</span>
             </div>
-            <form id="eventForm">
+            <form id="eventForm" method="post">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -727,7 +812,7 @@
 
                 <div class="modal-footer">
                     <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
-                    <button type="submit" id="saveBtn" class="btn btn-primary">Save</button>
+                    <button type="button" id="saveBtnupdate" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
@@ -741,7 +826,8 @@
                 <span class="close-btn">&times;</span>
             </div>
             <div style="padding: 1.5rem;">
-                <p>Are you sure you want to delete the event <span id="deleteEventName" style="font-weight: 600;"></span>? This action cannot be undone.</p>
+                <p>Are you sure you want to delete the event <span id="deleteEventName"
+                        style="font-weight: 600;"></span>? This action cannot be undone.</p>
             </div>
             <div class="modal-footer">
                 <button id="cancelDeleteBtn" class="btn btn-outline">Cancel</button>
@@ -758,7 +844,9 @@
                 <span class="close-btn">&times;</span>
             </div>
             <div class="event-details">
-                <img id="viewEventBanner" src="/placeholder.svg" alt="Event Banner" class="event-banner">
+                <img id="viewEventBanner"
+                    src="https://images.unsplash.com/photo-1603228254119-e6a4d095dc59?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="Event Banner" class="event-banner">
                 <div class="event-info">
                     <div class="event-info-item">
                         <span class="event-info-label">Date & Time:</span>
@@ -778,7 +866,8 @@
                     </div>
                     <div class="event-info-item" id="viewEventFormContainer" style="display: none;">
                         <span class="event-info-label">Registration:</span>
-                        <a id="viewEventForm" href="#" target="_blank" class="event-info-value" style="color: var(--primary-color); text-decoration: none;">Registration Form</a>
+                        <a id="viewEventForm" href="#" target="_blank" class="event-info-value"
+                            style="color: var(--primary-color); text-decoration: none;">Registration Form</a>
                     </div>
                 </div>
                 <h3 style="margin-top: 1.5rem; font-weight: 500; color: var(--dark-gray);">Description</h3>
@@ -807,13 +896,15 @@
             // DOM Elements
             const searchInput = document.getElementById("searchInput");
             const addEventBtn = document.getElementById("addEventBtn");
+            const adddatamodal = document.getElementById("adddatamodal");
             const eventModal = document.getElementById("eventModal");
             const deleteModal = document.getElementById("deleteModal");
             const viewEventModal = document.getElementById("viewEventModal");
-            const modalTitle = document.getElementById("modalTitle");
+            const addDataForm = document.getElementById("addDataForm");
             const eventForm = document.getElementById("eventForm");
-            const cancelBtn = document.getElementById("cancelBtn");
             const deleteEventName = document.getElementById("deleteEventName");
+            const addCancelBtn = document.getElementById("addCancelBtn");
+            const cancelBtn = document.getElementById("cancelBtn");
             const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
             const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
             const closeViewBtn = document.getElementById("closeViewBtn");
@@ -822,61 +913,60 @@
             const toastMessage = document.getElementById("toastMessage");
             const toastIcon = document.getElementById("toastIcon");
             const eventsTableBody = document.getElementById("eventsTableBody");
+            const addEventbanner = document.getElementById("addEventbanner");
             const eventbanner = document.getElementById("eventbanner");
+            const addImagePreview = document.getElementById("addImagePreview");
             const imagePreview = document.getElementById("imagePreview");
+            const addPreviewImage = document.getElementById("addPreviewImage");
             const previewImage = document.getElementById("previewImage");
 
-            // Sample events data
-            let events = [
-                {
-                    id: "1",
-                    title: "Annual Music Festival",
-                    date: "Oct 15, 2023 - 18:00",
-                    location: "School Auditorium",
-                    tag: "Music",
-                    isPaid: true,
-                    description: "Join us for a night of amazing music performances by talented students and guest artists.",
-                    form: "",
-                    eventbanner: "https://source.unsplash.com/random/800x400/?music"
-                },
-                {
-                    id: "2",
-                    title: "Science Fair",
-                    date: "Nov 20, 2023 - 09:00",
-                    location: "School Gymnasium",
-                    tag: "Science",
-                    isPaid: false,
-                    description: "Explore innovative science projects created by our students across all grade levels.",
-                    form: "",
-                    eventbanner: "https://source.unsplash.com/random/800x400/?science"
-                },
-                {
-                    id: "3",
-                    title: "Robotics Workshop",
-                    date: "Dec 5, 2023 - 14:00",
-                    location: "Computer Lab",
-                    tag: "Robotics",
-                    isPaid: true,
-                    description: "Learn the basics of robotics and programming in this hands-on workshop.",
-                    form: "",
-                    eventbanner: "https://source.unsplash.com/random/800x400/?robot"
-                }
-            ];
+            let events = [];
 
             // Current state
             let currentEventId = null;
-            let modalMode = "add";
             let imageData = null;
 
             // Initialize the table
             renderEventsTable();
 
-            // Event banner preview
-            eventbanner.addEventListener("change", function() {
+            fetch('http://127.0.0.1:8000/events/all/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    events = data;
+                    renderEventsTable();
+                })
+
+
+            // Event banner preview for Add Modal
+            addEventbanner.addEventListener("change", function () {
                 const file = this.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
+                        addPreviewImage.src = e.target.result;
+                        addImagePreview.style.display = "block";
+                        imageData = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    addImagePreview.style.display = "none";
+                    imageData = null;
+                }
+            });
+
+            // Event banner preview for Edit Modal
+            eventbanner.addEventListener("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
                         previewImage.src = e.target.result;
                         imagePreview.style.display = "block";
                         imageData = e.target.result;
@@ -891,6 +981,7 @@
             // Close buttons for modals
             document.querySelectorAll(".close-btn").forEach((btn) => {
                 btn.addEventListener("click", () => {
+                    adddatamodal.style.display = "none";
                     eventModal.style.display = "none";
                     deleteModal.style.display = "none";
                     viewEventModal.style.display = "none";
@@ -898,6 +989,10 @@
             });
 
             // Cancel buttons
+            addCancelBtn.addEventListener("click", () => {
+                adddatamodal.style.display = "none";
+            });
+
             cancelBtn.addEventListener("click", () => {
                 eventModal.style.display = "none";
             });
@@ -912,95 +1007,157 @@
 
             // Add Event button
             addEventBtn.addEventListener("click", () => {
-                modalTitle.textContent = "Add Event";
-                eventForm.reset();
-                imagePreview.style.display = "none";
-                modalMode = "add";
-                currentEventId = null;
+                addDataForm.reset();
+                addImagePreview.style.display = "none";
                 imageData = null;
-                clearFormErrors();
-                eventModal.style.display = "block";
+                clearFormErrors("add");
+                adddatamodal.style.display = "block";
             });
 
-            // Search functionality
-            searchInput.addEventListener("input", () => {
-                renderEventsTable();
-            });
+            // Add Event Save Button
+            document.getElementById("addSaveBtn").addEventListener("click", () => {
+                if (validateForm("add")) {
+                    const formdata = new FormData();
+                    const title = document.getElementById("addTitle").value;
+                    const date = document.getElementById("addDate").value;
+                    const tag = document.getElementById("addTag").value;
+                    const description = document.getElementById("addDescription").value;
+                    const is_paid = document.getElementById("addIsPaid").checked;
+                    const location = document.getElementById("addLocation").value;
+                    const form = document.getElementById("addForm").value;
+                    const bannerFile = document.getElementById("addEventbanner").files[0];
+                    
+                    formdata.append("title", title);
+                    formdata.append("date", date);
+                    formdata.append("tag", tag);
+                    formdata.append("description", description);
+                    formdata.append("is_paid", is_paid ? "True" : "False");  
+                    formdata.append("location", location);
+                    formdata.append("form", form);
 
-            // Form submission
-            eventForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-
-                // Validate form
-                if (!validateForm()) {
-                    return;
-                }
-
-                const formData = {
-                    title: document.getElementById("title").value,
-                    date: formatDateForDisplay(document.getElementById("date").value),
-                    location: document.getElementById("location").value,
-                    tag: document.getElementById("tag").value,
-                    isPaid: document.getElementById("isPaid").checked,
-                    description: document.getElementById("description").value,
-                    form: document.getElementById("form").value,
-                    eventbanner: imageData || (modalMode === "edit" ? getEventById(currentEventId).eventbanner : "https://source.unsplash.com/random/800x400/?event")
-                };
-
-                if (modalMode === "edit") {
-                    // Edit existing event
-                    const eventIndex = events.findIndex(event => event.id === currentEventId);
-                    if (eventIndex !== -1) {
-                        events[eventIndex] = {
-                            ...events[eventIndex],
-                            ...formData
-                        };
-                        showToast("Success", "Event updated successfully", "success");
+                    if (bannerFile) {
+                        formdata.append("eventbanner", bannerFile);
                     }
-                } else {
-                    // Add new event
-                    const newId = (Math.max(...events.map(event => parseInt(event.id)), 0) + 1).toString();
-                    events.push({
-                        id: newId,
-                        ...formData
+                    
+                    fetch('http://127.0.0.1:8000/events/create/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.getElementById('csrf').value
+                        },
+                        body: formdata
+                    })
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then(data => {
+                        adddatamodal.style.display = "none";
+                        showToast("Success", "Event created successfully", "success");
+                        // Refresh the events list
+                        fetch('http://127.0.0.1:8000/events/all/', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            events = data;
+                            renderEventsTable();
+                        });
+                    })
+                    .catch(error => {
+                        showToast("Error", "Failed to create event", "error");
                     });
-                    showToast("Success", "Event created successfully", "success");
                 }
-
-                renderEventsTable();
-                eventModal.style.display = "none";
             });
 
-            // Validate form
-            function validateForm() {
+            // Edit Event Save Button
+            document.getElementById("saveBtnupdate").addEventListener("click", () => {
+                if (validateForm("edit")) {
+                    const formdata = new FormData();
+                    formdata.append("id", currentEventId);
+                    formdata.append("title", document.getElementById("title").value);
+                    formdata.append("date", document.getElementById("date").value);
+                    formdata.append("tag", document.getElementById("tag").value);
+                    formdata.append("description", document.getElementById("description").value);
+                    formdata.append("is_paid", document.getElementById("isPaid").checked ? "True" : "False");  
+                    formdata.append("location", document.getElementById("location").value);
+                    formdata.append("form", document.getElementById("form").value);
+
+                    const bannerFile = document.getElementById("eventbanner").files[0];
+                    if (bannerFile) {
+                        formdata.append("eventbanner", bannerFile);
+                    }
+                    
+                    fetch(`http://127.0.0.1:8000/events/update_event/${currentEventId}/`, {
+                        method: 'PATCH',
+                        headers: {
+                            'X-CSRFToken': document.getElementById('csrf').value
+                        },
+                        body: formdata
+                    })
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then(data => {
+                        eventModal.style.display = "none";
+                        showToast("Success", "Event updated successfully", "success");
+                        // Refresh the events list
+                        fetch('http://127.0.0.1:8000/events/all/', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            events = data;
+                            renderEventsTable();
+                        });
+                    })
+                    .catch(error => {
+                        showToast("Error", "Failed to update event", "error");
+                    });
+                }
+            });
+
+            function validateForm(prefix) {
                 let isValid = true;
-                clearFormErrors();
+                clearFormErrors(prefix);
 
-                // Validate title
-                const title = document.getElementById("title").value;
+                // For add form, use addTitle, for edit form use title
+                const titleId = prefix === "add" ? `${prefix}Title` : "title";
+                const locationId = prefix === "add" ? `${prefix}Location` : "location";
+                const dateId = prefix === "add" ? `${prefix}Date` : "date";
+                const descriptionId = prefix === "add" ? `${prefix}Description` : "description";
+                
+                // For add form, use addTitleError, for edit form use titleError
+                const titleErrorId = prefix === "add" ? `${prefix}TitleError` : "titleError";
+                const locationErrorId = prefix === "add" ? `${prefix}LocationError` : "locationError";
+                const dateErrorId = prefix === "add" ? `${prefix}DateError` : "dateError";
+                const descriptionErrorId = prefix === "add" ? `${prefix}DescriptionError` : "descriptionError";
+
+                const title = document.getElementById(titleId).value;
                 if (!title.trim()) {
-                    showError("titleError", "Title is required");
+                    showError(titleErrorId, "Title is required");
                     isValid = false;
                 }
 
-                // Validate location
-                const location = document.getElementById("location").value;
+                const location = document.getElementById(locationId).value;
                 if (!location.trim()) {
-                    showError("locationError", "Location is required");
+                    showError(locationErrorId, "Location is required");
                     isValid = false;
                 }
 
-                // Validate date
-                const date = document.getElementById("date").value;
+                const date = document.getElementById(dateId).value;
                 if (!date) {
-                    showError("dateError", "Date and time are required");
+                    showError(dateErrorId, "Date and time are required");
                     isValid = false;
                 }
 
-                // Validate description
-                const description = document.getElementById("description").value;
+                const description = document.getElementById(descriptionId).value;
                 if (!description.trim()) {
-                    showError("descriptionError", "Description is required");
+                    showError(descriptionErrorId, "Description is required");
                     isValid = false;
                 }
 
@@ -1013,31 +1170,37 @@
                 errorElement.style.display = "block";
             }
 
-            function clearFormErrors() {
-                const errorElements = document.querySelectorAll(".error-message");
+            function clearFormErrors(prefix) {
+                let errorElements;
+                if (prefix === "add") {
+                    errorElements = document.querySelectorAll(".error-message[id^='add']");
+                } else if (prefix === "edit") {
+                    errorElements = document.querySelectorAll(".error-message:not([id^='add'])");
+                } else {
+                    errorElements = document.querySelectorAll(".error-message");
+                }
+                
                 errorElements.forEach(element => {
                     element.textContent = "";
                     element.style.display = "none";
                 });
             }
 
-            // View event
             function viewEvent(eventId) {
                 const event = getEventById(eventId);
                 if (!event) return;
-
                 document.getElementById("viewEventTitle").textContent = event.title;
                 document.getElementById("viewEventBanner").src = event.eventbanner;
-                document.getElementById("viewEventDate").textContent = event.date;
+                const dateTime = new Date(event.date);  // Parses the datetime string
+                const formatted = dateTime.toLocaleString('en-US', {
+                    dateStyle: 'long',
+                    timeStyle: 'short'
+                });
+                document.getElementById("viewEventDate").textContent = formatted;
+
                 document.getElementById("viewEventLocation").textContent = event.location;
-                
-                // Set tag with badge styling
                 document.getElementById("viewEventTag").innerHTML = `<span class="tag-badge">${event.tag}</span>`;
-                
-                // Set status with badge styling
-                document.getElementById("viewEventStatus").innerHTML = `<span class="status-badge ${event.isPaid ? 'status-paid' : 'status-free'}">${event.isPaid ? 'Paid' : 'Free'}</span>`;
-                
-                // Show/hide registration form link
+                document.getElementById("viewEventStatus").innerHTML = `<span class="status-badge ${event.is_paid ? 'status-paid' : 'status-free'}">${event.is_paid ? 'Paid' : 'Free'}</span>`;
                 const formContainer = document.getElementById("viewEventFormContainer");
                 if (event.form) {
                     document.getElementById("viewEventForm").href = event.form;
@@ -1045,29 +1208,25 @@
                 } else {
                     formContainer.style.display = "none";
                 }
-                
                 document.getElementById("viewEventDescription").textContent = event.description;
-                
                 viewEventModal.style.display = "block";
             }
 
-            // Edit event
             function editEvent(eventId) {
                 const event = getEventById(eventId);
                 if (!event) return;
                 
-                modalTitle.textContent = "Edit Event";
-                
-                // Fill form fields
                 document.getElementById("title").value = event.title;
                 document.getElementById("location").value = event.location;
-                document.getElementById("date").value = formatDateForInput(event.date);
+
+                const dateTime = new Date(event.date);
+                const formattedDateTime = dateTime.toISOString().slice(0, 16);
+                document.getElementById("date").value = formattedDateTime;
                 document.getElementById("tag").value = event.tag;
-                document.getElementById("isPaid").checked = event.isPaid;
+                document.getElementById("isPaid").checked = event.is_paid;
                 document.getElementById("form").value = event.form || "";
                 document.getElementById("description").value = event.description;
                 
-                // Set image preview if available
                 if (event.eventbanner) {
                     previewImage.src = event.eventbanner;
                     imagePreview.style.display = "block";
@@ -1075,75 +1234,44 @@
                     imagePreview.style.display = "none";
                 }
                 
-                // Set form mode
-                modalMode = "edit";
                 currentEventId = eventId;
-                
-                // Clear any previous errors
-                clearFormErrors();
-                
-                // Show modal
+                clearFormErrors("edit");
                 eventModal.style.display = "block";
-            }
-            
-            // Helper function to convert month name to number
-            function getMonthNumber(monthName) {
-                const months = {
-                    'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
-                    'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
-                };
-                return months[monthName];
-            }
-
-            // Format date from "Oct 15, 2023 - 18:00" to "2023-10-15T18:00"
-            function formatDateForInput(dateString) {
-                const dateParts = dateString.split(" - ");
-                const datePart = dateParts[0].split(" ");
-                const timePart = dateParts[1].split(":");
-                
-                const month = getMonthNumber(datePart[0]);
-                const day = parseInt(datePart[1]);
-                const year = parseInt(datePart[2]);
-                const hour = parseInt(timePart[0]);
-                const minute = parseInt(timePart[1]);
-                
-                const date = new Date(year, month, day, hour, minute);
-                
-                return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-            }
-
-            // Format date from input "2023-10-15T18:00" to display "Oct 15, 2023 - 18:00"
-            function formatDateForDisplay(dateString) {
-                const date = new Date(dateString);
-                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                
-                const month = months[date.getMonth()];
-                const day = date.getDate();
-                const year = date.getFullYear();
-                const hour = date.getHours().toString().padStart(2, '0');
-                const minute = date.getMinutes().toString().padStart(2, '0');
-                
-                return `${month} ${day}, ${year} - ${hour}:${minute}`;
             }
 
             // Show delete confirmation
             function showDeleteConfirmation(eventId) {
                 const event = getEventById(eventId);
                 if (!event) return;
-                
+
                 deleteEventName.textContent = event.title;
                 currentEventId = eventId;
-                
+
                 deleteModal.style.display = "block";
             }
 
             // Confirm delete event
             confirmDeleteBtn.addEventListener("click", () => {
                 if (currentEventId) {
-                    events = events.filter(event => event.id !== currentEventId);
-                    renderEventsTable();
-                    deleteModal.style.display = "none";
-                    showToast("Success", "Event deleted successfully", "success");
+                    fetch(`http://127.0.0.1:8000/events/delete_event/${currentEventId}/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRFToken': document.getElementById('csrf').value
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            events = events.filter(event => event.id !== currentEventId);
+                            renderEventsTable();
+                            deleteModal.style.display = "none";
+                            showToast("Success", "Event deleted successfully", "success");
+                        } else {
+                            throw new Error('Failed to delete event');
+                        }
+                    })
+                    .catch(error => {
+                        showToast("Error", "Failed to delete event", "error");
+                    });
                 }
             });
 
@@ -1151,7 +1279,7 @@
             function showToast(title, message, type = "success") {
                 toastTitle.textContent = title;
                 toastMessage.textContent = message;
-                
+
                 toast.className = "toast";
                 if (type === "error") {
                     toast.classList.add("error");
@@ -1159,69 +1287,77 @@
                 } else {
                     toastIcon.className = "fas fa-check-circle";
                 }
-                
+
                 toast.classList.add("active");
-                
+
                 setTimeout(() => {
                     toast.classList.remove("active");
                 }, 3000);
             }
-            
+
             // Helper function to get event by ID
             function getEventById(id) {
                 return events.find(event => event.id === id);
             }
-            
+
+            // Search functionality
+            searchInput.addEventListener("input", renderEventsTable);
+
             // Render events table
             function renderEventsTable() {
                 const searchTerm = searchInput.value.toLowerCase();
-                const filteredEvents = events.filter(event => 
+                const filteredEvents = events.filter(event =>
                     event.title.toLowerCase().includes(searchTerm) ||
                     event.location.toLowerCase().includes(searchTerm) ||
                     event.tag.toLowerCase().includes(searchTerm)
                 );
-                
+
                 eventsTableBody.innerHTML = "";
-                
+
                 if (filteredEvents.length === 0) {
                     const noResultsRow = document.createElement("tr");
                     noResultsRow.innerHTML = `<td colspan="6" style="text-align: center; color: rgba(99, 102, 241, 0.7);">No events found</td>`;
                     eventsTableBody.appendChild(noResultsRow);
                     return;
                 }
-                
+
                 filteredEvents.forEach(event => {
+                    const dateTime = new Date(event.date);  // Parses the datetime string
+                    const formatted = dateTime.toLocaleString('en-US', {
+                        dateStyle: 'long',
+                    });
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td>${event.title}</td>
-                        <td>${event.date}</td>
-                        <td>${event.location}</td>
-                        <td><span class="tag-badge">${event.tag}</span></td>
-                        <td><span class="status-badge ${event.isPaid ? 'status-paid' : 'status-free'}">${event.isPaid ? 'Paid' : 'Free'}</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="action-btn view" title="View">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn edit" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    
+                            <td>${event.title}</td>
+                            <td>${formatted}</td>
+                            <td>${event.location}</td>
+                            <td><span class="tag-badge">${event.tag}</span></td>
+                            <td><span class="status-badge ${event.is_paid ? 'status-paid' : 'status-free'}">${event.is_paid ? 'Paid' : 'Free'}</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn view" title="View">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+
                     // Add event listeners to the buttons
                     row.querySelector(".action-btn.view").addEventListener("click", () => viewEvent(event.id));
                     row.querySelector(".action-btn.edit").addEventListener("click", () => editEvent(event.id));
                     row.querySelector(".action-btn.delete").addEventListener("click", () => showDeleteConfirmation(event.id));
-                    
+
                     eventsTableBody.appendChild(row);
                 });
             }
         });
     </script>
 </body>
+
 </html>

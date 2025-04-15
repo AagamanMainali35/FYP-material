@@ -9,5 +9,6 @@ path('delete/<int:id>/',views.delete,name='deleteevent'),
 path('event/<int:id>/',views.geteventbyid,name='eventbyid'),
 path("deleteall/",views.deleteall,name='deleteall'),
 path('filter/',views.filterevents,name='filter'),
-path('tag/',views.filterontag,name='filterbytag')
+path('tag/',views.filterontag,name='filterbytag'),
+path('update_event/<int:id>/',views.update_events,name='eventupdate')
 ]

@@ -420,27 +420,7 @@
 
 <body>
     {% include 'Include and Base Pages/sidebar.html' %}
-    {% if role == 'Student' %}
-    <Style>
-        li.nav-link.Create{
-            display: none;
-        }
-        li.nav-link.Attendance{
-            display: none;
-        }
-        li.nav-link.setupfees{
-            display: none;
-        }
-        li.nav-link.dashboard{
-            display: none;
-        }
-        li.nav-link.holiday{
-            display: none;
-        }
-        
-
-    </Style>
-    {% endif %}
+    {% include 'Include and Base Pages/rolerestriction.html'%}
     <div class="main-content">
         <div class="fee-container">
             <!-- Dashboard Header -->
@@ -477,11 +457,12 @@
                     <div class="summary-item">
                         <div class="summary-label">Total Fee</div>
                         <div class="summary-value">{{ userprofile.payment_structure.Totalfeeamount }}</div>
-                    </div>
+                    </div>   
                 
                     <div class="summary-item">
                         <div class="summary-label">Monthly Fee</div>
-                        <div class="summary-value">{{ userprofile.payment_structure.monthlyfee }}</div>
+                        <div class="summary-value">{{ userprofile.payment_structure.monthlyfee|floatformat:"-0" }}
+                        </div>
                     </div>
                     
                     <div class="summary-item">
