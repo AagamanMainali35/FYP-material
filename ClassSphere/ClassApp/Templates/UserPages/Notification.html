@@ -265,9 +265,77 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <body>
   <main class="container2">
-    <div class="page-header">
-      <p class="header-subtitle">You have <span class="notif">{{objects|length}}</span>unread notifications</p>
+    {% if objects|length > 0 %}
+  <div class="page-header">
+    <p class="header-subtitle">
+      You have <span class="notif">{{ objects|length }}</span> unread notification{{ objects|length|pluralize }}
+    </p>
+  </div>
+  {% else%}
+  <style>
+    .notification-empty-state {
+      width: 100%;
+      max-width: 100%;
+      margin: 2rem auto;
+      padding: 2rem 1.5rem;
+      background: #f2f2f2;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+  
+    .notification-empty-state .icon-container {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      border-radius: 50%;
+    }
+  
+    .notification-empty-state svg {
+      width: 40px;
+      height: 40px;
+      fill: #6c757d;
+    }
+  
+    .notification-empty-state h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #343a40;
+      margin-bottom: 0.5rem;
+    }
+  
+    .notification-empty-state p {
+      font-size: 0.9375rem;
+      color: #6c757d;
+      line-height: 1.5;
+      margin: 0;
+    }
+  
+    .notification-empty-state .action-text {
+      margin-top: 1.25rem;
+      font-size: 0.875rem;
+      color: #0d6efd;
+      cursor: pointer;
+    }
+  </style>
+  
+  <div class="notification-empty-state">
+    <div class="icon-container">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
     </div>
+    <h3>No New Notifications</h3>
+    <p>You're all caught up! We'll notify you when there's something new.</p>
+  </div>
+{% endif %}
+
+
     <div class="notifications-list">
       {% for i in objects %}
   <div class="notification-card unread">
