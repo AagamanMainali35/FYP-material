@@ -1,5 +1,8 @@
 import datetime
 import random
+import uuid
+import requests
+import json
 from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -346,50 +349,132 @@ def filterontag(request):
         print(event_data.data)
     return Response({'events':event_data.data})
 
+# @role_required('Student')
+# @login_required(login_url='/login/')
+# def make_payment(request):
+#     userprofile = request.user.profile
+#     if request.method == 'POST':
+#         amount_paid = request.POST.get('amount_paid')
+#         payment = FeePayment(
+#             student=userprofile,
+#             amount_paid=int(amount_paid),
+#         )
+#         payment.save() 
+#         current_user = request.user
+#         try:
+#             userprofile = profile.objects.get(newprofile=current_user)
+#         except profile.DoesNotExist:
+#             return Response({"error": "Profile not found."}, status=404)
+#         fee = FeePayment.objects.filter(student=userprofile).first()
+#         total_paid = 0
+#         if fee:
+#             total_paid = sum(payment.amount_paid for payment in userprofile.fee_payments.all())
+#             total_fee_left = userprofile.payment_structure.Totalfeeamount - total_paid
+#         else:
+#             total_fee_left = userprofile.payment_structure.Totalfeeamount  
+#     current_month = datetime.datetime.now().month
+#     current_year = datetime.datetime.now().year
+#     current_month_payments = FeePayment.objects.filter(
+#         student=userprofile,
+#         payment_date__year=current_year,
+#         payment_date__month=current_month
+#     )
+
+    
+#     is_fee_paid_this_month = current_month_payments.exists()
+#     if not is_fee_paid_this_month:
+#         notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
+#     user=request.user
+#     context = {
+#         'userprofile': userprofile,
+#         'amount_paid': total_paid,
+#         'total_fee_left': total_fee_left,
+#         'user':user
+#     }
+#     return render(request, 'UserPages/Payment.html', context)
+
+
 @role_required('Student')
 @login_required(login_url='/login/')
 def make_payment(request):
-    if request.method == 'POST':
-        amount_paid = request.POST.get('amount_paid')
-        userprofile = request.user.profile
-        payment = FeePayment(
-            student=userprofile,
-            amount_paid=int(amount_paid),
-        )
-        payment.save() 
-    current_user = request.user
-    try:
-        userprofile = profile.objects.get(newprofile=current_user)
-    except profile.DoesNotExist:
-        return Response({"error": "Profile not found."}, status=404)
-    fee = FeePayment.objects.filter(student=userprofile).first()
-    # If fee records exist, calculate the total fee left, else set it to 0
-    total_paid = 0
-    if fee:
-        total_paid = sum(payment.amount_paid for payment in userprofile.fee_payments.all())
-        total_fee_left = userprofile.payment_structure.Totalfeeamount - total_paid
-    else:
-        total_fee_left = userprofile.payment_structure.Totalfeeamount  
-
-    current_month = datetime.datetime.now().month
-    current_year = datetime.datetime.now().year
-    current_month_payments = FeePayment.objects.filter(
-        student=userprofile,
-        payment_date__year=current_year,
-        payment_date__month=current_month
-    )
-    is_fee_paid_this_month = current_month_payments.exists()
-    if not is_fee_paid_this_month:
-        notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
-
-    user=request.user
-    context = {
-        'userprofile': userprofile,
-        'amount_paid': total_paid,
-        'total_fee_left': total_fee_left,
-        'user':user
+    order_id=uuid.uuid4()
+    print(order_id)
+    usergrade = request.user.profile.grade
+    usepayment_insatnce=PaymentStructure.objects.filter(grade=usergrade)
+    paid_instance=FeePayment.objects.filter(student=request.user.profile)
+    total_amount=0
+    context={
+        'user':request.user,
+        'userprofile':request.user.profile,
+        'uuid':order_id
     }
-    return render(request, 'UserPages/Payment.html', context)
+    for i in usepayment_insatnce:
+        context['total_fee']=i.Totalfeeamount
+        context['monthly_fee']=i.monthlyfee
+    if paid_instance.exists():
+        total_paid = sum(i.amount_paid for i in paid_instance)
+        context['amount_paid'] = total_paid
+        context['total_fee_left'] = context['total_fee'] - total_paid
+        if context['total_fee_left']==0:
+            context['paid_full']=True
+    else:
+        context['amount_paid'] = 0
+        context['total_fee_left'] = context['total_fee']
+
+    return render(request, 'UserPages/Payment.html',context)
+
+
+
+@login_required
+def process_payment(request):
+    url = "https://dev.khalti.com/api/v2/epayment/initiate/"
+    return_url=request.POST.get('return_url')
+    order_id=request.POST.get('order_id')
+    Total_amount=request.POST.get('amount')
+    amount=int(Total_amount)*100
+    user=request.user
+    payload = json.dumps({
+        "return_url": return_url,
+        "website_url": "http://127.0.0.1:8000",
+        "amount": amount,
+        "purchase_order_id": order_id,
+        "purchase_order_name": "test",
+        "customer_info": {
+        "name": user.username,
+        "email":user.email
+        }
+    })
+    headers = {
+        'Authorization': 'key fe6413e5c26a4a13986749a8308403c0',
+        'Content-Type': 'application/json',
+    }
+    
+    response = requests.request("POST", url, headers=headers, data=payload)
+    res=json.loads(response.text)
+    return redirect(res['payment_url'])
+    
+@login_required
+def verifytransaction(request,amount):
+    print(amount)
+    print('view has been hit')
+    pidx=request.GET.get('pidx')
+    url = "https://dev.khalti.com/api/v2/epayment/lookup/"
+    headers = {
+        'Authorization': 'key fe6413e5c26a4a13986749a8308403c0',
+        'Content-Type': 'application/json',
+    }
+    payload=json.dumps(
+        {
+        'pidx':pidx
+    }
+    )
+    response = requests.request("POST", url, headers=headers, data=payload)
+    new_res=json.loads(response.text)
+    if new_res['status']=='Completed':
+        userprofile=request.user.profile
+        FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now())
+    return redirect('pay')
+
 
 @login_required
 def eventdetail(request,id):

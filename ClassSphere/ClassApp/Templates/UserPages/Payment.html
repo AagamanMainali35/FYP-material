@@ -415,6 +415,26 @@
         .card:nth-child(3) {
             animation-delay: 0.2s;
         }
+        .payment-complete {
+            background-color: #e6ffed;
+            border: 1px solid #57cc99;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-complete .card-title {
+            color: #2d6a4f;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .payment-complete p {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: #1b4332;
+        }
+        
     </style>
 </head>
 
@@ -433,6 +453,14 @@
                 </div>
             </div>
 
+            <!-- Hidden Khalti Form -->
+            <form id="khaltiPaymentForm" action="{% url 'process' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="{{ uuid }}" name="order_id" id="order_id">
+                <input type="hidden" name="amount" id="khaltiAmount">
+                <input type="hidden" name="return_url" id="return_url">
+            </form>
+            
             <!-- Alert Messages -->
             {% if messages %}
                 {% for message in messages %}
@@ -451,17 +479,15 @@
                     </div>
                 </div>
                 
-    
-                
                 <div class="summary-grid">
                     <div class="summary-item">
                         <div class="summary-label">Total Fee</div>
-                        <div class="summary-value">{{ userprofile.payment_structure.Totalfeeamount }}</div>
+                        <div class="summary-value">{{ total_fee }}</div>
                     </div>   
                 
                     <div class="summary-item">
                         <div class="summary-label">Monthly Fee</div>
-                        <div class="summary-value">{{ userprofile.payment_structure.monthlyfee|floatformat:"-0" }}
+                        <div class="summary-value">{{ monthly_fee|floatformat:"-0" }}
                         </div>
                     </div>
                     
@@ -478,6 +504,17 @@
             </div>
 
             <!-- Payment Form Card -->
+            {%if paid_full%}
+            <div class="card payment-complete">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-check-circle"></i> Payment Complete</h2>
+                </div>
+                <div class="card-body">
+                    <p>🎉 You have paid the full amount. No pending dues.</p>
+                    <p>Total Paid: ₹{{ total_fee }}</p>
+                </div>
+            </div>
+            {%else%}
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title"><i class="fas fa-credit-card"></i> Make Payment</h2>
@@ -486,13 +523,13 @@
                     </div>
                 </div>
                 
-                <form method="POST" action="" id="paymentForm" onsubmit="return validatePayment()">
+                <form method="POST" action="" id="paymentForm" onsubmit="return processPayment(event)">
                     {% csrf_token %}
                     
                     <div class="payment-form">
                         <div class="form-group">
                             <label for="amount" class="form-label">Payment Amount </label>
-                            <input type="number" id="amount" name="amount_paid" class="form-control" 
+                            <input type="number" id="Paymentamount" name="amount_paid" class="form-control" 
                                    min="5000" max="{{ total_fee_left }}" step="100" 
                                    placeholder="Enter amount (min ₹5,000)" required>
                             <div class="form-error" id="amountError">
@@ -529,6 +566,7 @@
                     </div>
                 </form>
             </div>
+            {%endif%}
 
             <!-- Payment History Card -->
             <div class="card">
@@ -576,17 +614,22 @@
 
     <script>
         // Payment method selection
+        let selectedPaymentMethod = 'khalti';
+        
         function selectPaymentMethod(element, method) {
             document.querySelectorAll('.payment-method').forEach(el => {
                 el.classList.remove('selected');
             });
             element.classList.add('selected');
+            selectedPaymentMethod = method;
             document.querySelector(`input[value="${method}"]`).checked = true;
         }
 
-        // Payment validation
-        function validatePayment() {
-            const amountInput = document.getElementById('amount');
+        // Payment validation and processing
+        function processPayment(event) {
+            event.preventDefault();
+            
+            const amountInput = document.getElementById('Paymentamount');
             const amountError = document.getElementById('amountError');
             const amount = parseFloat(amountInput.value);
             const minAmount = 5000;
@@ -597,11 +640,25 @@
                 return false;
             }
             
+            if (selectedPaymentMethod === 'khalti') {
+                // Process Khalti payment
+                const khaltiAmount = document.getElementById('khaltiAmount');
+                const returnUrl = `http://127.0.0.1:8000/verify/${amount}/`;
+                
+                khaltiAmount.value = amount;
+                document.getElementById('return_url').value = returnUrl;
+                document.getElementById('khaltiPaymentForm').submit();
+            } else {
+                const amountInput = document.getElementById('Paymentamount');
+
+                
+            }
+            
             return true;
         }
 
         // Real-time validation
-        document.getElementById('amount').addEventListener('input', function() {
+        document.getElementById('Paymentamount').addEventListener('input', function() {
             const amount = parseFloat(this.value);
             const amountError = document.getElementById('amountError');
             

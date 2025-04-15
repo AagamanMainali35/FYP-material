@@ -17,7 +17,7 @@ urlpatterns = [
     path('detail/<int:id>/',views.eventdetail,name='DetailPage'),
     path('events/',include('ClassApp.EventsAPI.urls')),
     path('exam/',include('ClassApp.ExamAPI.urls')),
-    path('pay/',views.make_payment,name='pay'),
+    path('user/fees/',views.make_payment,name='pay'),
     path('send/',views.send_Notification),
     path('profile/',views.profilepage,name='userprofile'),
     path('schedule/',views.schedule,name='schedule'),
@@ -38,5 +38,7 @@ urlpatterns = [
     path('update/fee_setup/<int:id>',views.updatefee,name='update'),
     path('delete/fee_setup/<int:id>',views.deletefee,name='deletfee'),
     path('admin2/eventmanagement/',views.eventCRUD,name='eventcrud'),
-    path('404Notfound/',views.erropage,name='errorpage')
+    path('404Notfound/',views.erropage,name='errorpage'),
+    path('initiate/',views.process_payment,name='process'),
+    path('verify/<int:amount>/',views.verifytransaction,name='verify')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
