@@ -214,6 +214,12 @@
                                     <span class="text nav-text">Profile</span>
                                 </a>
                             </li>
+                            <li class="nav-link  ManageExam">
+                                <a href="{% url 'Manage_exam' %}"> 
+                                    <i class='bx bxs-report icon'></i>
+                                    <span class="text nav-text">Manage Exam</span>
+                                </a>
+                            </li>
                             <li class="nav-link setupfees">
                                 <a href="{% url 'feesetup'%}">
                                     <i class="bx bx-money icon"></i>
@@ -224,6 +230,12 @@
                                 <a href="{% url 'eventcrud'%}">
                                     <i class='bx bx-bar-chart-alt-2 icon'></i>
                                     <span class="text nav-text">Manage Event</span>
+                                </a>
+                            </li>
+                            <li class="nav-link  Create">
+                                <a href="{% url 'createExam'%}"> 
+                                    <i class='bx bx-plus-circle icon'></i>
+                                    <span class="text nav-text">Create Exam</span>
                                 </a>
                             </li>
                             <li class="nav-link holiday">
@@ -248,12 +260,6 @@
                                 <a href="{% url 'schedule'%}"> 
                                     <i class='bx bxs-report icon'></i>
                                     <span class="text nav-text"> Exam</span>
-                                </a>
-                            </li>
-                            <li class="nav-link  Create">
-                                <a href="{% url 'createExam'%}"> 
-                                    <i class='bx bx-plus-circle icon'></i>
-                                    <span class="text nav-text">Create Exam</span>
                                 </a>
                             </li>
                             <li class="nav-link Attendance">

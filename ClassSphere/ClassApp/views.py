@@ -228,9 +228,9 @@ def reset(request):
                         messages.error(request, "Session has expired. Please log in again.")
         return render(request, 'UserPages/passwordreset.html')
 
+
 def event(request):
     return render(request,'UserPages/event.html')
-
 
 @api_view(['POST'])
 def contact(request):
@@ -268,7 +268,8 @@ def create_event(request):
         return Response(serializer.data)
     else:
         return Response({" Status ":serializer.errors})
-    
+
+@role_required('Admin')  
 @api_view(['PATCH'])
 def update_events(request,id):
     try:
@@ -293,24 +294,11 @@ def delete(request,id):
         return Response('Event not found')
     return Response('Event deleted successfully')
 
-@role_required('admin')
-@api_view(['DELETE'])
-def deleteall(request):
-    data=Event.objects.all()
-    for i in data:
-        i.delete()
-    return JsonResponse({"Status":"Events Deleted Sucessfully"})
-
 @api_view(['GET'])
 def geteventbyid(request,id):
     event=Event.objects.get(id=id)
     serializer=Eventserializer(event)
     return JsonResponse(serializer.data)
-
-@login_required(login_url='/login')
-@role_required('Admin')
-def eventCRUD(request):
-    return render(request,'AdminPages/eventCrud.html')
 
 @api_view(['POST'])
 def filterevents(request):
@@ -349,60 +337,36 @@ def filterontag(request):
         print(event_data.data)
     return Response({'events':event_data.data})
 
-# @role_required('Student')
-# @login_required(login_url='/login/')
-# def make_payment(request):
-#     userprofile = request.user.profile
-#     if request.method == 'POST':
-#         amount_paid = request.POST.get('amount_paid')
-#         payment = FeePayment(
-#             student=userprofile,
-#             amount_paid=int(amount_paid),
-#         )
-#         payment.save() 
-#         current_user = request.user
-#         try:
-#             userprofile = profile.objects.get(newprofile=current_user)
-#         except profile.DoesNotExist:
-#             return Response({"error": "Profile not found."}, status=404)
-#         fee = FeePayment.objects.filter(student=userprofile).first()
-#         total_paid = 0
-#         if fee:
-#             total_paid = sum(payment.amount_paid for payment in userprofile.fee_payments.all())
-#             total_fee_left = userprofile.payment_structure.Totalfeeamount - total_paid
-#         else:
-#             total_fee_left = userprofile.payment_structure.Totalfeeamount  
-#     current_month = datetime.datetime.now().month
-#     current_year = datetime.datetime.now().year
-#     current_month_payments = FeePayment.objects.filter(
-#         student=userprofile,
-#         payment_date__year=current_year,
-#         payment_date__month=current_month
-#     )
+@login_required
+def eventdetail(request,id):
+    event=Event.objects.get(id=id)
+    event_obj={'obj':event}
+    return render(request,'UserPages/eventdetail.html',context=event_obj)
 
-    
-#     is_fee_paid_this_month = current_month_payments.exists()
-#     if not is_fee_paid_this_month:
-#         notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
-#     user=request.user
-#     context = {
-#         'userprofile': userprofile,
-#         'amount_paid': total_paid,
-#         'total_fee_left': total_fee_left,
-#         'user':user
-#     }
-#     return render(request, 'UserPages/Payment.html', context)
-
+@login_required(login_url='/login')
+@role_required('Admin')
+def eventCRUD(request):
+    return render(request,'AdminPages/eventCrud.html')
 
 @role_required('Student')
 @login_required(login_url='/login/')
 def make_payment(request):
     order_id=uuid.uuid4()
-    print(order_id)
+    userprofile=request.user.profile
     usergrade = request.user.profile.grade
     usepayment_insatnce=PaymentStructure.objects.filter(grade=usergrade)
     paid_instance=FeePayment.objects.filter(student=request.user.profile)
     total_amount=0
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
+    current_month_payments = FeePayment.objects.filter(
+         student=userprofile,
+         payment_date__year=current_year,
+         payment_date__month=current_month
+     )
+    is_fee_paid_this_month = current_month_payments.exists()
+    if not is_fee_paid_this_month:
+         notifications.objects.create(user_instance=userprofile,tag='Fees',NotificationMsg='Fee Pyment For this Month Pending Please Clear you Payment')
     context={
         'user':request.user,
         'userprofile':request.user.profile,
@@ -422,8 +386,6 @@ def make_payment(request):
         context['total_fee_left'] = context['total_fee']
 
     return render(request, 'UserPages/Payment.html',context)
-
-
 
 @login_required
 def process_payment(request):
@@ -452,7 +414,7 @@ def process_payment(request):
     response = requests.request("POST", url, headers=headers, data=payload)
     res=json.loads(response.text)
     return redirect(res['payment_url'])
-    
+
 @login_required
 def verifytransaction(request,amount):
     print(amount)
@@ -474,13 +436,6 @@ def verifytransaction(request,amount):
         userprofile=request.user.profile
         FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now())
     return redirect('pay')
-
-
-@login_required
-def eventdetail(request,id):
-    event=Event.objects.get(id=id)
-    event_obj={'obj':event}
-    return render(request,'UserPages/eventdetail.html',context=event_obj)
 
 @role_required('admin')
 @api_view(['POST'])
@@ -525,20 +480,48 @@ def profilepage(request):
                 user.save()
                 messages.success(request, 'Details Updated Successfully')
                 return redirect('userprofile')
-
-        # Handle Email Change
-        elif 'SubmitEmailChnage' in request.POST:
-            email = request.POST.get('email', '').strip()
-            password = request.POST.get('password', '')
-            check = authenticate(request, username=user.username, password=password)
-            if check:
-                user.email = email
+            
+        elif 'OTPconfirm' in request.POST:
+            email=request.user.email
+            otp = random.randint(100000, 999999)
+            print(otp)
+            request.session['ottp'] = otp  
+            request.session['email'] = email 
+            subject = "OTP for your ClassSphere Login"
+            message = f"Dear User,You OTPfor Email chnage is {otp}. For security reasons, do not share it with others. Best regards, ClassSphere."
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            try:
+                    send_mail(subject, message, from_email, recipient_list)
+            except Exception as e:
+                    print(f"Error sending email: {e}")
+        elif 'ResentOTP' in request.POST:
+            email=request.user.email
+            otp = random.randint(100000, 999999)
+            print(otp)
+            request.session.pop('ottp', None)
+            request.session.pop('email', None)
+            request.session['ottp'] = otp  
+            request.session['email'] = email 
+            subject = "OTP for your ClassSphere Login"
+            message = f"Dear User,You OTPfor Email chnage is {otp}. For security reasons, do not share it with others. Best regards, ClassSphere."
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            try:
+                    send_mail(subject, message, from_email, recipient_list)
+            except Exception as e:
+                    print(f"Error sending email: {e}")
+        elif 'OTP'  in request.POST:
+            userOTP=request.POST.get('OTP')
+            newemail=request.POST.get('newemail')
+            stores_otp=request.session.get('ottp')
+            if str(userOTP)==str(stores_otp):
+                user=request.user
+                user.email=newemail
                 user.save()
-                messages.success(request, 'Email Updated Successfully')
-                return redirect('userprofile')
-            else:
-                messages.error(request, 'Wrong Credential Entered')
-
+                request.session.pop('ottp', None)
+                request.session.pop('email', None)
+                messages.success(request,'Email Changed sucessfully')
         elif 'passwordchange' in request.POST:
             oldpass = request.POST.get('old')
             newpass = request.POST.get('new')
@@ -676,17 +659,21 @@ def exam(request,id):
 @api_view(['GET'])
 def getallExam(request):
     exams = Exam.objects.all()
-    result = {}
+    result = []  # Change from dict to list
+
     for exam in exams:
-        exam_key = f"{exam.Exam_Name}-{exam.id}"
-        result[exam_key] = {
+        exam_data = {
+            'Exam_ID': exam.id,
+            'Exam_Name': exam.Exam_Name,
             'Exam_Date': str(exam.Exam_Date),
             'Total_Marks': exam.Total_Marks,
             'Questions': []
         }
+
         questions = Questions.objects.filter(Exam_Instace=exam)
         for q in questions:
             question_data = {
+                'Question_Id':q.id,
                 'Question_Name': q.Question_Name,
                 'Question_Marks': q.Question_Marks,
                 'Correct_Answer': q.correct_answer,
@@ -696,14 +683,98 @@ def getallExam(request):
             choices = Choice.objects.filter(question_id=q.id)
             for c in choices:
                 question_data['Choices'].append({
+                    "id": c.id,
                     'Choice': c.choice_name
                 })
 
-            result[exam_key]['Questions'].append(question_data)
+            exam_data['Questions'].append(question_data)
+
+        result.append(exam_data)  # Append exam_data to the result list
 
     return Response({"status": True, "data": result})
 
+@login_required(login_url='login/')
+@role_required('Teacher')
+def Exam_create(request):
+    user=request.user
+    return render(request,'AdminPages/ExamCreate.html',{'user':user})
 
+@role_required('Teacher')
+@api_view(['POST'])
+def handlecreate(request):
+    data=request.data   
+    try:
+        with transaction.atomic():
+            grade_instance=Grade.objects.get(classname=data.get('exam_grade')) 
+            exam_instance=Exam.objects.create(Exam_Name=data.get('exam_name'),ExamGrade=grade_instance,Exam_Date=data.get('exam_date'),Total_Marks=data.get('total_marks'))
+            question=data.get('questions')
+            for i in question:
+                question_instance=Questions.objects.create(Exam_Instace=exam_instance,Question_Name=i['question_text'],Question_Marks=i['marks'],correct_answer=i['correct_answer'])
+                for choices,value in i['options'].items():
+                    print(choices,value)
+                    Choice.objects.create(choice_name=value,question_id=question_instance)
+    except Exception as e:
+        print('Somenthing went wonrg:',e)
+    
+    return Response({'status':data})   
+
+@role_required('Teacher')
+@login_required
+def exam_managementpage(request):
+    return render(request,'AdminPages/ExamUpdate.html')
+
+@api_view(['PATCH'])
+def updateexam(request):
+    data = request.data
+    rgrade = data.get('Grade')
+    exam_id = data.get('Exam_ID')
+    try:
+        grade_ins = Grade.objects.get(classname=rgrade)
+    except Grade.DoesNotExist:
+        return Response({'error': 'Grade not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    exam_instance = Exam.objects.get(id=exam_id)
+    with transaction.atomic():
+        Exam.objects.filter(id=exam_id).update(
+            Exam_Name=data.get('Exam_Name'),
+            Total_Marks=data.get('Total_Marks'),
+            Exam_Date=data.get('Exam_Date'),
+            ExamGrade=grade_ins
+        )
+
+        for question_data in data.get('Questions', []):
+            question_id = question_data.get('Question_Id')
+            question = Questions.objects.filter(id=question_id).first()
+            question = Questions.objects.create(
+                    Exam_Instace=exam_instance,
+                    Question_Name=question_data.get('Question_Name'),
+                    Question_Marks=question_data.get('Question_Marks'),
+                    correct_answer=question_data.get('correct_answer')
+                )
+
+            for choice_data in question_data.get('Choices', []):
+                choice_id = choice_data.get('id')
+                choice_text = choice_data.get('text')
+                is_correct = choice_data.get('correct')
+
+                if choice_id:
+                    choice = Choice.objects.filter(id=choice_id).first()
+                    if choice:
+                        choice.choice_text = choice_text
+                        choice.correct = is_correct
+                        choice.save()
+    return Response(data={'message':'Data Updates Sucessfully'}, status=status.HTTP_200_OK)
+
+@login_required
+@api_view(['DELETE'])
+def deleteExam(request,id):
+    eaxm=Exam.objects.get(id=id)
+    eaxm.delete()
+    return Response({'Status':'Deletes Sucessfully'},status=status.HTTP_200_OK)
+
+@login_required(login_url='login/')
+@role_required('Student')
 def leader_board(request):
     leaderboard=StudentLeaderBoard.objects.all().order_by('-total_marks')
     context={   
@@ -711,8 +782,8 @@ def leader_board(request):
     } 
     return render(request,'UserPages/Leaderboard.html',context)
 
+@login_required(login_url='login/')
 @role_required('Student')
-@login_required
 def schedule(request):
     user=request.user
     UserDatas=StudentLeaderBoard.objects.filter(student_id=user)
@@ -742,7 +813,7 @@ def schedule(request):
     return render(request,'UserPages/exam.html',context)
 
 @role_required('Admin')
-@login_required
+@login_required(login_url='login/')
 def attendance_view(request):
     attendance_records = attendance.objects.all().select_related('user')
     total_students = profile.objects.filter(role='Student').count()
@@ -762,6 +833,7 @@ def attendance_view(request):
     return render(request, 'AdminPages/attendance.html', context)  
 
 @api_view(['POST'])
+@login_required(login_url='login/')
 def get_attendance_data(request):
     if 'file' not in request.FILES:
         return Response({'Status': 'No file received'}, status=400)
@@ -788,6 +860,7 @@ def get_attendance_data(request):
     return Response({'Status': f'{uploaded_file.name} file received successfully'})
 
 @api_view(['POST'])
+@login_required(login_url='login/')
 def get_filter(request):
     body = request.data
     filtered_data = attendance.objects.all()
@@ -811,37 +884,13 @@ def get_filter(request):
         })
 
     return Response({'status': data})
-    
+
+@login_required(login_url='login/') 
 def holiday(request):
     holiday_date=Holiday.objects.all()
     return render(request,'UserPages/Holiday.html',{'holiday':holiday_date})
 
-@role_required('Teacher')
-def Exam_create(request):
-    user=request.user
-    return render(request,'AdminPages/ExamCreate.html',{'user':user})
-
-@role_required('Teacher')
-@api_view(['POST'])
-def handlecreate(request):
-    data=request.data   
-    try:
-        with transaction.atomic():
-            grade_instance=Grade.objects.get(classname=data.get('exam_grade')) 
-            exam_instance=Exam.objects.create(Exam_Name=data.get('exam_name'),ExamGrade=grade_instance,Exam_Date=data.get('exam_date'),Created_by=request.user,Total_Marks=data.get('total_marks'))
-            question=data.get('questions')
-            for i in question:
-                question_instance=Questions.objects.create(Exam_Instace=exam_instance,Question_Name=i['question_text'],Question_Marks=i['marks'],correct_answer=i['correct_answer'])
-                for choices,value in i['options'].items():
-                    print(choices,value)
-                    Choice.objects.create(choice_name=value,question_id=question_instance)
-    except Exception as e:
-        print('Somenthing went wonrg:',e)
-    return Response({'status':data})     
-
-
-
-
+@login_required(login_url='login/')
 @role_required('Teacher','Admin')
 def adminpage(request):
     total_user=User.objects.count()
@@ -865,11 +914,14 @@ def adminpage(request):
         }
     return render(request, 'AdminPages/admin.html', context)
 
+@login_required(login_url='login/')
 @role_required('Admin')
 def holidayCRUD(request):
     holiday_data = Holiday.objects.all()
     return render(request, 'AdminPages/Holidayadmin.html',{'holiday':holiday_data})
 
+
+@login_required(login_url='login/')
 @api_view(['POST'])
 def add_holiday(request):
     name = request.data.get('holiday')
@@ -900,6 +952,7 @@ def add_holiday(request):
             )
     return Response({"Status": "Holiday Created Successfully"})
 
+
 @role_required('Admin')
 @api_view(['DELETE'])
 def deleteHoliday(request,id):
@@ -907,6 +960,8 @@ def deleteHoliday(request,id):
     instance.delete()
     return Response({"Status":"Holiday Deleted Sucessfully"})
 
+
+@login_required(login_url='login/')
 @role_required('Admin')
 def fee_setup(request):
     user=request.user
@@ -931,7 +986,6 @@ def deletefee(request,id):
     data.delete()
     return Response({'status':'Data Deleted sucessfully'})
 
-
 @login_required(login_url='/login/')
 def notificationpage(request):
     user=request.user
@@ -941,8 +995,6 @@ def notificationpage(request):
         notification_object.is_read=True
         notification_object.save()
     return render(request,'UserPages/Notification.html',{'objects':data})
-
-
 
 def erropage(request):
     return render(request,'Include and Base Pages/ErrorPage.html')

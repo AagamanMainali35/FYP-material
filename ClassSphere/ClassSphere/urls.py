@@ -40,5 +40,6 @@ urlpatterns = [
     path('admin2/eventmanagement/',views.eventCRUD,name='eventcrud'),
     path('404Notfound/',views.erropage,name='errorpage'),
     path('initiate/',views.process_payment,name='process'),
-    path('verify/<int:amount>/',views.verifytransaction,name='verify')
+    path('verify/<int:amount>/',views.verifytransaction,name='verify'),
+    path('ExamManagement/',views.exam_managementpage,name='Manage_exam')
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 

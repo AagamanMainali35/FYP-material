@@ -660,63 +660,86 @@
     <nav class="sidebar">
         <div class="menu-bar">
             <div class="menu">
+               
                 <ul class="menu-links">
-                    <li class="nav-link ">
+                    <li class="nav-link Home">
                         <a href="/">
                             <i class='bx bx-home-alt icon'></i>
                             <span class="text nav-text">Home</span>
                         </a>
                     </li>
-                    <li class="nav-link">
-                        <a href="#">
+                    <li class="nav-link dashboard">
+                        <a href="{% url 'adminpage' %}">
                             <i class='bx bx-chart icon'></i>  
                             <span class="text nav-text">Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-link">
-                        <a href="{% url 'feesetup'%}">
-                            <i class="bx bx-money icon"></i>
-                            <span class="text nav-text">SetUp fee</span>
-                        </a>
-                    </li>
-                    <li class="nav-link">
+                    <li class="nav-link Profile">
                         <a href="{% url 'userprofile'%}">
                             <i class='bx bxs-user-detail icon'></i>
                             <span class="text nav-text">Profile</span>
                         </a>
                     </li>
-                    <li class="nav-link">
-                        <a href="{% url 'attendance' %}">
-                            <i class='bx bx-pie-chart-alt icon'></i>
-                            <span class="text nav-text">Attendance</span>
+                    <li class="nav-link setupfees">
+                        <a href="{% url 'feesetup'%}">
+                            <i class="bx bx-money icon"></i>
+                            <span class="text nav-text">SetUp fee</span>
                         </a>
                     </li>
-                    <li class="nav-link">
+        
+                    <li class="nav-link  eventManage ">
+                        <a href="{% url 'eventcrud'%}">
+                            <i class='bx bx-bar-chart-alt-2 icon'></i>
+                            <span class="text nav-text">Manage Event</span>
+                        </a>
+                    </li>
+                    <li class="nav-link holiday">
                         <a href="{% url 'holidaycrud'%}">
                             <i class="fas fa-umbrella-beach icon"></i>
                             <span class="text nav-text">Holiday</span>
                         </a>
                     </li>
-                    <li class="nav-link">
-                        <a href="{% url 'eventcrud'%}">
+                    <li class="nav-link Fees">
+                        <a href="{% url 'pay'%}">
                             <i class='bx bx-bar-chart-alt-2 icon'></i>
-                            <span class="text nav-text">Manage Events</span>
+                            <span class="text nav-text">Fees</span>
                         </a>
                     </li>
-                
-                    <li class="nav-link">
-                        <a href="#">
+                    <li class="nav-link Notifications">
+                        <a href="{% url 'Notification'%}">
                             <i class='bx bx-bell icon'></i>
-                            <span class="text nav-text">Notification</span>
+                            <span class="text nav-text">Notifications</span>
                         </a>
                     </li>
-                    
-                </ul>
                 
+                    <li class="nav-link  ManageExam">
+                        <a href="#"> 
+                            <i class='bx bxs-report icon'></i>
+                            <span class="text nav-text">Manage Exam</span>
+                        </a>
+                    </li>
+                    <li class="nav-link  Create">
+                        <a href="{% url 'createExam'%}"> 
+                            <i class='bx bx-plus-circle icon'></i>
+                            <span class="text nav-text">Create Exam</span>
+                        </a>
+                    </li>
+                    <li class="nav-link Attendance">
+                        <a href="{% url 'attendance' %}">
+                            <i class='bx bx-heart icon'></i>
+                            <span class="text nav-text">Attendance</span>
+                        </a>
+                    </li>
+                   
+                </ul>
             </div>
-
-            <div class="bottom-content">
-                <li><a href="#"><i class='bx bx-log-out icon'></i> <span class="text nav-text">Logout</span></a></li>
+            <div class="bottom-content" style="margin-bottom: 2rem;">
+                <li class="">
+                    <a href="{% url 'logout'%}">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Logout</span>
+                    </a>
+                </li>
             </div>
         </div>
     </nav>

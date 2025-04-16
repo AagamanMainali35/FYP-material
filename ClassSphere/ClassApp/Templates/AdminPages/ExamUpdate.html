@@ -16,38 +16,38 @@
             --box-shadow: 0 4px 6px rgba(95, 49, 49, 0.1);
             --transition: all 0.3s ease;
         }
-
+    
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+    
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--light-gray);
             color: var(--dark-gray);
             line-height: 1.6;
         }
-
+    
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+            margin-left:18rem;
+            padding: 1rem 0 0 2rem;
         }
-
+    
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
-
+    
         .header h1 {
             font-size: 1.75rem;
             color: var(--dark-gray);
         }
-
+    
         .btn {
             display: inline-flex;
             align-items: center;
@@ -60,56 +60,56 @@
             border: none;
             font-size: 0.875rem;
         }
-
+    
         .btn i {
             margin-right: 0.5rem;
         }
-
+    
         .btn-primary {
             background-color: var(--primary-color);
             color: white;
             box-shadow: var(--box-shadow);
         }
-
+    
         .btn-primary:hover {
             background-color: #5253cc;
         }
-
+    
         .btn-secondary {
             background-color: var(--primary-color);
             opacity: 0.9;
             color: white;
         }
-
+    
         .btn-secondary:hover {
             background-color: var(--primary-color);
             opacity: 1;
         }
-
+    
         .btn-outline {
             background-color: transparent;
             border: 1px solid #e0e0e0;
             color: var(--dark-gray);
         }
-
+    
         .btn-outline:hover {
             background-color: var(--light-gray);
         }
-
+    
         .btn-danger {
             background-color: var(--error-color);
             color: white;
         }
-
+    
         .btn-danger:hover {
             background-color: #d73125;
         }
-
+    
         /* Search */
         .search-container {
             margin-bottom: 1rem;
         }
-
+    
         .search-box {
             display: flex;
             align-items: center;
@@ -121,12 +121,12 @@
             max-width: 400px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
+    
         .search-box i {
             color: #9ca3af;
             margin-right: 0.5rem;
         }
-
+    
         .search-box input {
             border: none;
             outline: none;
@@ -134,7 +134,7 @@
             width: 100%;
             color: var(--dark-gray);
         }
-
+    
         /* Table */
         .card {
             background-color: white;
@@ -143,20 +143,20 @@
             border: 1px solid #e0e0e0;
             overflow: hidden;
         }
-
+    
         .table-container {
             overflow-x: auto;
         }
-
+    
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
+    
         thead {
             background-color: rgba(99, 102, 241, 0.1);
         }
-
+    
         th {
             text-align: left;
             padding: 1rem;
@@ -164,17 +164,17 @@
             color: var(--primary-color);
             border-bottom: 1px solid #e0e0e0;
         }
-
+    
         td {
             padding: 1rem;
             border-bottom: 1px solid #f0f0f0;
             color: var(--dark-gray);
         }
-
+    
         tr:hover {
             background-color: rgba(99, 102, 241, 0.05);
         }
-
+    
         .status-badge {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -182,28 +182,28 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
-
+    
         .status-active {
             background-color: rgba(99, 102, 241, 0.1);
             color: var(--primary-color);
         }
-
-        .status-scheduled {
-            background-color: rgba(52, 168, 83, 0.1);
-            color: var(--secondary-color);
+    
+        .status-upcoming {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: #FFAB00;
         }
-
+    
         .status-completed {
             background-color: rgba(234, 67, 53, 0.1);
             color: var(--error-color);
         }
-
+    
         .action-buttons {
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
         }
-
+    
         .action-btn {
             background: none;
             border: none;
@@ -216,23 +216,23 @@
             border-radius: 50%;
             transition: var(--transition);
         }
-
+    
         .action-btn:hover {
             background-color: #f0f0f0;
         }
-
+    
         .action-btn.edit {
             color: var(--primary-color);
         }
-
+    
         .action-btn.delete {
             color: var(--error-color);
         }
-
+    
         .action-btn.view {
             color: #6b7280;
         }
-
+    
         /* Pagination */
         .pagination {
             display: flex;
@@ -242,7 +242,7 @@
             gap: 0.5rem;
             border-top: 1px solid #e0e0e0;
         }
-
+    
         .pagination-btn {
             background: none;
             border: none;
@@ -253,11 +253,11 @@
             gap: 0.25rem;
             transition: var(--transition);
         }
-
+    
         .pagination-btn:hover {
             color: var(--primary-color);
         }
-
+    
         .pagination-current {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -266,7 +266,7 @@
             border-radius: 4px;
             font-size: 0.875rem;
         }
-
+    
         /* Modal */
         .modal {
             display: none;
@@ -280,7 +280,7 @@
             overflow-y: auto;
             padding: 2rem 1rem;
         }
-
+    
         .modal-content {
             background-color: white;
             margin: 0 auto;
@@ -292,26 +292,27 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-
+    
         .delete-modal {
             max-width: 500px;
         }
-
+    
         .view-modal {
             max-width: 800px;
         }
-
+    
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
                 transform: translateY(-20px);
             }
+    
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
+    
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -319,23 +320,23 @@
             padding: 1.5rem;
             border-bottom: 1px solid #e0e0e0;
         }
-
+    
         .modal-header h2 {
             font-size: 1.25rem;
             color: var(--dark-gray);
         }
-
+    
         .close-btn {
             font-size: 1.5rem;
             cursor: pointer;
             color: #9ca3af;
             transition: var(--transition);
         }
-
+    
         .close-btn:hover {
             color: var(--dark-gray);
         }
-
+    
         .modal-footer {
             padding: 1rem 1.5rem;
             display: flex;
@@ -343,33 +344,33 @@
             gap: 0.75rem;
             border-top: 1px solid #e0e0e0;
         }
-
+    
         /* Form */
         form {
             padding: 1.5rem;
         }
-
+    
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
-
+    
         .form-group {
             margin-bottom: 1rem;
         }
-
+    
         .form-group.full-width {
             grid-column: span 2;
         }
-
+    
         label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
             color: var(--dark-gray);
         }
-
+    
         input,
         select,
         textarea {
@@ -381,12 +382,12 @@
             color: var(--dark-gray);
             transition: var(--transition);
         }
-
+    
         textarea {
             resize: vertical;
             min-height: 100px;
         }
-
+    
         input:focus,
         select:focus,
         textarea:focus {
@@ -394,26 +395,26 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
-
+    
         .error-message {
             color: var(--error-color);
             font-size: 0.75rem;
             margin-top: 0.25rem;
             display: none;
         }
-
+    
         /* Questions Section */
         .questions-section {
             margin-top: 1.5rem;
             border-top: 1px solid #f0f0f0;
             padding-top: 1.5rem;
         }
-
+    
         .questions-section h3 {
             margin-bottom: 1rem;
             color: var(--dark-gray);
         }
-
+    
         .question-item {
             background-color: rgba(99, 102, 241, 0.05);
             border-radius: var(--border-radius);
@@ -422,19 +423,23 @@
             position: relative;
             border: 1px solid rgba(99, 102, 241, 0.1);
         }
-
+    
         .question-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.75rem;
         }
-
+    
+        .status-upcoming {
+            background-color: rgba(255, 171, 0, 0.1);
+            color: #FFAB00;
+        }
         .question-title {
             font-weight: 500;
             color: var(--primary-color);
         }
-
+    
         .remove-question {
             background: none;
             border: none;
@@ -442,27 +447,27 @@
             cursor: pointer;
             font-size: 1rem;
         }
-
+    
         .choices-container {
             margin-top: 0.75rem;
         }
-
+    
         .choice-item {
             display: flex;
             align-items: center;
             margin-bottom: 0.5rem;
             gap: 0.5rem;
         }
-
+    
         .choice-radio {
             width: auto;
             margin-right: 0.5rem;
         }
-
+    
         .choice-text {
             flex-grow: 1;
         }
-
+    
         .remove-choice {
             background: none;
             border: none;
@@ -470,7 +475,7 @@
             cursor: pointer;
             font-size: 0.875rem;
         }
-
+    
         .add-choice-btn {
             background: none;
             border: none;
@@ -482,7 +487,7 @@
             font-size: 0.875rem;
             margin-top: 0.5rem;
         }
-
+    
         /* Toast */
         .toast {
             position: fixed;
@@ -500,45 +505,45 @@
             transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
             z-index: 1001;
         }
-
+    
         .toast.active {
             transform: translateX(0);
         }
-
+    
         .toast-content {
             display: flex;
             align-items: center;
             padding: 15px;
         }
-
+    
         .toast i {
             font-size: 1.5rem;
             color: var(--secondary-color);
             margin-right: 15px;
         }
-
+    
         .toast-message {
             display: flex;
             flex-direction: column;
         }
-
+    
         .toast-title {
             font-weight: 600;
             color: var(--dark-gray);
         }
-
+    
         .toast-text {
             color: #6b7280;
             font-size: 0.875rem;
         }
-
+    
         .toast-progress {
             position: relative;
             height: 3px;
             width: 100%;
             background-color: #f0f0f0;
         }
-
+    
         .toast-progress::before {
             content: "";
             position: absolute;
@@ -547,49 +552,49 @@
             background-color: var(--secondary-color);
             animation: progress 3s linear forwards;
         }
-
+    
         .toast.error {
             border-left-color: var(--error-color);
         }
-
+    
         .toast.error i {
             color: var(--error-color);
         }
-
+    
         .toast.error .toast-progress::before {
             background-color: var(--error-color);
         }
-
+    
         @keyframes progress {
             100% {
                 width: 0%;
             }
         }
-
+    
         /* Exam Details */
         .exam-details {
             padding: 1.5rem;
         }
-
+    
         .exam-info {
             margin-bottom: 1.5rem;
         }
-
+    
         .exam-info-item {
             display: flex;
             margin-bottom: 0.75rem;
         }
-
+    
         .exam-info-label {
             font-weight: 500;
             width: 120px;
             color: var(--dark-gray);
         }
-
+    
         .exam-info-value {
             color: #6b7280;
         }
-
+    
         .view-question-item {
             background-color: rgba(99, 102, 241, 0.05);
             border-radius: var(--border-radius);
@@ -597,81 +602,111 @@
             margin-bottom: 1rem;
             border: 1px solid rgba(99, 102, 241, 0.1);
         }
-
+    
         .view-question-title {
             font-weight: 500;
             color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
-
+    
         .view-question-text {
             margin-bottom: 1rem;
             color: var(--dark-gray);
         }
-
+    
         .view-choices-list {
             list-style: none;
         }
-
+    
         .view-choice-item {
             display: flex;
             align-items: center;
             margin-bottom: 0.5rem;
         }
-
+    
         .view-choice-item.correct {
             color: var(--secondary-color);
             font-weight: 500;
         }
-
+    
         .view-choice-item i {
             margin-right: 0.5rem;
         }
-
+    
         /* Responsive */
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
+    
             .form-group.full-width {
                 grid-column: span 1;
             }
-
+    
             .action-buttons {
                 flex-direction: column;
             }
-
+    
             .modal-content {
                 margin: 0;
             }
         }
+        /* No Data Message Styling */
+    .no-data-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        text-align: center;
+        background-color: #F5F5F5;
+        border-radius: var(--border-radius);
+        border: 1px dashed rgba(244, 244, 244, 0.2);
+        height: 85vh;
+        margin-top: -25px ;
+    }
+
+    .no-data-icon {
+        font-size: 3rem;
+        color: #d1d5db;
+        margin-bottom: 1rem;
+    }
+
+    .no-data-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark-gray);
+        margin-bottom: 0.5rem;
+    }
+
+    .no-data-message {
+        color: var(--text-light);
+        max-width: 400px;
+        margin-bottom: 1.5rem;
+    }
+
+    .no-data-action {
+        margin-top: 0.5rem;
+    }
+    .btn-primary{
+        text-decoration: none;
+    }
     </style>
 </head>
 <body>
+    {%include 'Include and Base Pages/sidebar.html'%}
+    {% include 'Include and Base Pages/rolerestriction.html'%}
     <div class="container">
         <header class="header">
             <h1>Examination Management System</h1>
-            <button id="addExamBtn" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add Examination
-            </button>
         </header>
-
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search examinations...">
-            </div>
-        </div>
-
+        <input type="text" id="csrf" value="{{csrf_token}}" hidden>
         <div class="card">
             <div class="table-container">
                 <table id="examsTable">
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Subject</th>
-                            <th>Duration (min)</th>
                             <th>Total Marks</th>
                             <th>Status</th>
                             <th>Date</th>
@@ -680,80 +715,9 @@
                         </tr>
                     </thead>
                     <tbody id="examsTableBody">
-                        <!-- Manually created table rows -->
-                        <tr data-id="1">
-                            <td>Midterm Examination</td>
-                            <td>Mathematics</td>
-                            <td>120</td>
-                            <td>100</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td>Oct 15, 2023</td>
-                            <td>2</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn view" data-id="1" title="View">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit" data-id="1" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" data-id="1" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-id="2">
-                            <td>Final Examination</td>
-                            <td>Physics</td>
-                            <td>180</td>
-                            <td>150</td>
-                            <td><span class="status-badge status-scheduled">Scheduled</span></td>
-                            <td>Nov 20, 2023</td>
-                            <td>1</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn view" data-id="2" title="View">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit" data-id="2" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" data-id="2" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-id="3">
-                            <td>Quiz</td>
-                            <td>Chemistry</td>
-                            <td>45</td>
-                            <td>50</td>
-                            <td><span class="status-badge status-completed">Completed</span></td>
-                            <td>Sep 5, 2023</td>
-                            <td>1</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn view" data-id="3" title="View">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit" data-id="3" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" data-id="3" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Exam rows will be populated here -->
                     </tbody>
                 </table>
-            </div>
-            <div class="pagination">
-                <button class="pagination-btn"><i class="fas fa-chevron-left"></i> Previous</button>
-                <span class="pagination-current">1</span>
-                <button class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </div>
@@ -762,8 +726,8 @@
     <div id="examModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Add Examination</h2>
-                <span class="close-btn">&times;</span>
+                <h2 id="modalTitle">Edit Examination</h2>
+                <span class="close-btn" onclick="closeModal('examModal')">&times;</span>
             </div>
             <form id="examForm">
                 <div class="form-grid">
@@ -773,27 +737,27 @@
                         <span class="error-message" id="titleError"></span>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" required>
-                        <span class="error-message" id="subjectError"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="duration">Duration (minutes)</label>
-                        <input type="number" id="duration" name="duration" min="1" required>
-                        <span class="error-message" id="durationError"></span>
-                    </div>
-                    <div class="form-group">
                         <label for="totalMarks">Total Marks</label>
                         <input type="number" id="totalMarks" name="totalMarks" min="1" required>
                         <span class="error-message" id="totalMarksError"></span>
                     </div>
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status" name="status">
-                            <option value="Active">Active</option>
-                            <option value="Scheduled">Scheduled</option>
-                            <option value="Completed">Completed</option>
+                        <label for="grade">Grade</label>
+                        <select id="grade" name="grade">
+                            <option value="1">Grade 1</option>
+                            <option value="2">Grade 2</option>
+                            <option value="3">Grade 3</option>
+                            <option value="4">Grade 4</option>
+                            <option value="5">Grade 5</option>
+                            <option value="6">Grade 6</option>
+                            <option value="7">Grade 7</option>
+                            <option value="8">Grade 8</option>
+                            <option value="9">Grade 9</option>
+                            <option value="10" selected>Grade 10</option>
+                            <option value="11">Grade 11</option>
+                            <option value="12">Grade 12</option>
                         </select>
+                        <span class="error-message" id="gradeError"></span>
                     </div>
                     <div class="form-group">
                         <label for="date">Date</label>
@@ -805,62 +769,39 @@
                 <div class="questions-section">
                     <h3>Questions</h3>
                     <div id="questionsContainer">
-                        <!-- Question items will be added here -->
+                        <!-- Questions will be populated here -->
                     </div>
-                    <button type="button" id="addQuestionBtn" class="btn btn-secondary">
-                        <i class="fas fa-plus"></i> Add Question
-                    </button>
+                    <!-- Removed Add Question button -->
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
-                    <button type="submit" id="saveBtn" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('examModal')">Cancel</button>
+                    <button type="button" id="saveBtn" class="btn btn-primary" onclick="saveExam()">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="modal">
-        <div class="modal-content delete-modal">
-            <div class="modal-header">
-                <h2>Confirm Deletion</h2>
-                <span class="close-btn">&times;</span>
-            </div>
-            <div style="padding: 1.5rem;">
-                <p>Are you sure you want to delete the examination <span id="deleteExamName" style="font-weight: 600;"></span>? This action cannot be undone.</p>
-            </div>
-            <div class="modal-footer">
-                <button id="cancelDeleteBtn" class="btn btn-outline">Cancel</button>
-                <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Exam Details Modal -->
+    <!-- View Exam Modal -->
     <div id="viewExamModal" class="modal">
         <div class="modal-content view-modal">
             <div class="modal-header">
-                <h2 id="viewExamTitle">Examination Details</h2>
-                <span class="close-btn">&times;</span>
+                <h2 id="viewExamTitle"></h2>
+                <span class="close-btn" onclick="closeModal('viewExamModal')">&times;</span>
             </div>
             <div class="exam-details">
                 <div class="exam-info">
-                    <div class="exam-info-item">
-                        <span class="exam-info-label">Subject:</span>
-                        <span id="viewExamSubject" class="exam-info-value"></span>
-                    </div>
-                    <div class="exam-info-item">
-                        <span class="exam-info-label">Duration:</span>
-                        <span id="viewExamDuration" class="exam-info-value"></span>
-                    </div>
                     <div class="exam-info-item">
                         <span class="exam-info-label">Total Marks:</span>
                         <span id="viewExamMarks" class="exam-info-value"></span>
                     </div>
                     <div class="exam-info-item">
                         <span class="exam-info-label">Status:</span>
-                        <span id="viewExamStatus" class="exam-info-value"></span>
+                        <span id="viewExamStatus" class="exam-info-value"><span class="status-badge status-active">Active</span></span>
+                    </div>
+                    <div class="exam-info-item">
+                        <span class="exam-info-label">Grade:</span>
+                        <span id="viewExamGrade" class="exam-info-value">Grade 10</span>
                     </div>
                     <div class="exam-info-item">
                         <span class="exam-info-label">Date:</span>
@@ -871,12 +812,29 @@
                 <div style="margin-top: 2rem;">
                     <h3 style="margin-bottom: 1rem; color: var(--dark-gray);">Questions</h3>
                     <div id="viewQuestionsContainer">
-                        <!-- Questions will be displayed here -->
+                        <!-- Questions will be populated here -->
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="closeViewBtn" class="btn btn-outline">Close</button>
+                <button id="closeViewBtn" class="btn btn-outline" onclick="closeModal('viewExamModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <span class="close-btn" onclick="closeModal('deleteModal')">&times;</span>
+            </div>
+            <div style="padding: 1.5rem;">
+                <p>Are you sure you want to delete the examination <span id="deleteExamName" style="font-weight: 600;"></span>? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDeleteBtn" class="btn btn-outline" onclick="closeModal('deleteModal')">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger" onclick="deleteExam()">Delete</button>
             </div>
         </div>
     </div>
@@ -894,346 +852,256 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // Store exam data in memory
-            const examData = {
-                "1": {
-                    title: "Midterm Examination",
-                    subject: "Mathematics",
-                    duration: 120,
-                    totalMarks: 100,
-                    status: "Active",
-                    date: "2023-10-15",
-                    questions: [
-                        {
-                            text: "Solve the quadratic equation: 3x² + 5x - 2 = 0. Show all your work.",
-                            choices: [
-                                { text: "x = 1/3 or x = -2", isCorrect: true },
-                                { text: "x = 2/3 or x = -1", isCorrect: false },
-                                { text: "x = -1/3 or x = 2", isCorrect: false },
-                                { text: "x = -2/3 or x = 1", isCorrect: false }
-                            ]
-                        },
-                        {
-                            text: "Find the derivative of f(x) = 2x³ - 4x² + 5x - 7",
-                            choices: [
-                                { text: "f'(x) = 6x² - 8x + 5", isCorrect: true },
-                                { text: "f'(x) = 6x² - 4x + 5", isCorrect: false },
-                                { text: "f'(x) = 6x² - 8x - 5", isCorrect: false },
-                                { text: "f'(x) = 3x² - 8x + 5", isCorrect: false }
-                            ]
-                        }
-                    ]
-                },
-                "2": {
-                    title: "Final Examination",
-                    subject: "Physics",
-                    duration: 180,
-                    totalMarks: 150,
-                    status: "Scheduled",
-                    date: "2023-11-20",
-                    questions: [
-                        {
-                            text: "Explain Newton's three laws of motion and provide an example for each.",
-                            choices: [
-                                { text: "First Law: An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an external force.", isCorrect: false },
-                                { text: "Second Law: Force equals mass times acceleration (F = ma).", isCorrect: false },
-                                { text: "Third Law: For every action, there is an equal and opposite reaction.", isCorrect: false },
-                                { text: "All of the above", isCorrect: true }
-                            ]
-                        }
-                    ]
-                },
-                "3": {
-                    title: "Quiz",
-                    subject: "Chemistry",
-                    duration: 45,
-                    totalMarks: 50,
-                    status: "Completed",
-                    date: "2023-09-05",
-                    questions: [
-                        {
-                            text: "Balance the following chemical equation: H₂ + O₂ → H₂O",
-                            choices: [
-                                { text: "H₂ + O₂ → H₂O", isCorrect: false },
-                                { text: "2H₂ + O₂ → 2H₂O", isCorrect: true },
-                                { text: "H₂ + O → H₂O", isCorrect: false },
-                                { text: "H₂ + ½O₂ → H₂O", isCorrect: false }
-                            ]
-                        }
-                    ]
-                }
-            };
-
-            // DOM Elements
-            const searchInput = document.getElementById("searchInput");
-            const addExamBtn = document.getElementById("addExamBtn");
-            const examModal = document.getElementById("examModal");
-            const deleteModal = document.getElementById("deleteModal");
-            const viewExamModal = document.getElementById("viewExamModal");
-            const modalTitle = document.getElementById("modalTitle");
-            const examForm = document.getElementById("examForm");
-            const cancelBtn = document.getElementById("cancelBtn");
-            const questionsContainer = document.getElementById("questionsContainer");
-            const addQuestionBtn = document.getElementById("addQuestionBtn");
-            const deleteExamName = document.getElementById("deleteExamName");
-            const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
-            const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-            const closeViewBtn = document.getElementById("closeViewBtn");
-            const toast = document.getElementById("toast");
-            const toastTitle = document.getElementById("toastTitle");
-            const toastMessage = document.getElementById("toastMessage");
-            const toastIcon = document.getElementById("toastIcon");
-            const tableRows = document.querySelectorAll("#examsTableBody tr");
-
-            // Close buttons for modals
-            document.querySelectorAll(".close-btn").forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    examModal.style.display = "none";
-                    deleteModal.style.display = "none";
-                    viewExamModal.style.display = "none";
-                });
+        // Global variable to store exam data
+        let examData = [];
+    
+        // Helper function to decode Unicode escape sequences
+        function decodeUnicode(str) {
+            if (!str) return str;
+            return str.replace(/\\u([a-fA-F0-9]{4})/g, function(match, grp) {
+                return String.fromCharCode(parseInt(grp, 16));
             });
-
-            // Cancel buttons
-            cancelBtn.addEventListener("click", () => {
-                examModal.style.display = "none";
-            });
-
-            cancelDeleteBtn.addEventListener("click", () => {
-                deleteModal.style.display = "none";
-            });
-
-            closeViewBtn.addEventListener("click", () => {
-                viewExamModal.style.display = "none";
-            });
-
-            // Add Exam button
-            addExamBtn.addEventListener("click", () => {
-                modalTitle.textContent = "Add Examination";
-                examForm.reset();
-                questionsContainer.innerHTML = "";
-                examForm.dataset.mode = "add";
-                delete examForm.dataset.examId;
-                examModal.style.display = "block";
-            });
-
-            // Add Question button
-            addQuestionBtn.addEventListener("click", () => {
-                addQuestionItem();
-            });
-
-            // Search functionality
-            searchInput.addEventListener("input", () => {
-                const searchTerm = searchInput.value.toLowerCase();
-                
-                tableRows.forEach(row => {
-                    const title = row.cells[0].textContent.toLowerCase();
-                    const subject = row.cells[1].textContent.toLowerCase();
-                    
-                    if (title.includes(searchTerm) || subject.includes(searchTerm)) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
-                });
-                
-                // Check if any rows are visible
-                const visibleRows = Array.from(tableRows).filter(row => row.style.display !== "none");
-                
-                if (visibleRows.length === 0) {
-                    const noResultsRow = document.createElement("tr");
-                    noResultsRow.id = "noResultsRow";
-                    noResultsRow.innerHTML = `<td colspan="8" style="text-align: center; color: rgba(99, 102, 241, 0.7);">No examinations found</td>`;
-                    
-                    // Remove existing no results row if it exists
-                    const existingNoResults = document.getElementById("noResultsRow");
-                    if (existingNoResults) {
-                        existingNoResults.remove();
-                    }
-                    
-                    document.getElementById("examsTableBody").appendChild(noResultsRow);
-                } else {
-                    // Remove no results row if it exists
-                    const existingNoResults = document.getElementById("noResultsRow");
-                    if (existingNoResults) {
-                        existingNoResults.remove();
-                    }
-                }
-            });
-
-            // Form submission
-            examForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-
-                // Validate form
-                if (!validateForm()) {
-                    return;
-                }
-
-                const formData = {
-                    title: document.getElementById("title").value,
-                    subject: document.getElementById("subject").value,
-                    duration: document.getElementById("duration").value,
-                    totalMarks: document.getElementById("totalMarks").value,
-                    status: document.getElementById("status").value,
-                    date: document.getElementById("date").value,
-                    questions: []
+        }
+        
+        // Function to determine exam status based on date
+        function getExamStatus(examDate) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+            
+            const examDateObj = new Date(examDate);
+            examDateObj.setHours(0, 0, 0, 0);
+            
+            if (examDateObj > today) {
+                return { 
+                    text: "Upcoming", 
+                    class: "status-upcoming" 
                 };
-
-                // Get all question items
-                const questionItems = document.querySelectorAll(".question-item");
-                
-                questionItems.forEach(item => {
-                    const questionText = item.querySelector(".question-text").value;
-                    const choiceItems = item.querySelectorAll(".choice-item");
-                    const choices = [];
-                    
-                    choiceItems.forEach(choiceItem => {
-                        const choiceText = choiceItem.querySelector(".choice-text").value;
-                        const isCorrect = choiceItem.querySelector(".choice-radio").checked;
-                        
-                        choices.push({
-                            text: choiceText,
-                            isCorrect: isCorrect
-                        });
-                    });
-                    
-                    formData.questions.push({
-                        text: questionText,
-                        choices: choices
-                    });
-                });
-
-                if (examForm.dataset.mode === "edit") {
-                    // Edit existing exam
-                    const examId = examForm.dataset.examId;
-                    const row = document.querySelector(`tr[data-id="${examId}"]`);
-                    
-                    if (row) {
-                        // Update row data
-                        row.cells[0].textContent = formData.title;
-                        row.cells[1].textContent = formData.subject;
-                        row.cells[2].textContent = formData.duration;
-                        row.cells[3].textContent = formData.totalMarks;
-                        
-                        // Update status badge
-                        const statusBadge = row.cells[4].querySelector(".status-badge");
-                        statusBadge.className = "status-badge";
-                        
-                        if (formData.status === "Active") {
-                            statusBadge.classList.add("status-active");
-                        } else if (formData.status === "Scheduled") {
-                            statusBadge.classList.add("status-scheduled");
-                        } else {
-                            statusBadge.classList.add("status-completed");
+            } else if (examDateObj < today) {
+                return { 
+                    text: "Completed", 
+                    class: "status-completed" 
+                };
+            } else {
+                return { 
+                    text: "Active", 
+                    class: "status-active" 
+                };
+            }
+        }
+    
+        // Fetch exam data when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchExams();
+        });
+    
+        // Function to fetch exams from the API
+        function fetchExams() {
+            fetch('http://127.0.0.1:8000/exam/all/', {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status && data.data) {
+                    // Process the data to decode any Unicode escape sequences
+                    examData = data.data.map(exam => {
+                        if (exam.Questions) {
+                            exam.Questions = exam.Questions.map(question => {
+                                // Decode question text
+                                question.Question_Name = decodeUnicode(question.Question_Name);
+                                
+                                if (question.Choices) {
+                                    question.Choices = question.Choices.map(choice => {
+                                        // Decode choice text
+                                        choice.Choice = decodeUnicode(choice.Choice);
+                                        return choice;
+                                    });
+                                }
+                                
+                                // Decode correct answer
+                                if (question.Correct_Answer) {
+                                    question.Correct_Answer = decodeUnicode(question.Correct_Answer);
+                                }
+                                
+                                return question;
+                            });
                         }
-                        
-                        statusBadge.textContent = formData.status;
-                        
-                        // Format and update date
-                        const date = new Date(formData.date);
-                        const options = { year: "numeric", month: "short", day: "numeric" };
-                        row.cells[5].textContent = date.toLocaleDateString(undefined, options);
-                        
-                        // Update questions count
-                        row.cells[6].textContent = formData.questions.length;
-                        
-                        // Update exam data in memory
-                        examData[examId] = formData;
-                        
-                        showToast("Success", "Examination updated successfully", "success");
-                    }
+                        return exam;
+                    });
+                    
+                    renderExamTable();
                 } else {
-                    // Add new exam
-                    const tableBody = document.getElementById("examsTableBody");
-                    const newRow = document.createElement("tr");
-                    
-                    // Generate a new ID
-                    const existingIds = Object.keys(examData).map(id => parseInt(id));
-                    const newId = Math.max(...existingIds, 0) + 1;
-                    
-                    newRow.dataset.id = newId;
-                    
-                    // Format date
-                    const date = new Date(formData.date);
-                    const options = { year: "numeric", month: "short", day: "numeric" };
-                    const formattedDate = date.toLocaleDateString(undefined, options);
-                    
-                    // Determine status class
-                    let statusClass = "";
-                    if (formData.status === "Active") {
-                        statusClass = "status-active";
-                    } else if (formData.status === "Scheduled") {
-                        statusClass = "status-scheduled";
-                    } else {
-                        statusClass = "status-completed";
-                    }
-                    
-                    newRow.innerHTML = `
-                        <td>${formData.title}</td>
-                        <td>${formData.subject}</td>
-                        <td>${formData.duration}</td>
-                        <td>${formData.totalMarks}</td>
-                        <td><span class="status-badge ${statusClass}">${formData.status}</span></td>
-                        <td>${formattedDate}</td>
-                        <td>${formData.questions.length}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="action-btn view" data-id="${newId}" title="View">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="action-btn edit" data-id="${newId}" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="action-btn delete" data-id="${newId}" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    `;
-                    
-                    tableBody.appendChild(newRow);
-                    
-                    // Add event listeners to the new buttons
-                    newRow.querySelector(".action-btn.view").addEventListener("click", function() {
-                        viewExam(newId);
-                    });
-                    
-                    newRow.querySelector(".action-btn.edit").addEventListener("click", function() {
-                        editExam(newId);
-                    });
-                    
-                    newRow.querySelector(".action-btn.delete").addEventListener("click", function() {
-                        showDeleteConfirmation(newId);
-                    });
-                    
-                    // Store exam data in memory
-                    examData[newId] = formData;
-                    
-                    showToast("Success", "Examination created successfully", "success");
+                    showToast("Error", "Failed to fetch exam data", "error");
                 }
-
-                examModal.style.display = "none";
+            })
+            .catch(error => {
+                console.error('Error fetching exam data:', error);
+                showToast("Error", "Failed to fetch exam data", "error");
             });
-
-            // Add question item
-            function addQuestionItem() {
-                const questionId = Date.now();
-                const questionItem = document.createElement("div");
-                questionItem.className = "question-item";
-                questionItem.dataset.questionId = questionId;
-
-                questionItem.innerHTML = `
+        }
+    
+        // Function to render the exam table
+        function renderExamTable() {
+            const tableBody = document.getElementById('examsTableBody');
+            tableBody.innerHTML = '';
+    
+            // Check if there's no exam data
+            if (!examData || examData.length === 0) {
+                // Hide the table and show the no data message
+                const tableContainer = document.querySelector('.table-container');
+                tableContainer.innerHTML = `
+                    <div class="no-data-container">
+                        <div class="no-data-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h3 class="no-data-title">No Exams Found</h3>
+                        <p class="no-data-message">There are currently no examinations in the system. Create a new examination to get started.</p>
+                        <div class="no-data-action">
+                            <a href="/create/" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Create New Exam
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+    
+            // If we have exam data, render the table as before
+            examData.forEach((exam, index) => {
+                const questionsCount = exam.Questions ? exam.Questions.length : 0;
+                
+                // Format date for display
+                const examDate = new Date(exam.Exam_Date);
+                const formattedDate = examDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                
+                // Get status based on date
+                const status = getExamStatus(exam.Exam_Date);
+    
+                // Create questionsHTML for hidden data
+                let questionsHTML = "";
+                if (exam.Questions && exam.Questions.length > 0) {
+                    exam.Questions.forEach(question => {
+                        let choicesHTML = "";
+                        question.Choices.forEach(choice => {
+                            choicesHTML += `
+                                <div class="choice" data-text="${choice.Choice}" data-id="${choice.id}" data-correct="${question.Correct_Answer === choice.Choice}"></div>
+                            `;
+                        });
+    
+                        questionsHTML += `
+                            <div class="question" data-text="${question.Question_Name}" data-marks="${question.Question_Marks}" data-id="${question.Question_Id}">
+                                ${choicesHTML}
+                            </div>
+                        `;
+                    });
+                }
+    
+                const row = document.createElement('tr');
+                row.dataset.id = exam.Exam_ID;
+                row.innerHTML = `
+                    <td>${exam.Exam_Name}</td>
+                    <td>${exam.Total_Marks}</td>
+                    <td><span class="status-badge ${status.class}">${status.text}</span></td>
+                    <td>${formattedDate}</td>
+                    <td>${questionsCount}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn view" onclick="viewExam(${index})" title="View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn edit" onclick="openEditModal(${index})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="showDeleteConfirmation(${index})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <!-- Hidden data for questions and choices -->
+                    <td style="display: none;" class="exam-questions">
+                        ${questionsHTML}
+                    </td>
+                    <td style="display: none;" class="exam-date">${exam.Exam_Date}</td>
+                    <td style="display: none;" class="exam-grade">${exam.Grade || '10'}</td>
+                `;
+    
+                tableBody.appendChild(row);
+            });
+        }
+        // Function to open a modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }  {
+            document.getElementById(modalId).style.display = "block";
+        }
+    
+        // Function to close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+    
+        // Function to open the edit modal
+        function openEditModal(examIndex) {
+            const exam = examData[examIndex];
+            
+            // Set the exam ID on the form
+            document.getElementById("examForm").dataset.examId = exam.Exam_ID;
+            document.getElementById("examForm").dataset.examIndex = examIndex;
+            
+            // Populate form fields
+            document.getElementById("title").value = exam.Exam_Name;
+            document.getElementById("totalMarks").value = exam.Total_Marks;
+            document.getElementById("grade").value = exam.Grade || '10';
+            document.getElementById("date").value = exam.Exam_Date;
+            
+            // Clear existing questions
+            const questionsContainer = document.getElementById("questionsContainer");
+            questionsContainer.innerHTML = '';
+            
+            if (exam.Questions && exam.Questions.length > 0) {
+                exam.Questions.forEach((question, qIndex) => {
+                    addQuestionToEditModal(question, qIndex);
+                });
+            }
+            
+            // Open the modal
+            openModal("examModal");
+        }
+        
+        // Function to add a question to the edit modal
+        function addQuestionToEditModal(question, index) {
+            const questionsContainer = document.getElementById("questionsContainer");
+            const questionId = "q" + Date.now() + index;
+            
+            let choicesHTML = '';
+            if (question.Choices && question.Choices.length > 0) {
+                question.Choices.forEach((choice, cIndex) => {
+                    const isCorrect = choice.Choice === question.Correct_Answer;
+                    choicesHTML += `
+                        <div class="choice-item">
+                            <input type="radio" name="question-${questionId}" class="choice-radio" ${isCorrect ? 'checked' : ''}>
+                            <input type="text" class="choice-text" placeholder="Enter choice text" value="${choice.Choice}">
+                            <span class="error-message choice-error"></span>
+                        </div>
+                    `;
+                });
+            }
+            
+            const questionHTML = `
+                <div class="question-item" data-question-id="${questionId}" data-question-db-id="${question.Question_Id}">
                     <div class="question-header">
-                        <span class="question-title">Question ${questionsContainer.children.length + 1}</span>
-                        <button type="button" class="remove-question">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <span class="question-title">Question ${index + 1}</span>
                     </div>
                     <div class="form-group">
-                        <textarea class="question-text" placeholder="Enter question text" rows="2"></textarea>
+                        <textarea class="question-text" placeholder="Enter question text" rows="2">${question.Question_Name}</textarea>
                         <span class="error-message question-error"></span>
+                    </div>
+                    <div class="question_marks">
+                        <label>Marks:</label>
+                        <input type="number" class="question-marks" min="1" value="${question.Question_Marks}" style="width: 60px; margin-left: 5px;">
                     </div>
                     <div class="choices-container">
                         <div class="choices-header">
@@ -1241,414 +1109,242 @@
                             <span class="error-message choices-error"></span>
                         </div>
                         <div class="choices-list">
-                            <!-- Choices will be added here -->
+                            ${choicesHTML}
                         </div>
-                        <button type="button" class="add-choice-btn">
-                            <i class="fas fa-plus"></i> Add Choice
-                        </button>
                     </div>
-                `;
-
-                questionsContainer.appendChild(questionItem);
-
-                // Add initial choices
-                const choicesList = questionItem.querySelector(".choices-list");
-                addChoiceItem(choicesList);
-                addChoiceItem(choicesList);
-
-                // Add event listeners
-                questionItem.querySelector(".remove-question").addEventListener("click", () => {
-                    questionItem.remove();
-                    updateQuestionNumbers();
-                });
-
-                questionItem.querySelector(".add-choice-btn").addEventListener("click", () => {
-                    addChoiceItem(choicesList);
-                });
-            }
-
-            // Add choice item
-            function addChoiceItem(choicesList) {
-                const choiceId = Date.now() + Math.random().toString(36).substr(2, 5);
-                const choiceItem = document.createElement("div");
-                choiceItem.className = "choice-item";
-
-                const radioName = `question-${choicesList.closest(".question-item").dataset.questionId}`;
-
-                choiceItem.innerHTML = `
-                    <input type="radio" name="${radioName}" class="choice-radio">
-                    <input type="text" class="choice-text" placeholder="Enter choice text">
-                    <button type="button" class="remove-choice">
-                        <i class="fas fa-times"></i>
-                    </button>
-                    <span class="error-message choice-error"></span>
-                `;
-
-                choicesList.appendChild(choiceItem);
-
-                // Add event listener for remove button
-                choiceItem.querySelector(".remove-choice").addEventListener("click", () => {
-                    if (choicesList.children.length > 2) {
-                        choiceItem.remove();
-                    } else {
-                        showToast("Warning", "At least two choices are required", "error");
-                    }
-                });
-            }
-
-            // Update question numbers
-            function updateQuestionNumbers() {
-                const questionItems = document.querySelectorAll(".question-item");
-                questionItems.forEach((item, index) => {
-                    item.querySelector(".question-title").textContent = `Question ${index + 1}`;
-                });
-            }
-
-            // Validate form
-            function validateForm() {
-                let isValid = true;
-
-                // Clear previous errors
-                document.querySelectorAll(".error-message").forEach((el) => {
-                    el.textContent = "";
-                    el.style.display = "none";
-                });
-
-                // Validate title
-                const title = document.getElementById("title").value;
-                if (!title.trim()) {
-                    document.getElementById("titleError").textContent = "Title is required";
-                    document.getElementById("titleError").style.display = "block";
-                    isValid = false;
-                }
-
-                // Validate subject
-                const subject = document.getElementById("subject").value;
-                if (!subject.trim()) {
-                    document.getElementById("subjectError").textContent = "Subject is required";
-                    document.getElementById("subjectError").style.display = "block";
-                    isValid = false;
-                }
-
-                // Validate duration
-                const duration = document.getElementById("duration").value;
-                if (!duration || isNaN(duration) || Number.parseInt(duration) <= 0) {
-                    document.getElementById("durationError").textContent = "Duration must be a positive number";
-                    document.getElementById("durationError").style.display = "block";
-                    isValid = false;
-                }
-
-                // Validate total marks
-                const totalMarks = document.getElementById("totalMarks").value;
-                if (!totalMarks || isNaN(totalMarks) || Number.parseInt(totalMarks) <= 0) {
-                    document.getElementById("totalMarksError").textContent = "Total marks must be a positive number";
-                    document.getElementById("totalMarksError").style.display = "block";
-                    isValid = false;
-                }
-
-                // Validate date
-                const date = document.getElementById("date").value;
-                if (!date) {
-                    document.getElementById("dateError").textContent = "Date is required";
-                    document.getElementById("dateError").style.display = "block";
-                    isValid = false;
-                }
-
-                // Validate questions
-                const questionItems = document.querySelectorAll(".question-item");
-                if (questionItems.length === 0) {
-                    addQuestionItem();
-                    showToast("Warning", "At least one question is required", "error");
-                    isValid = false;
-                } else {
-                    // Check each question
-                    questionItems.forEach((item) => {
-                        const questionText = item.querySelector(".question-text").value;
-                        const choiceItems = item.querySelectorAll(".choice-item");
-                        let hasCorrectAnswer = false;
-
-                        if (!questionText.trim()) {
-                            const errorEl = item.querySelector(".question-error");
-                            errorEl.textContent = "Question text is required";
-                            errorEl.style.display = "block";
-                            isValid = false;
-                        }
-
-                        if (choiceItems.length < 2) {
-                            const errorEl = item.querySelector(".choices-error");
-                            errorEl.textContent = "At least two choices are required";
-                            errorEl.style.display = "block";
-                            isValid = false;
-                        }
-
-                        choiceItems.forEach((choiceItem) => {
-                            const choiceText = choiceItem.querySelector(".choice-text").value;
-                            const isCorrect = choiceItem.querySelector(".choice-radio").checked;
-
-                            if (!choiceText.trim()) {
-                                const errorEl = choiceItem.querySelector(".choice-error");
-                                errorEl.textContent = "Choice text is required";
-                                errorEl.style.display = "block";
-                                isValid = false;
-                            }
-
-                            if (isCorrect) {
-                                hasCorrectAnswer = true;
-                            }
-                        });
-
-                        if (!hasCorrectAnswer && choiceItems.length > 0) {
-                            const errorEl = item.querySelector(".choices-error");
-                            errorEl.textContent = "Please select a correct answer";
-                            errorEl.style.display = "block";
-                            isValid = false;
-                        }
-                    });
-                }
-
-                return isValid;
-            }
-
-            // View exam
-            function viewExam(examId) {
-                const exam = examData[examId];
-                
-                if (!exam) return;
-                
-                document.getElementById("viewExamTitle").textContent = exam.title;
-                document.getElementById("viewExamSubject").textContent = exam.subject;
-                document.getElementById("viewExamDuration").textContent = `${exam.duration} minutes`;
-                document.getElementById("viewExamMarks").textContent = exam.totalMarks;
-                
-                // Set status with badge styling
-                let statusHTML = '';
-                if (exam.status === "Active") {
-                    statusHTML = `<span class="status-badge status-active">${exam.status}</span>`;
-                } else if (exam.status === "Scheduled") {
-                    statusHTML = `<span class="status-badge status-scheduled">${exam.status}</span>`;
-                } else {
-                    statusHTML = `<span class="status-badge status-completed">${exam.status}</span>`;
-                }
-                document.getElementById("viewExamStatus").innerHTML = statusHTML;
-                
-                // Format date
-                const date = new Date(exam.date);
-                const options = { year: "numeric", month: "long", day: "numeric" };
-                document.getElementById("viewExamDate").textContent = date.toLocaleDateString(undefined, options);
-                
-                // Display questions
-                const questionsContainer = document.getElementById("viewQuestionsContainer");
-                questionsContainer.innerHTML = "";
-                
-                if (exam.questions.length === 0) {
-                    questionsContainer.innerHTML = "<p>No questions available for this examination.</p>";
-                } else {
-                    exam.questions.forEach((question, index) => {
-                        const questionElement = document.createElement("div");
-                        questionElement.className = "view-question-item";
-                        
-                        let choicesHTML = "";
-                        question.choices.forEach((choice) => {
-                            const icon = choice.isCorrect ? 
-                                '<i class="fas fa-check-circle" style="color: var(--secondary-color);"></i>' : 
-                                '<i class="fas fa-circle" style="color: #ccc;"></i>';
-                            
-                            const className = choice.isCorrect ? "view-choice-item correct" : "view-choice-item";
-                            
+                </div>
+            `;
+            
+            // Add the new question to the container
+            questionsContainer.insertAdjacentHTML('beforeend', questionHTML);
+        }
+        
+        // Function to view exam details
+        function viewExam(examIndex) {
+            const exam = examData[examIndex];
+            
+            // Populate view modal with exam details
+            document.getElementById("viewExamTitle").textContent = exam.Exam_Name;
+            document.getElementById("viewExamMarks").textContent = exam.Total_Marks;
+            document.getElementById("viewExamGrade").textContent = `Grade ${exam.Grade || '10'}`;
+            
+            // Get status based on date
+            const status = getExamStatus(exam.Exam_Date);
+            document.getElementById("viewExamStatus").innerHTML = `<span class="status-badge ${status.class}">${status.text}</span>`;
+            
+            // Format date for display
+            const examDate = new Date(exam.Exam_Date);
+            const formattedDate = examDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            document.getElementById("viewExamDate").textContent = formattedDate;
+            
+            // Clear existing questions
+            const viewQuestionsContainer = document.getElementById("viewQuestionsContainer");
+            viewQuestionsContainer.innerHTML = '';
+            
+            // Add questions if they exist
+            if (exam.Questions && exam.Questions.length > 0) {
+                exam.Questions.forEach((question, qIndex) => {
+                    let choicesHTML = '';
+                    
+                    if (question.Choices && question.Choices.length > 0) {
+                        question.Choices.forEach(choice => {
+                            const isCorrect = choice.Choice === question.Correct_Answer;
                             choicesHTML += `
-                                <li class="${className}">
-                                    ${icon} ${choice.text}
+                                <li class="view-choice-item ${isCorrect ? 'correct' : ''}">
+                                    <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-circle'}" style="color: ${isCorrect ? 'var(--secondary-color)' : '#ccc'};"></i> ${choice.Choice}
                                 </li>
                             `;
                         });
-                        
-                        questionElement.innerHTML = `
-                            <h4 class="view-question-title">Question ${index + 1}</h4>
-                            <p class="view-question-text">${question.text}</p>
+                    }
+                    
+                    const questionHTML = `
+                        <div class="view-question-item">
+                            <h4 class="view-question-title">Question ${qIndex + 1} <span style="color: var(--secondary-color);">(${question.Question_Marks} marks)</span></h4>
+                            <p class="view-question-text">${question.Question_Name}</p>
                             <ul class="view-choices-list">
                                 ${choicesHTML}
                             </ul>
-                        `;
-                        
-                        questionsContainer.appendChild(questionElement);
-                    });
-                }
-                
-                viewExamModal.style.display = "block";
-            }
-
-            // Edit exam
-            function editExam(examId) {
-                const exam = examData[examId];
-                
-                if (!exam) return;
-                
-                modalTitle.textContent = "Edit Examination";
-                
-                // Fill form fields
-                document.getElementById("title").value = exam.title;
-                document.getElementById("subject").value = exam.subject;
-                document.getElementById("duration").value = exam.duration;
-                document.getElementById("totalMarks").value = exam.totalMarks;
-                document.getElementById("status").value = exam.status;
-                document.getElementById("date").value = exam.date;
-                
-                // Set form mode
-                examForm.dataset.mode = "edit";
-                examForm.dataset.examId = examId;
-                
-                // Clear questions container
-                questionsContainer.innerHTML = "";
-                
-                // Add questions
-                exam.questions.forEach((question) => {
-                    const questionId = Date.now() + Math.random().toString(36).substr(2, 5);
-                    const questionItem = document.createElement("div");
-                    questionItem.className = "question-item";
-                    questionItem.dataset.questionId = questionId;
-
-                    questionItem.innerHTML = `
-                        <div class="question-header">
-                            <span class="question-title">Question ${questionsContainer.children.length + 1}</span>
-                            <button type="button" class="remove-question">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="question-text" placeholder="Enter question text" rows="2">${question.text}</textarea>
-                            <span class="error-message question-error"></span>
-                        </div>
-                        <div class="choices-container">
-                            <div class="choices-header">
-                                <label>Choices (select the correct answer)</label>
-                                <span class="error-message choices-error"></span>
-                            </div>
-                            <div class="choices-list">
-                                <!-- Choices will be added here -->
-                            </div>
-                            <button type="button" class="add-choice-btn">
-                                <i class="fas fa-plus"></i> Add Choice
-                            </button>
                         </div>
                     `;
-
-                    questionsContainer.appendChild(questionItem);
-
-                    // Add choices
-                    const choicesList = questionItem.querySelector(".choices-list");
-                    const radioName = `question-${questionId}`;
-
-                    question.choices.forEach((choice) => {
-                        const choiceItem = document.createElement("div");
-                        choiceItem.className = "choice-item";
-
-                        choiceItem.innerHTML = `
-                            <input type="radio" name="${radioName}" class="choice-radio" ${choice.isCorrect ? "checked" : ""}>
-                            <input type="text" class="choice-text" placeholder="Enter choice text" value="${choice.text}">
-                            <button type="button" class="remove-choice">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <span class="error-message choice-error"></span>
-                        `;
-
-                        choicesList.appendChild(choiceItem);
-
-                        // Add event listener for remove button
-                        choiceItem.querySelector(".remove-choice").addEventListener("click", () => {
-                            if (choicesList.children.length > 2) {
-                                choiceItem.remove();
-                            } else {
-                                showToast("Warning", "At least two choices are required", "error");
-                            }
-                        });
-                    });
-
-                    // Add event listeners
-                    questionItem.querySelector(".remove-question").addEventListener("click", () => {
-                        questionItem.remove();
-                        updateQuestionNumbers();
-                    });
-
-                    questionItem.querySelector(".add-choice-btn").addEventListener("click", () => {
-                        addChoiceItem(choicesList);
-                    });
-                });
-                
-                // Show modal
-                examModal.style.display = "block";
-            }
-
-            // Show delete confirmation
-            function showDeleteConfirmation(examId) {
-                const exam = examData[examId];
-                
-                if (!exam) return;
-                
-                deleteExamName.textContent = exam.title;
-                
-                confirmDeleteBtn.onclick = () => {
-                    const row = document.querySelector(`tr[data-id="${examId}"]`);
-                    if (row) {
-                        row.remove();
-                    }
-                    delete examData[examId];
-                    deleteModal.style.display = "none";
-                    showToast("Success", "Examination deleted successfully", "success");
                     
-                    // Check if table is empty
-                    if (document.querySelectorAll("#examsTableBody tr").length === 0) {
-                        const noResultsRow = document.createElement("tr");
-                        noResultsRow.id = "noResultsRow";
-                        noResultsRow.innerHTML = `<td colspan="8" style="text-align: center; color: rgba(99, 102, 241, 0.7);">No examinations found</td>`;
-                        document.getElementById("examsTableBody").appendChild(noResultsRow);
+                    viewQuestionsContainer.insertAdjacentHTML('beforeend', questionHTML);
+                });
+            } else {
+                viewQuestionsContainer.innerHTML = '<p>No questions available for this exam.</p>';
+            }
+            
+            // Open the view modal
+            openModal("viewExamModal");
+        }
+        
+        // Function to show delete confirmation
+        function showDeleteConfirmation(examIndex) {
+            const exam = examData[examIndex];
+            
+            // Set the exam name and ID for deletion
+            document.getElementById("deleteExamName").textContent = exam.Exam_Name;
+            document.getElementById("confirmDeleteBtn").dataset.examId = exam.Exam_ID;
+            document.getElementById("confirmDeleteBtn").dataset.examIndex = examIndex;
+            
+            // Open the delete modal
+            openModal("deleteModal");
+        }
+        
+        // Function to delete an exam
+        function deleteExam() {
+            const examId = document.getElementById("confirmDeleteBtn").dataset.examId;
+            const examIndex = document.getElementById("confirmDeleteBtn").dataset.examIndex;
+            
+            // Log the delete URL to verify it's correct
+            const deleteUrl = `http://127.0.0.1:8000/exam/delete/${examId}/`;
+            console.log("Deleting exam with URL:", deleteUrl);
+            
+            fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'x-csrftoken': document.getElementById('csrf').value
+                }
+            })
+            .then(response => {
+                console.log("Delete response status:", response.status);
+                if (response.ok) {
+                    // Remove from local data
+                    examData.splice(examIndex, 1);
+                    renderExamTable();
+                    showToast("Success", "Examination deleted successfully", "success");
+                } else {
+                    showToast("Error", "Failed to delete examination", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting exam:', error);
+                showToast("Error", "Failed to delete examination", "error");
+            });
+            
+            closeModal("deleteModal");
+        }
+        
+        // Function to save the exam
+        function saveExam() {
+            const examForm = document.getElementById("examForm");
+            const examId = examForm.dataset.examId;
+            const examIndex = examForm.dataset.examIndex;
+            const title = document.getElementById("title").value;
+            const totalMarks = document.getElementById("totalMarks").value;
+            const grade = document.getElementById("grade").value;
+            const date = document.getElementById("date").value;
+        
+            const questionItems = document.querySelectorAll(".question-item");
+            const questions = [];
+        
+            questionItems.forEach((item, index) => {
+                const questionText = item.querySelector(".question-text").value;
+                const questionMarks = parseInt(item.querySelector(".question-marks").value) || 1;
+                const questionDbId = item.dataset.questionDbId; // Get Question_Id if it exists
+                const choiceItems = item.querySelectorAll(".choice-item");
+                const choices = [];
+                let correctAnswer = "";
+        
+                choiceItems.forEach((choiceItem, choiceIndex) => {
+                    const choiceText = choiceItem.querySelector(".choice-text").value;
+                    const isCorrect = choiceItem.querySelector(".choice-radio").checked;
+        
+                    choices.push({
+                        id: choiceIndex + 1,
+                        Choice: choiceText
+                    });
+        
+                    if (isCorrect) {
+                        correctAnswer = choiceText;
                     }
+                });
+        
+                const questionData = {
+                    Question_Name: questionText,
+                    Question_Marks: questionMarks,
+                    Choices: choices,
+                    Correct_Answer: correctAnswer
                 };
                 
-                deleteModal.style.display = "block";
-            }
-
-            // Show toast notification
-            function showToast(title, message, type = "success") {
-                toastTitle.textContent = title;
-                toastMessage.textContent = message;
-                
-                toast.className = "toast";
-                if (type === "error") {
-                    toast.classList.add("error");
-                    toastIcon.className = "fas fa-times-circle";
-                } else {
-                    toastIcon.className = "fas fa-check-circle";
+                // Add Question_Id if it exists
+                if (questionDbId) {
+                    questionData.Question_Id = parseInt(questionDbId);
                 }
                 
-                toast.classList.add("active");
-                
-                setTimeout(() => {
-                    toast.classList.remove("active");
-                }, 3000);
+                questions.push(questionData);
+            });
+        
+            const updateData = {
+                Exam_ID: examId,
+                Exam_Name: title,
+                Total_Marks: totalMarks,
+                Exam_Date: date,
+                Grade: grade,
+                Questions: questions
+            };
+        
+            console.log("Sending data to server:", JSON.stringify(updateData)); // Log the data being sent
+        
+            fetch('http://127.0.0.1:8000/exam/update/', {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                    'x-csrftoken': document.getElementById('csrf').value
+                },
+                body: JSON.stringify(updateData)
+            })
+            .then(response => {
+                console.log(response.status);
+                if (response.status === 200) {
+                    examData[examIndex] = updateData;
+                    renderExamTable();
+                    closeModal("examModal");
+                    showToast("Success", "Examination updated successfully", "success");
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || "Failed to update examination");
+                    });
+                }
+            })
+            .then(data => {
+                console.log("Response Data:", data);
+            })
+            .catch(error => {
+                console.error('Error updating exam:', error);
+                showToast("Error", error.message || "Failed to update examination", "error");
+            });
+        }
+        
+        // Function to show toast notification
+        function showToast(title, message, type = "success") {
+            const toast = document.getElementById("toast");
+            const toastTitle = document.getElementById("toastTitle");
+            const toastMessage = document.getElementById("toastMessage");
+            const toastIcon = document.getElementById("toastIcon");
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.className = "toast";
+            if (type === "error") {
+                toast.classList.add("error");
+                toastIcon.className = "fas fa-times-circle";
+            } else {
+                toastIcon.className = "fas fa-check-circle";
             }
             
-            // Add event listeners to action buttons
-            document.querySelectorAll(".action-btn.edit").forEach((btn) => {
-                btn.addEventListener("click", function() {
-                    const examId = this.dataset.id;
-                    editExam(examId);
-                });
-            });
+            toast.classList.add("active");
             
-            document.querySelectorAll(".action-btn.delete").forEach((btn) => {
-                btn.addEventListener("click", function() {
-                    const examId = this.dataset.id;
-                    showDeleteConfirmation(examId);
-                });
-            });
-            
-            document.querySelectorAll(".action-btn.view").forEach((btn) => {
-                btn.addEventListener("click", function() {
-                    const examId = this.dataset.id;
-                    viewExam(examId);
-                });
-            });
-        });
+            // Auto-hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove("active");
+            }, 3000);
+        }
     </script>
 </body>
 </html>
