@@ -147,7 +147,7 @@ class Exam(models.Model):
     Exam_Name=models.CharField(max_length=255,null=False)
     ExamGrade=models.ForeignKey(Grade,null=False,on_delete=models.CASCADE)
     Exam_Date=models.DateField(max_length=255,null=False)
-    Created_by=models.ForeignKey(User,on_delete=models.CASCADE)
+    Created_by=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     Total_Marks=models.CharField(max_length=255,null=False)
     def __str__(self):
         return f'{self.Exam_Name[:50]}-{self.id}'
