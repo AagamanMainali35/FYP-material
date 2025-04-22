@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -27,19 +28,20 @@
         --text-color: #707070;
         --tran-05: all 0.3s ease;
     }
-    body{
+
+    body {
         overflow-y: hidden;
     }
 
-   .bodyContainer{
-    min-height: 100vh;
-    transition: all 0.3s ease;
-    background-color: #F5F5F5;
-    display: flex;
-    gap: 10px;
-   }
+    .bodyContainer {
+        min-height: 100vh;
+        transition: all 0.3s ease;
+        background-color: #F5F5F5;
+        display: flex;
+        gap: 10px;
+    }
 
- 
+
     .home {
         position: absolute;
         top: 0;
@@ -418,18 +420,18 @@
     .success {
         color: rgb(106, 176, 0);
     }
-    
+
     .error {
-        color: red; 
+        color: red;
     }
-    
+
     /* OTP Input Styles */
     .otp-container {
         display: flex;
         justify-content: space-between;
         margin: 20px 0;
     }
-    
+
     .otp-input {
         width: 50px;
         height: 50px;
@@ -441,35 +443,35 @@
         background-color: #f9f9f9;
         transition: border-color 0.3s, box-shadow 0.3s;
     }
-    
+
     .otp-input:focus {
         border-color: #695CFE;
         outline: none;
         box-shadow: 0 0 0 2px rgba(105, 92, 254, 0.1);
     }
-    
+
     .resend-otp {
         text-align: right;
         margin-top: 10px;
     }
-    
+
     .resend-link {
         color: #695CFE;
         cursor: pointer;
         font-size: 14px;
         text-decoration: none;
     }
-    
+
     .resend-link:hover {
         text-decoration: underline;
     }
-    
+
     .timer {
         font-size: 14px;
         color: #666;
         margin-left: 5px;
     }
-    
+
     /* Confirmation Modal Styles */
     #confirmationModal .modal-content {
         width: 400px;
@@ -483,13 +485,13 @@
         font-size: 14px;
         display: none;
     }
-    
+
     .status-message.success {
         background-color: rgba(106, 176, 0, 0.1);
         border: 1px solid rgba(106, 176, 0, 0.3);
         color: rgb(106, 176, 0);
     }
-    
+
     .status-message.error {
         background-color: rgba(255, 0, 0, 0.1);
         border: 1px solid rgba(255, 0, 0, 0.3);
@@ -511,25 +513,24 @@
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .otp-container {
             justify-content: center;
             gap: 10px;
         }
-        
+
         .otp-input {
             width: 40px;
             height: 40px;
             font-size: 18px;
         }
     }
-   
 </style>
 
 <body>
     <div class="bodyContainer">
         {%include 'Include and Base Pages/sidebar.html'%}
-            {% include 'Include and Base Pages/rolerestriction.html'%}
+        {% include 'Include and Base Pages/rolerestriction.html'%}
         <div class="profile">
             <input type="text" hidden value="{{csrf_token}}" id="csrf">
             <div class="left">
@@ -540,7 +541,7 @@
                     </div>
                     <img src="{{profile_info.picture.url}}" srcset="">
                 </div>
-                <form id ='uploadForm' action="" method="post" enctype="multipart/form-data">
+                <form id='uploadForm' action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="upload">
                         <div class="change">
@@ -560,51 +561,47 @@
                     {% endif %}
                     <div class="password-fields">
                         <label for="old-password">Old Password:</label>
-                        <input type="password" id="old-password" name="old" class="password-input" placeholder="Enter old password">
-    
+                        <input type="password" id="old-password" name="old" class="password-input"
+                            placeholder="Enter old password">
+
                         <label for="new-password">New Password:</label>
-                        <input type="password" id="new-password" class="password-input"  name='new'placeholder="Enter new password">
-    
+                        <input type="password" id="new-password" class="password-input" name='new'
+                            placeholder="Enter new password">
+
                         <div class="change-password-btn">
-                            <button type="submit" class="btn-change-password" name="passwordchange">Change Password</button>
+                            <button type="submit" class="btn-change-password" name="passwordchange">Change
+                                Password</button>
                         </div>
                     </div>
                 </form>
-    
+
             </div>
             <div class="right">
-                <form action="" method="post">
-                    {% csrf_token %}
+                <form>
+                    <input type="text" id="csrf"  hidden value="{{csrf_token}}">
                     <div class="personal-info">
                         <h2>Personal Information</h2>
                         <div class="info-fields">
-                            {% if messages %}
-                            {% for message in messages %}
-                            <p class=" msg {% if message.tags == 'success' %}success{% else %}error{% endif %}">
-                                {{ message }}
-                            </p>
-                            {% endfor %}
-                            {% endif %}
                             <div class="name-fields-container">
                                 <div class="field-group">
                                     <label for="firstname">First Name</label>
-                                    <input type="text" id="firstname" class="info-input" value="{{user_info.first_name }}"
-                                        placeholder="Enter your first name" name="fname">
+                                    <input type="text" id="firstname" class="info-input" value="{{user_info.first_name }}" placeholder="Enter your first name" name="fname">
                                 </div>
-    
+
                                 <div class="field-group">
                                     <label for="lastname">Last Name</label>
-                                    <input type="text" id="lastname" class="info-input" value="{{ user_info.last_name }}"
-                                        placeholder="Enter your last name" name="lname">
+                                    <input type="text" id="lastname" class="info-input"
+                                        value="{{ user_info.last_name }}" placeholder="Enter your last name"
+                                        name="lname">
                                 </div>
                             </div>
-    
+
                             <div class="field-group">
                                 <label for="username">Username</label>
                                 <input type="text" id="username" class="info-input" value="{{user_info.username}}"
                                     placeholder="Enter your username" name="username">
                             </div>
-    
+
                             <div class="field-group">
                                 <label for="email">Email Address</label>
                                 <input type="email" id="email" class="info-input" value="{{ user_info.email}}"
@@ -614,55 +611,99 @@
                                         emails.</span>
                                 </p>
                             </div>
-    
                             <div class="field-group">
                                 <label for="grade">Grade/Year</label>
-                                <select id="grade" class="info-input" name="grade">
-                                    <option value="{{user_info.grade}}" disabled selected>{{profile_info.grade}}</option>
+                                <select id="grade" class="info-input" disabled>
+                                    <option value="{{user_info.grade}}" disabled selected>{{profile_info.grade}}
+                                    </option>
                                     {% for grade in Grades %}
                                     <option value="{{ grade.classname }}">{{grade.classname}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-    
+                            <input type="text"  id="ingrade" name="grade" hidden>
                             <div class="field-group">
                                 <label for="address">Address</label>
-                                <input type="text" id="username" class="info-input" value="Kathmandu Jotpati"
-                                    placeholder="Enter your username">
+                                <input type="text" name="address" id="address" class="info-input" value="{{user_info.address}}" placeholder="Enter your Address">
                             </div>
-    
                             <div class="save-btn-container">
-                                <button type="submit" class="btn-save-info" name="Savedetails">Save Changes</button>
+                                <button type="button" class="btn-save-info" name="Savedetails" id="Savedetails">Save Changes</button>    
                             </div>
                         </div>
                     </div>
                 </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const gradeSelect = document.getElementById('grade');
+                        const hiddenInput = document.getElementById('ingrade');
+                
+                        hiddenInput.value = gradeSelect.value;
+                         gradeSelect.addEventListener('change', function () {
+                            hiddenInput.value = this.value;
+                            console.log(hiddenInput.value)
+                        });
+
+                        document.getElementById('Savedetails').addEventListener('click',()=>{
+                            formdata=new FormData()
+                            username=document.getElementById('username').value
+                            firstname=document.getElementById('firstname').value
+                            lastname=document.getElementById('lastname').value
+                            address=document.getElementById('address').value
+                            formdata.append('username',username)
+                            formdata.append('fname',firstname)
+                            formdata.append('lname',lastname)
+                            formdata.append('address',address)
+                            formdata.append('Savedetails','')
+                            fetch('http://127.0.0.1:8000/profile/',{
+                                method:'POST',
+                                headers:{
+                                    'x-csrftoken':document.getElementById('csrf').value
+                                },
+                                body:formdata
+                            })
+                            .then(resposne=>{
+                                return resposne.json()
+                            }) 
+                            .then(data=>{
+                                if(data.status){
+                                    Swal.fire({
+                                        title: "OK",
+                                        text: data.status,
+                                        icon: "success"
+                                      })
+                                      
+                                }
+                            })
+                        })
+                    });
+                </script> 
             </div>
-    
         </div>
-        
+
         <!-- Confirmation Modal -->
         <div class="modal" id="confirmationModal">
             <div class="modal-content">
                 <div class="modal-title">Change Email Address</div>
-                <div class="modal-description">This is your primary email address and will be used to send notification emails.Would you like to change your email address?</div>
-                
+                <div class="modal-description">This is your primary email address and will be used to send notification
+                    emails.Would you like to change your email address?</div>
+
                 <div class="modal-buttons">
                     <button type="button" class="btn-cancel" id="cancelConfirmation">No</button>
                     <button type="button" class="btn-submit" id="confirmEmailChange">Yes</button>
                 </div>
             </div>
         </div>
-        
+
         <!-- Email Change Modal with OTP -->
         <form id="emailChangeForm" action="" method="post">
             {% csrf_token %}
             <div class="modal" id="emailChangeModal">
                 <div class="modal-content">
                     <div class="modal-title">Change Email Address</div>
-                    <div class="modal-description">You are going to update your current email address with a new one. Please
+                    <div class="modal-description">You are going to update your current email address with a new one.
+                        Please
                         enter your new email address and the OTP sent to your current email.</div>
-                    
+
                     <!-- Status message container -->
                     <div id="statusMessage" class="status-message"></div>
 
@@ -671,7 +712,7 @@
                         <input type="email" id="new-email" class="info-input" placeholder="Enter your new email address"
                             name="newemail" required>
                     </div>
-                    
+
                     <div class="modal-field" id="otpFieldContainer">
                         <label for="otp">Enter OTP</label>
                         <input type="hidden" id="combinedOtp" name="OTP">
@@ -688,7 +729,7 @@
                             <span class="timer" id="otpTimer"></span>
                         </div>
                     </div>
-    
+
                     <div class="modal-buttons">
                         <button type="button" class="btn-cancel" id="cancelEmailChange">Cancel</button>
                         <button type="button" class="btn-submit" id="submitOtp">Submit</button>
@@ -697,8 +738,6 @@
             </div>
         </form>
     </div>
-        
-
 </body>
 <script>
     // Toggle sidebar
@@ -730,7 +769,7 @@
         statusMessage.textContent = message;
         statusMessage.className = 'status-message ' + type;
         statusMessage.style.display = 'block';
-        
+
         // Auto-hide success messages after 3 seconds
         if (type === 'success') {
             setTimeout(() => {
@@ -755,7 +794,7 @@
     });
 
     // Also open confirmation modal when clicking on the email change link
-    document.getElementById('emailChangeLink').addEventListener('click', function() {
+    document.getElementById('emailChangeLink').addEventListener('click', function () {
         confirmationModal.style.display = 'flex';
         setTimeout(() => {
             confirmationModal.classList.add('show');
@@ -777,17 +816,16 @@
             emailChangeModal.style.display = 'flex';
             setTimeout(() => {
                 emailChangeModal.classList.add('show');
-                startOtpTimer(120); // 2 minutes timer
+                startOtpTimer(120); 
             }, 10);
         }, 600);
-        
+
         // Reset status message and OTP inputs
         statusMessage.style.display = 'none';
         otpInputs.forEach(input => {
             input.value = '';
         });
-        
-        // Request OTP from server
+
         const data = new FormData();
         data.append('OTPconfirm', true);
         fetch(window.location.href, {
@@ -797,10 +835,10 @@
             },
             body: data
         })
-        .catch(error => {
-            console.error('Error requesting OTP:', error);
-            showStatusMessage('Failed to request OTP. Please try again.', 'error');
-        });
+            .catch(error => {
+                console.error('Error requesting OTP:', error);
+                showStatusMessage('Failed to request OTP. Please try again.', 'error');
+            });
     });
 
     // Close email change modal when clicking on "Cancel"
@@ -829,14 +867,14 @@
 
     // OTP input handling - move to next input after entering a digit
     otpInputs.forEach((input, index) => {
-        input.addEventListener('keyup', function(e) {
+        input.addEventListener('keyup', function (e) {
             // If the input has a value, move to the next input
             if (this.value.length === this.maxLength) {
                 if (index < otpInputs.length - 1) {
                     otpInputs[index + 1].focus();
                 }
             }
-            
+
             // If backspace is pressed and the input is empty, move to the previous input
             if (e.key === 'Backspace' && this.value.length === 0) {
                 if (index > 0) {
@@ -847,13 +885,13 @@
     });
 
     // Resend OTP functionality
-    resendOtp.addEventListener('click', function(e) {
+    resendOtp.addEventListener('click', function (e) {
         e.preventDefault();
-        
+
         // Disable the resend link
         resendOtp.style.pointerEvents = 'none';
         resendOtp.style.opacity = '0.5';
-    
+
         const data = new FormData();
         data.append('ResentOTP', true);
         fetch(window.location.href, {
@@ -863,35 +901,35 @@
             },
             body: data
         })
-        .then(() => {
-            // Reset the timer
-            startOtpTimer(120);
-            showStatusMessage('OTP has been resent to your email', 'success');
-        })
-        .catch(error => {
-            console.error('Error resending OTP:', error);
-            showStatusMessage('Failed to resend OTP. Please try again.', 'error');
-            // Re-enable the resend link
-            resendOtp.style.pointerEvents = 'auto';
-            resendOtp.style.opacity = '1';
-        });
+            .then(() => {
+                // Reset the timer
+                startOtpTimer(120);
+                showStatusMessage('OTP has been resent to your email', 'success');
+            })
+            .catch(error => {
+                console.error('Error resending OTP:', error);
+                showStatusMessage('Failed to resend OTP. Please try again.', 'error');
+                // Re-enable the resend link
+                resendOtp.style.pointerEvents = 'auto';
+                resendOtp.style.opacity = '1';
+            });
     });
 
     // OTP timer function
     function startOtpTimer(seconds) {
         let remainingSeconds = seconds;
-        
+
         // Clear any existing timer
         if (window.otpTimerInterval) {
             clearInterval(window.otpTimerInterval);
         }
-        
+
         // Update timer text immediately
         updateTimerText(remainingSeconds);
-        
-        window.otpTimerInterval = setInterval(function() {
+
+        window.otpTimerInterval = setInterval(function () {
             remainingSeconds--;
-            
+
             if (remainingSeconds <= 0) {
                 clearInterval(window.otpTimerInterval);
                 resendOtp.style.pointerEvents = 'auto';
@@ -927,40 +965,40 @@
     });
 
     // Submit OTP button click handler
-    submitOtpBtn.addEventListener('click', function(e) {
+    submitOtpBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        
+
         // Combine OTP values
         let enteredOtp = '';
         otpInputs.forEach(input => {
             enteredOtp += input.value;
         });
-        
+
         // Validate OTP
         if (enteredOtp.length !== 6) {
             showStatusMessage('Please enter a valid 6-digit OTP', 'error');
             return;
         }
-        
+
         // Get new email
         const newEmail = document.getElementById('new-email').value;
         if (!newEmail) {
             showStatusMessage('Please enter your new email address', 'error');
             return;
         }
-        
+
         // Set the combined OTP value to the hidden input
         combinedOtpInput.value = enteredOtp;
-        
+
         // Submit the form via AJAX
         const formData = new FormData();
         formData.append('OTP', enteredOtp);
         formData.append('newemail', newEmail);
-        
+
         // Disable submit button and show loading state
         submitOtpBtn.disabled = true;
         submitOtpBtn.textContent = 'Submitting...';
-        
+
         fetch(window.location.href, {
             method: 'POST',
             headers: {
@@ -968,28 +1006,28 @@
             },
             body: formData
         })
-        .then(response => {
-            // Re-enable submit button
-            submitOtpBtn.disabled = false;
-            submitOtpBtn.textContent = 'Submit';
-            
-            if (response.ok) {
-                // Show success message and close modal
-                showStatusMessage('Email changed successfully!', 'success');
-            } else {
-                // Show error message
-                showStatusMessage('Failed to verify OTP. Please try again.', 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error submitting OTP:', error);
-            submitOtpBtn.disabled = false;
-            submitOtpBtn.textContent = 'Submit';
-            showStatusMessage('An error occurred. Please try again.', 'error');
-        });
+            .then(response => {
+                // Re-enable submit button
+                submitOtpBtn.disabled = false;
+                submitOtpBtn.textContent = 'Submit';
+
+                if (response.ok) {
+                    // Show success message and close modal
+                    showStatusMessage('Email changed successfully!', 'success');
+                } else {
+                    // Show error message
+                    showStatusMessage('Failed to verify OTP. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting OTP:', error);
+                submitOtpBtn.disabled = false;
+                submitOtpBtn.textContent = 'Submit';
+                showStatusMessage('An error occurred. Please try again.', 'error');
+            });
     });
-    
-    input_field.addEventListener("change", function() {
+
+    input_field.addEventListener("change", function () {
         if (input_field.files.length > 0) {
             uploadForm.submit();
         }

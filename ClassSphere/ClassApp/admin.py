@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  profile,Event,Grade,Notification,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentAnswers,StudentLeaderBoard,attendance,Holiday
+from .models import  profile,Event,Grade,Notification,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentLeaderBoard,attendance,Holiday
 
 @admin.register(profile)
 class profile(admin.ModelAdmin):
@@ -11,7 +11,6 @@ admin.site.register(PaymentStructure)
 admin.site.register(FeePayment)
 admin.site.register(Exam)
 admin.site.register(Questions)
-admin.site.register(StudentAnswers)
 admin.site.register(Choice)
 admin.site.register(StudentLeaderBoard)
 admin.site.register(attendance)

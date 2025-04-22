@@ -369,6 +369,28 @@
             padding: 0 0.5rem;
             z-index: 10;
         }
+        .exam-table th, .exam-table td {
+            text-align: left; /* Consistent alignment */
+            padding: 1.25rem 1.5rem;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        
+        /* Set specific widths for each column */
+        .exam-table th:nth-child(1), .exam-table td:nth-child(1) { width: 20%; }
+        .exam-table th:nth-child(2), .exam-table td:nth-child(2) {
+             width: 15%; 
+            }
+        .exam-table th:nth-child(3), .exam-table td:nth-child(3) { width: 12%;              text-align: center;
+        }
+        .exam-table th:nth-child(4), .exam-table td:nth-child(4) { width: 12%;             text-align: center;
+        }
+        .exam-table th:nth-child(5), .exam-table td:nth-child(5) { width: 12%;              text-align: center;
+        }
+        .exam-table th:nth-child(6), .exam-table td:nth-child(6) { width: 12%;              text-align: center;
+        }
+        .exam-table th:nth-child(7), .exam-table td:nth-child(7) { width: 15%;             text-align: center;
+        }
+        
 
         .btn {
             padding: 0.75rem 1.5rem;
@@ -764,7 +786,7 @@
                 <section>
                     <div class="table-section">
                         <div class="table-header">
-                            <h2 class="table-title">Detailed Exam Schedule</h2>
+                            <h2 class="table-title"> My Results :</h2>
                             <div class="table-actions">
                                 <div class="search-bar">
                                     <input type="text" class="search-input" placeholder="Search exams...">
@@ -779,23 +801,23 @@
                                     <tr>
                                         <th>Exam Name</th>
                                         <th>Date</th>
-                                        <th>Duration</th>
-                                        <th>Total Marks</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Total_Marks</th>
+                                        <th>Correct</th>
+                                        <th>Incorrect</th>
+                                        <th>Answered</th>
+                                        <th>Total_Question</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for exam in upcoming_exam %}
+                                    {% for exam in Leaderboard %}
                                     <tr>
-                                        <td class="exam-name">{{ exam.Exam_Name }}</td>
-                                        <td>{{ exam.Exam_Date }}</td>
-                                        <td>90 mins</td>
-                                        <td>{{ exam.Total_Marks }}</td>
-                                        <td><span class="exam-status status-upcoming">Upcoming</span></td>
-                                        <td>
-                                            <a href="{% url 'exam' exam.id %}" class="btn btn-primary action-btn">Start</a>
-                                        </td>
+                                        <td class="exam-name">{{ exam.exam_id.Exam_Name }}</td>
+                                        <td>{{ exam.exam_id.Exam_Date}}</td>
+                                        <td>{{exam.total_marks}}</td>
+                                        <td>{{exam.Correct}}</td>
+                                        <td>{{exam.Incorrect}}</td>
+                                        <td>{{exam.Answered}}</td>
+                                        <td>{{exam.Total_Question}}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

@@ -18,7 +18,6 @@
 </style>
 <body>
     {% include 'Include and Base Pages/rolerestriction.html'%}
-
      <div class="header">
         <header class="header-content">
             <a href="#logo" class="logo">
@@ -29,24 +28,27 @@
                 <a href="/" class="nav-link Home" >
                     <span>Home</span>
                 </a>
-                <a href="/event" class="nav-link Events">
+                <a href="{% url 'eventpage' %}" class="nav-link Events">
                     <span>Events</span>
                 </a>
+                <a href="{% url 'leaderboard' %}" class="nav-link Events">
+                    <span>Result</span>
+                </a>
                 {% if user.profile.role == 'Student'%}
-                <a href="/schedule" class="nav-link Exam">
+                <a href="{% url 'schedule'%}" class="nav-link Exam">
                     <span>Exams</span>
                 </a>
                 {%endif%}
-                <a href="/holiday" class="nav-link Holiday">
+                <a href="{% url 'holiday'%}" class="nav-link Holiday">
                     <span>Holiday</span>
                 </a>
 
                 {% if user.profile.role == 'Admin'%}
-            <a href="{% url 'adminpage' %}" class="nav-link profile">
-              <span>DashBoard</span>
-            </a>
+                    <a href="{% url 'adminpage'%}" class="nav-link profile">
+                    <span>DashBoard</span>
+                    </a>
             {%else%}
-            <a href="{% url 'userprofile' %}" class="nav-link profile">
+            <a href="{% url 'userprofile'%}" class="nav-link profile">
               <span>Profile</span>
             </a>
             {%endif%}

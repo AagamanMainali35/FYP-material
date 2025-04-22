@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail,EmailMessage
 from django.conf import settings
-from .models import  profile,Event,Grade,Notification as notifications,PaymentStructure,FeePayment,Exam,Questions,Choice,StudentAnswers,attendance,User,StudentLeaderBoard,Holiday
+from .models import  profile,Event,Grade,Notification as notifications,PaymentStructure,FeePayment,Exam,Questions,Choice,attendance,User,StudentLeaderBoard,Holiday
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import Eventserializer,NotificationSerilizer
@@ -22,6 +22,7 @@ from django.db.models.functions import Cast
 from django.db.models import IntegerField
 from ClassSphere.decorators import role_required
 from rest_framework import status
+from django.utils.safestring import mark_safe
 
 
 def base_page(request):
@@ -139,7 +140,7 @@ def ottp(request):
     else:
         if request.method == 'POST':
             if request.session.get('workflow')=='login':
-                entered_otp = request.POST.get('ottp') 
+                entered_otp = request.POST.get('ottp').strip()
                 email = request.session.get('email')  
                 stored_otp = request.session.get('ottp') 
                 if stored_otp is None or email is None:
@@ -370,7 +371,7 @@ def make_payment(request):
     context={
         'user':request.user,
         'userprofile':request.user.profile,
-        'uuid':order_id
+        'uuid':order_id,
     }
     for i in usepayment_insatnce:
         context['total_fee']=i.Totalfeeamount
@@ -384,7 +385,6 @@ def make_payment(request):
     else:
         context['amount_paid'] = 0
         context['total_fee_left'] = context['total_fee']
-
     return render(request, 'UserPages/Payment.html',context)
 
 @login_required
@@ -425,16 +425,12 @@ def verifytransaction(request,amount):
         'Authorization': 'key fe6413e5c26a4a13986749a8308403c0',
         'Content-Type': 'application/json',
     }
-    payload=json.dumps(
-        {
-        'pidx':pidx
-    }
-    )
+    payload=json.dumps({'pidx':pidx})
     response = requests.request("POST", url, headers=headers, data=payload)
     new_res=json.loads(response.text)
     if new_res['status']=='Completed':
         userprofile=request.user.profile
-        FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now())
+        FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now(),grade=userprofile.grade)
     return redirect('pay')
 
 @role_required('admin')
@@ -458,13 +454,15 @@ def profilepage(request):
     role=request.user.profile.role
     grade_list = Grade.objects.all()
     userprofile_instance = profile.objects.get(newprofile=user)
-
+    print(user.profile.address)
     if request.method == 'POST':
+        print(request.POST) 
         if 'Savedetails' in request.POST:
+            print(request.POST)
             fname = request.POST.get('fname', '').strip()
             lname = request.POST.get('lname', '').strip()
             username = request.POST.get('username', '').strip()
-
+            address=request.POST.get('address','').strip()
             updated = False
             if fname:
                 user.first_name = fname
@@ -472,15 +470,17 @@ def profilepage(request):
             if lname:
                 user.last_name = lname
                 updated = True
+            if address:
+                UserProfile=profile.objects.get(newprofile=request.user)
+                UserProfile.address=address
+                UserProfile.save()
             if username:
                 user.username = username
                 updated = True
-
             if updated:
+                print('updated')
                 user.save()
-                messages.success(request, 'Details Updated Successfully')
-                return redirect('userprofile')
-            
+                return JsonResponse({'status':'Profile Has been updated sucessfully'})
         elif 'OTPconfirm' in request.POST:
             email=request.user.email
             otp = random.randint(100000, 999999)
@@ -562,14 +562,13 @@ def profilepage(request):
                     messages.error(request, 'Wrong Old Password Entered.')
             else:
                 messages.error(request, 'Wrong Old Password Entered.')
-
         elif 'Profilepic' in request.FILES:
                 profilepicture = request.FILES['Profilepic']
                 profile_ins=profile.objects.get(newprofile=request.user)
                 profile_ins.profile_picture=profilepicture
                 profile_ins.save()
                 return redirect('userprofile')
-        
+ 
     if userprofile_instance.grade:
         context = {
             'Grades': grade_list,
@@ -578,6 +577,7 @@ def profilepage(request):
                 'email': user.email,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
+                'address':user.profile.address
             },
             'profile_info': {
                 'picture':userprofile_instance.profile_picture,
@@ -659,8 +659,7 @@ def exam(request,id):
 @api_view(['GET'])
 def getallExam(request):
     exams = Exam.objects.all()
-    result = []  # Change from dict to list
-
+    result = []  
     for exam in exams:
         exam_data = {
             'Exam_ID': exam.id,
@@ -805,6 +804,7 @@ def schedule(request):
     context={
         'Attempts':totalAttemptedExam,
         'exam':exam,
+        'Leaderboard':UserDatas,
         'avg_score':average,
         'higest_score':round(highestScore/100*100),
         'upcoming_exam':available_exams,
@@ -819,7 +819,10 @@ def attendance_view(request):
     total_students = profile.objects.filter(role='Student').count()
     present= attendance.objects.filter(Attendance_Status='Present',date=datetime.date.today()).count()
     absent= attendance.objects.filter(Attendance_Status='absent',date=datetime.date.today()).count()
-    percent=round(present/total_students*100)
+    percent = 0
+    if total_students > 0:
+        percent = round((present / total_students) * 100)
+    
     grades=Grade.objects.all()
     context = {
         'attendance':  attendance_records,
@@ -896,21 +899,51 @@ def adminpage(request):
     total_user=User.objects.count()
     total_eaxms=Exam.objects.count()
     total_tecahers=profile.objects.filter(role='Teacher').count()
-    print(total_tecahers)
-    listo = []  # List to store the total for each month
+   
+    totalstudentbyclass=[0]*10
+    for classname in range(1,11):
+        for obj in profile.objects.filter(grade__classname=classname):
+            totalstudentbyclass[classname-1]+=1
+      
+    listo = [] 
     for month in range(1, 13):  
-        total = 0  
+        total = 0   
         data = FeePayment.objects.annotate(month=ExtractMonth('payment_date')).filter(month=month)
         for i in data:
             total += i.amount_paid  
         listo.append(total)  
     sumd=sum(listo)/1000
+    total_Grade_fee = []
+    Outstanding = []
+
+    for obj in range(1, 11):
+        grade_instance = Grade.objects.get(classname=obj)
+        
+        Gradedata = PaymentStructure.objects.get(grade=grade_instance)
+        Total_fees = Gradedata.Totalfeeamount
+        total_Grade_fee.append(Total_fees)
+        
+        total_collected = 0
+        fee_payments = FeePayment.objects.filter(grade=grade_instance)
+        for payment in fee_payments:
+            total_collected += payment.amount_paid
+
+        outstanding_amount = Total_fees - total_collected
+        Outstanding.append(outstanding_amount)
+
+
+    print("All Grades - Total Fees:", total_Grade_fee)
+    print("All Grades - Outstanding:", Outstanding)
+
     context = {
         'data': listo,
         'total_user':total_user,
         'total_exams':total_eaxms,
         'total_revenue':round(sumd),
-        'total_tecahers':total_tecahers
+        'total_tecahers':total_tecahers,
+        'totalstudentbyclass':totalstudentbyclass,
+        'total_fee': mark_safe(json.dumps(total_Grade_fee)),
+        'outstanding_fee': mark_safe(json.dumps(Outstanding)),
         }
     return render(request, 'AdminPages/admin.html', context)
 
@@ -952,14 +985,12 @@ def add_holiday(request):
             )
     return Response({"Status": "Holiday Created Successfully"})
 
-
 @role_required('Admin')
 @api_view(['DELETE'])
 def deleteHoliday(request,id):
     instance=Holiday.objects.get(id=id)
     instance.delete()
     return Response({"Status":"Holiday Deleted Sucessfully"})
-
 
 @login_required(login_url='login/')
 @role_required('Admin')
@@ -984,17 +1015,159 @@ def deletefee(request,id):
     data=PaymentStructure.objects.get(id=id)
     print(data)
     data.delete()
-    return Response({'status':'Data Deleted sucessfully'})
-
+    return Response({'status':'Data Deleted sucessfully'}) #optional
+ 
 @login_required(login_url='/login/')
 def notificationpage(request):
     user=request.user
-    data=notifications.objects.filter(user_instance=user.profile)
-    data_ins=notifications.objects.filter(user_instance=request.user.profile)
-    for notification_object in data_ins:
-        notification_object.is_read=True
-        notification_object.save()
-    return render(request,'UserPages/Notification.html',{'objects':data})
+    data=notifications.objects.filter(user_instance=user.profile).order_by('is_read')
+    count=0
+    for i in data:
+        if i.is_read == False:
+            count+=1
+    print(count)
+    return render(request,'UserPages/Notification.html',{'objects':data,'count':count})
+
+@api_view(['POST'])
+def mark_as_read(request):
+    if request.method=='POST' :
+        requestdata=request.data
+        print(requestdata['id'])
+        instance=notifications.objects.get(id=requestdata['id'])
+        instance.is_read=True
+        instance.save()
+    return Response({'status':'Data Updated Sucessfully'})
 
 def erropage(request):
     return render(request,'Include and Base Pages/ErrorPage.html')
+
+@api_view(['GET'])
+def get_FilterData(request, id):
+    instance = Exam.objects.get(id=id)
+    queryset = StudentLeaderBoard.objects.filter(exam_id=instance).order_by('-exam_id__Exam_Date')
+
+    Data = []
+    for obj in queryset:
+        exam = obj.exam_id  
+        exam_data = {
+            'id': exam.id,
+            'Exam_Name': exam.Exam_Name,
+            'ExamGrade': exam.ExamGrade.id, 
+            'Exam_Date': exam.Exam_Date,
+            'Total_Marks': exam.Total_Marks,
+        }
+        Data.append({
+            'id': obj.id,
+            'exam_instance': exam_data,
+            'user_id': obj.student_id.id,
+            'score': obj.Correct,
+            'Incorrect': obj.Incorrect,
+            'Answered': obj.Answered,
+            'Total_Question': obj.Total_Question,
+        })
+
+    return Response({'Data': Data})
+
+@role_required('Admin')
+@login_required(login_url='login/')
+def user_management(request):
+    users = User.objects.all() 
+    now = datetime.datetime.now()
+    user_data = [] 
+
+    for student in users:  # Iterate over the queryset of users
+        try:
+            userprofile = student.profile  # Accessing the profile
+        except profile.DoesNotExist:
+            continue  # Skip users without profiles
+
+        has_paid = FeePayment.objects.filter(
+            student=userprofile,
+            payment_date__year=now.year,
+            payment_date__month=now.month
+        ).exists()
+
+        user_data.append({
+            'user': student,    
+            'paid': has_paid,
+            'is_active': student.is_active,
+        })
+
+    context = {
+        'users': user_data,
+        'inactive_users': User.objects.filter(is_active=False),  # Optional if needed separately
+
+    }
+    return render(request, 'UserPages/UserManagement.html', context)
+
+@api_view(['POST'])
+def update_user(request):
+    username = request.POST.get('username')
+    newrole = request.POST.get('newrole')
+    reason = request.POST.get('reason')
+    grade_value = request.POST.get('grade')  # Only used for Teacher/Student
+
+    try:
+
+        user = User.objects.get(username=username)
+        user_profile = profile.objects.get(newprofile=user)
+
+        if newrole == 'Admin':
+            user_profile.grade = None
+            user_profile.payment_structure = None
+            data=FeePayment.objects.filter(student=user_profile)
+            for obj in data:
+                obj.delete()
+        elif newrole == 'Teacher':
+            grade_obj = Grade.objects.get(classname=grade_value)
+            user_profile.grade = grade_obj
+            user_profile.payment_structure = None
+            data=FeePayment.objects.filter(student=user_profile)
+            for obj in data:
+                obj.delete()
+            grade_obj = Grade.objects.get(classname=grade_value)
+            payment_structure = PaymentStructure.objects.get(grade=grade_obj)
+            user_profile.grade = grade_obj
+            user_profile.payment_structure = payment_structure
+
+        user_profile.role = newrole
+        user_profile.save()
+
+        send_mail(
+            subject='Your Role Has Been Updated',
+            message=f'Hello {user.username},\n\nYour role has been updated to "{newrole}".\nReason: {reason}\n\nThank you.',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+        return Response({'message': 'User role updated and email sent successfully.'})
+
+    except Exception as e:
+        print("Error occurred:", str(e))
+        return Response({'error': str(e)}, status=500)
+
+
+    except Exception as e:
+        print("Error occurred:", str(e))  # This will show up in your server logs
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['POST'])
+def ban(request):
+    username=request.POST.get('username')
+    typeof=request.POST.get('ban_type')
+    reason=request.POST.get('reason')
+    user=User.objects.get(username=username)
+    user.is_active=False
+    user.save()
+    send_mail(
+            subject='Regarding Account Deactivation',
+            message=f'Hello {user.username},\n\nYour Account For ClassSpher Has been banned {typeof} Due to {reason} . Please contact Student Help Desk For more Information',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+    return Response({'status':f'{username} has been banned from loggin onto the ystem '})
+
+

@@ -49,6 +49,7 @@ class profile(models.Model):
         ('Admin', 'Admin'),
     ]
     student_id=models.CharField(null=True,blank=True)
+    address=models.CharField(max_length=255,default='')
     newprofile = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(verbose_name='Role', choices=ROLE, max_length=10)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE, null=True ,blank=True)
@@ -78,9 +79,9 @@ class profile(models.Model):
 
 class FeePayment(models.Model):
     student = models.ForeignKey(profile, on_delete=models.CASCADE, related_name='fee_payments')
+    grade=models.ForeignKey(Grade,on_delete=models.CASCADE,null=True)
     amount_paid = models.IntegerField() 
     payment_date = models.DateTimeField()  
-
     def __str__(self):
         return f' {self.id}-{self.student.newprofile.email} - {self.amount_paid}'
 
@@ -166,12 +167,6 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_name[:20]
 
-class StudentAnswers(models.Model):
-    question_id=models.ForeignKey(Questions,on_delete=models.CASCADE,null=False)
-    user_id=models.ForeignKey(User,on_delete=models.CASCADE,null=False)
-    StudentAnswers=models.CharField(verbose_name='Student_ID',max_length=255,null=True)
-    def __str__(self):
-        return f' question no {self.question_id.id} answered as {self.StudentAnswers} bu  {self.user_id.username}'
     
 class StudentLeaderBoard(models.Model):
     exam_id=models.ForeignKey(Exam,on_delete=models.CASCADE)

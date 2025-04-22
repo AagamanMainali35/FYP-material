@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <style>
+        :root {
+            /* Main Colors */
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --primary-light: #eef2ff;
+            --secondary: #2ec4b6;
+            --secondary-dark: #21a99d;
+            --secondary-light: #e0f7f5;
+            --success: #06d6a0;
+            --success-light: #e3fcf7;
+            --danger: #ef476f;
+            --danger-light: #fce8ee;
+            --warning: #ffd166;
+            --warning-light: #fff8e6;
+            --info: #118ab2;
+            --info-light: #e1f5fa;
+
+            /* Neutral Colors */
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --black: #000000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1405px;
+            margin: 0 0 0 19rem
+        }
+
+        .dashboard-header {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.625rem 1rem 0.625rem 2.5rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-300);
+            background-color: var(--white);
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            transition: all 0.2s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background-color: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-100);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            background-color: #05b388;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background-color: #d63d63;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--gray-800);
+        }
+
+        .btn-warning:hover {
+            background-color: #e6b840;
+        }
+
+        .btn-info {
+            background-color: var(--info);
+            color: var(--white);
+        }
+
+        .btn-info:hover {
+            background-color: #0f7a9b;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-icon {
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            border-radius: 0.375rem;
+        }
+
+        .btn-icon.btn-sm {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            background-color: var(--gray-50);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .table td {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: var(--success-light);
+            color: var(--success);
+        }
+
+        .badge-danger {
+            background-color: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .badge-warning {
+            background-color: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .badge-info {
+            background-color: var(--info-light);
+            color: var(--info);
+        }
+
+        .badge-primary {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .badge-secondary {
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+        }
+
+        /* User Avatar */
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 1rem;
+            overflow: hidden;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        .user-email {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .pagination-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            background-color: var(--white);
+            border: 1px solid var(--gray-200);
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination-button:hover {
+            background-color: var(--gray-50);
+        }
+
+        .pagination-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-button.active {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .pagination-list {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin: 0 0.5rem;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-backdrop.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--gray-700);
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+        }
+
+        .modal-footer {
+            padding: 1.25rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-300);
+            background-color: var(--white);
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid var(--gray-300);
+            background-color: var(--white);
+            font-size: 0.875rem;
+            color: var(--gray-800);
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .dashboard-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 10;
+            min-width: 12rem;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+            background-color: var(--white);
+            border-radius: 0.375rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+        }
+
+        .dropdown.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 0.5rem 0;
+            background-color: var(--gray-200);
+        }
+        .no-users-found {
+            display: flex;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #6c757d; /* Muted color */
+            background-color: #f8d7da; /* Light red background */
+            border: 1px solid #f5c6cb; /* Red border */
+            border-radius: 5px;
+            min-height: 150px; /* Ensure there's enough space for centering */
+        }
+        
+        .no-users-found i {
+            color: #dc3545; /* Red color for the icon */
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .no-users-found p {
+            margin: 0;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    {% include 'Include and Base Pages/sidebar.html' %}
+    {% include 'Include and Base Pages/rolerestriction.html'%}
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">User Management</h1>
+            <div class="dashboard-actions">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search users..." id="search-input">
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="tabs" id="tabs">
+            <div class="tab active" data-tab="all-users">All Users</div>
+            <div class="tab" data-tab="inactive-users">Inactive Users</div>
+        </div>
+
+        <div class="tab-content active" id="all-users">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">All Users</h2>
+                        <div class="card-subtitle">Manage all registered users</div>
+                    </div>
+                  
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>StudentID</th>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Fees Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for userdata in users %}
+                                    <tr>
+                                        <td>{{ userdata.user.profile.student_id }}</td>
+                                        <td>
+                                            <div class="user-info">
+                                                <div class="user-avatar">{{ userdata.user.username|slice:":1"|upper }}</div>
+                                                <div>
+                                                    <div class="user-name">{{ userdata.user.username }}</div>
+                                                    <div class="user-email">{{ userdata.user.email }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-secondary">{{ userdata.user.profile.role }}</span>
+                                        </td>
+                                        
+                                        {% if userdata.is_active %}
+                                            <td>
+                                                <span class="badge badge-success">Active</span>
+                                            </td>
+                                        {% else %}
+                                            <td>
+                                                <span class="badge badge-danger">Inactive</span>
+                                            </td>
+                                        {% endif %}
+                                        <td>{{ userdata.user.last_login|date:"Y/m/d" }}</td>
+                                        <td>
+                                            {% if userdata.has_paid %}
+                                                <span class="badge badge-success">Paid</span>
+                                            {% else %}
+                                                <span class="badge badge-warning">Not Paid</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <button class="btn btn-sm btn-outline change-role-btn" data-user-id="{{ userdata.user.id }}" title="Change Role">
+                                                    <i class="fas fa-user-tag"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger ban-user-btn" data-user-id="{{ userdata.user.id }}" title="Ban User">
+                                                    <i class="fas fa-ban"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="tab-content" id="inactive-users">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Inactive Users</h2>
+                        <div class="card-subtitle">Manage banned or inactive users</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Last Login</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if inactive_users %}
+                                    {% for user in inactive_users %}
+                                        <tr>
+                                            <td>
+                                                <div class="user-info">
+                                                    <div class="user-avatar">{{ user.username|slice:":1"|upper }}</div>
+                                                    <div>
+                                                        <div class="user-name">{{ user.username }}</div>
+                                                        <div class="user-email">{{ user.email }}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-secondary">{{ user.profile.role }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-warning">Inactive</span>
+                                            </td>
+                                            <td>{{ user.last_login|date:"Y/m/d" }}</td>
+                                            <td>
+                                                <div class="table-actions">
+                                                    <button class="btn btn-sm btn-success ban-user-btn" data-user-id="{{ user.id }}" title="Activate User">
+                                                        <i class="fas fa-user-check"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger" title="Delete User">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    
+                        {% if not inactive_users %}
+                            <div class="no-users-found">
+                                <i class="fas fa-exclamation-circle"></i><br>
+                                <p>No inactive users found.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for changing user role -->
+    <form class="modal-backdrop" id="change-role-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Change User Role</h3>
+                <button class="modal-close" id="close-role-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="user-name">User</label>
+                    <input type="text" class="form-control" id="user-name" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="current-role">Current Role</label>
+                    <input type="text" class="form-control" id="current-role" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="new-role">New Role</label>
+                    <select class="form-select" id="new-role">
+                        <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <!-- Grade field - will be shown/hidden based on role -->
+                <div class="form-group" id="grade-group" style="display: none;">
+                    <label class="form-label" for="user-grade">Grade</label>
+                    <select class="form-select" id="user-grade">
+                        <option value="">Select Grade</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="role-change-reason">Reason for Change</label>
+                    <textarea class="form-control" id="role-change-reason" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" type="button" id="cancel-role-change">Cancel</button>
+                <button class="btn btn-primary" type="button" id="confirm-role-change">Save Changes</button>
+            </div>
+        </div>
+    </form>
+    <input type="text" name="" id="csrf" value="{{csrf_token}}" hidden>
+
+    <!-- Modal for banning user -->
+    <div class="modal-backdrop" id="ban-user-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Ban User</h3>
+                <button class="modal-close" id="close-ban-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="ban-user-name">User</label>
+                    <input type="text" class="form-control" id="ban-user-name" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="ban-type">Ban Type</label>
+                    <select class="form-select" id="ban-type">
+                        <option value="temporary">Temporary Ban</option>
+                        <option value="permanent">Permanent Ban</option>
+                    </select>
+                </div>
+               
+                <div class="form-group">
+                    <label class="form-label" for="ban-reason">Reason for Ban</label>
+                    <textarea class="form-control" id="ban-reason" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancel-ban">Cancel</button>
+                <button class="btn btn-danger" id="confirm-ban">Ban User</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const searchInput = document.getElementById('search-input');        
+        const changeRoleModal = document.getElementById('change-role-modal');
+        const banUserModal = document.getElementById('ban-user-modal');
+        const closeButtons = document.querySelectorAll('.modal-close, .btn-outline');
+        const banType = document.getElementById('ban-type');
+        const banDurationGroup = document.getElementById('ban-duration-group');
+        const newRoleSelect = document.getElementById('new-role');
+        const gradeGroup = document.getElementById('grade-group');
+        const userGradeSelect = document.getElementById('user-grade');
+        const confirmRoleChangeBtn = document.getElementById('confirm-role-change');
+
+        // Tab functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Modal functions
+        function openChangeRoleModal(userId) {
+            const userRow = document.querySelector(`[data-user-id="${userId}"]`).closest('tr');
+            const userName = userRow.querySelector('.user-name').textContent;
+            const userRole = userRow.querySelector('.badge').textContent;
+
+            document.getElementById('user-name').value = userName;
+            document.getElementById('current-role').value = userRole;
+            document.getElementById('new-role').value = userRole.trim();
+            
+            // Check if grade field should be shown based on current role
+            toggleGradeField(userRole.trim());
+            
+            changeRoleModal.classList.add('active');
+        }
+
+        function openBanUserModal(userId) {
+            const userRow = document.querySelector(`[data-user-id="${userId}"]`).closest('tr');
+            const userName = userRow.querySelector('.user-name').textContent;
+            
+            document.getElementById('ban-user-name').value = userName;
+            banUserModal.classList.add('active');
+        }
+
+        function closeModals() {
+            document.querySelectorAll('.modal-backdrop').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+
+        // Toggle grade field based on selected role
+        function toggleGradeField(role) {
+            if (role === 'Student' || role === 'Teacher') {
+                gradeGroup.style.display = 'block';
+            } else {
+                gradeGroup.style.display = 'none';
+            }
+        }
+
+        // Event delegation for dynamic buttons
+        document.addEventListener('click', function(e) {
+            // Role Change Buttons
+            if (e.target.closest('.change-role-btn')) {
+                const btn = e.target.closest('.change-role-btn');
+                openChangeRoleModal(btn.dataset.userId);
+            }
+            
+            // Ban/Activate Buttons
+            if (e.target.closest('.ban-user-btn')) {
+                const btn = e.target.closest('.ban-user-btn');
+                if (btn.querySelector('i').classList.contains('fa-user-check')) {
+                    if (confirm('Activate this user?')) alert('User activated!');
+                } else {
+                    openBanUserModal(btn.dataset.userId);
+                }
+            }
+        });
+
+        // Close modals
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', closeModals);
+        });
+
+        // Listen for role changes to show/hide grade field
+        newRoleSelect.addEventListener('change', function() {
+            toggleGradeField(this.value);
+        });
+
+        // Ban Type Toggle
+        banType.addEventListener('change', function() {
+            banDurationGroup.style.display = 
+                this.value === 'permanent' ? 'none' : 'block';
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const allRows = document.querySelectorAll('tbody tr');
+            
+            allRows.forEach(row => {
+                const userName = row.querySelector('.user-name')?.textContent.toLowerCase() || '';
+                const userEmail = row.querySelector('.user-email')?.textContent.toLowerCase() || '';
+                
+                if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Confirm actions
+        document.getElementById('confirm-role-change').addEventListener('click', function() {
+            const username = document.getElementById('user-name').value;
+            const currentrole = document.getElementById('current-role').value;
+            const newrole = document.getElementById('new-role').value;
+            const reason = document.getElementById('role-change-reason').value;
+            
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('currentrole', currentrole);
+            formData.append('newrole', newrole);
+            formData.append('reason', reason);
+            
+            // Add grade to form data if applicable
+            if (newrole === 'Student' || newrole === 'Teacher') {
+                const grade = document.getElementById('user-grade').value;
+                if (!grade) {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Please select a grade for this user",
+                        icon: "error"
+                    });
+                    return;
+                }
+                formData.append('grade', grade);
+            }
+            closeModals();
+            fetch('http://127.0.0.1:8000/user/manage/update/role/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.getElementById('csrf').value
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                closeModals();
+                Swal.fire({
+                    title: "Role Update:",
+                    text: "The selected User's Role Has been Updated",
+                    icon: "success"
+                }).then(data => {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: "Error",
+                    text: "An error occurred while updating the role",
+                    icon: "error"
+                });
+            });
+        });
+        
+        document.getElementById('confirm-ban').addEventListener('click', function () {
+            const username = document.getElementById('ban-user-name').value;
+            const banType = document.getElementById('ban-type').value;
+            const reason = document.getElementById('ban-reason').value;
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('ban_type', banType);
+            formData.append('reason', reason);
+            fetch('http://127.0.0.1:8000/user/ban/', {
+                method: 'POST',
+                headers:{
+                    'x-csrftoken':document.getElementById('csrf').value
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Ban Response:', data);
+                closeModals();
+                Swal.fire({
+                    title: "Ban Status:",
+                    text: "The selected User's Has been banned ",
+                    icon: "success"
+                }).then(data => {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1);
+                });
+            })
+            .catch(error => {
+                console.error('Ban Error:', error);
+            });
+        });
+        
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal-backdrop').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModals();
+                }
+            });
+        });
+
+        // Close modals with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModals();
+            }
+        });
+    </script>
+</body>
+</html>

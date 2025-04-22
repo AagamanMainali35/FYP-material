@@ -42,6 +42,7 @@ ul{
   display: flex;
   align-items: center;
   gap: 1rem;
+  margin-top: 1.5rem;
   flex-wrap: wrap;
 }
 
@@ -87,38 +88,21 @@ ul{
   color: #6366F1;
 }
 
-.footerForm {
-  display: grid;
-  gap: 1rem;
+.hours-container {
+  margin-top: 1rem;
 }
 
-.footerInput {
-  padding: 0.75rem;
-  font-size: 1rem;
-  color: #0a0a0a;
-  background-color: white;
-  border: 1px solid #737373;
-  border-radius: 5px;
-}
-
-.footerInput::placeholder {
+.hours-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-family: "Poppins", serif;
   color: #737373;
+  border-bottom: 1px dashed #d1d1d1;
 }
 
-.footerButton {
-  padding: 0.75rem 1.5rem;
-  outline: none;
-  border: none;
-  font-size: 1rem;
-  color: white;
-  background-color: #6366F1;
-  border-radius: 5px;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.footerButton:hover {
-  background-color: #2476da;
+.hours-item:last-child {
+  border-bottom: none;
 }
 
 .footerBar {
@@ -139,6 +123,9 @@ ul{
     grid-template-columns: 2fr 1fr 1fr 1.5fr;
   }
 }
+a{
+  text-decoration: none;
+}
 </style>
 
     <footer id="contact" class="footerContainer">
@@ -148,30 +135,45 @@ ul{
           <p>
             Immerse yourself in a world of knowledge and discovery with Class Sphere. Where learning meets innovation. Your journey to excellence starts here.
           </p>
+          <div class="footerSocials">
+            <a href="#"><i class="ri-facebook-fill"></i></a>
+            <a href="#"><i class="ri-twitter-fill"></i></a>
+            <a href="#"><i class="ri-instagram-line"></i></a>
+            <a href="#"><i class="ri-linkedin-fill"></i></a>
+          </div>
         </div>
         <div class="footerColumn">
           <h4 class="footerTitle">Quick Links</h4>
           <ul class="footerLinks">
-            <li><a href="/">Home</a></li>
-            <li><a href="/profile">Profile</a></li>
-            <li><a href="pay/">Fees</a></li>
-            <li><a href="#"></a></li>
+            <li><a href="/"><i class="ri-home-4-line"></i> Home</a></li>
+            <li><a href="/profile"><i class="ri-user-line"></i> Profile</a></li>
+            <li><a href="pay/"><i class="ri-wallet-3-line"></i> Fees</a></li>
           </ul>
         </div>
         <div class="footerColumn">
           <h4 class="footerTitle">Contact Us</h4>
           <ul class="footerLinks">
-            <li><a href="#"><span><i class="ri-phone-fill"></i></span> +977 9803184146</a></li>
-            <li><a href="#"><span><i class="ri-record-mail-line"></i></span> info@ClassSphere</a></li>
-            <li><a href="#"><span><i class="ri-map-pin-2-fill"></i></span> Kathmandu, Nepal</a></li>
+            <li><a href="#"><i class="ri-phone-fill"></i> +977 9803184146</a></li>
+            <li><a href="#"><i class="ri-mail-line"></i> info@ClassSphere</a></li>
+            <li><a href="#"><i class="ri-map-pin-2-fill"></i> Kathmandu, Nepal</a></li>
           </ul>
         </div>
         <div class="footerColumn">
-          <h4 class="footerTitle">Subscribe</h4>
-          <form action="/" class="footerForm">
-            <input type="text" placeholder="Enter your email" class="footerInput" />
-            <button class="footerButton">Subscribe</button>
-          </form>
+          <h4 class="footerTitle">School Hours</h4>
+          <div class="hours-container">
+            <div class="hours-item">
+              <span>Monday - Friday</span>
+              <span>9:00 AM - 6:00 PM</span>
+            </div>
+            <div class="hours-item">
+              <span>Saturday</span>
+              <span>10:00 AM - 4:00 PM</span>
+            </div>
+            <div class="hours-item">
+              <span>Sunday</span>
+              <span>Closed</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

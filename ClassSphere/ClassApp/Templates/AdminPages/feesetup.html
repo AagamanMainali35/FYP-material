@@ -352,6 +352,7 @@
     {% include 'Include and Base Pages/sidebar.html'%}
     {% include 'Include and Base Pages/rolerestriction.html'%}
     <div class="main-content">
+        <input type="text" id="csrf" value="{{csrf_token}}" hidden>
         <!-- Page Header -->
         <div class="page-header">
             <div>
@@ -514,64 +515,57 @@
 
         // Calculate monthly fee
         function calculateMonthlyFee(totalFee) {
-            return (totalFee / 12).toFixed(2);
+            // Use Math.round to fix floating point precision issues
+            return (Math.round((totalFee / 12) * 100) / 100).toFixed(2);
         }
-
         
         // Edit fee structure
         function editFeeStructure(id) { 
             id=parseInt(id)
-            console.log(typeof(id))
             const modal = new bootstrap.Modal(document.getElementById('editFeeStructureModal'));
-            const grade =document.getElementById(`grade-${id}`).textContent
-            const totfee=document.getElementById(`tfee-${id}`).textContent.replace('$',"")
-            const monfee= document.getElementById(`mfee-${id}`).textContent.replace('$',"")
-            const afee= document.getElementById(`afee-${id}`).textContent.replace('$',"")
-            document.getElementById('editGradeId').value=id;
+            const grade = document.getElementById(`grade-${id}`).textContent;
+            const totfee = document.getElementById(`tfee-${id}`).textContent.replace('$',"");
+            const monfee = document.getElementById(`mfee-${id}`).textContent.replace('$',"");
+            const afee = document.getElementById(`afee-${id}`).textContent.replace('$',"")
+            document.getElementById('editGradeId').value = id;
             document.getElementById('editGrade').value = grade;
             document.getElementById('editAdmissionFee').value = afee;
             document.getElementById('editTotalFee').value = totfee;
-            document.getElementById('editMonthlyFee').value =parseFloat(totfee/12).toFixed(2);
+            document.getElementById('editMonthlyFee').value = calculateMonthlyFee(totfee);
             modal.show();
-            document.getElementById('editTotalFee').addEventListener('input', function() {
-                const annualFee = parseFloat(this.value) || 0;  
-                const monthlyFee = (annualFee / 12).toFixed(2);
-                document.getElementById('editMonthlyFee').value = monthlyFee;
-            });
         }
 
-        document.getElementById('newFeeForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const grade = document.getElementById('newGrade').value;
-            const totalFee = parseFloat(document.getElementById('newTotalFee').value);
-            const admissionFee = parseFloat(document.getElementById('newAdmissionFee').value);
-            
-            // Close the modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('newFeeStructureModal'));
-            modal.hide();
-                    
-            // Show success message
-            showSuccessAlert(`New fee structure for ${grade} has been created successfully.`);
+        document.getElementById('editTotalFee').addEventListener('input', function() {
+            const totalFee = parseFloat(this.value) || 0;
+            document.getElementById('editMonthlyFee').value = calculateMonthlyFee(totalFee);
         });
-
-
+        
         document.getElementById('editbtn').addEventListener('click', function() {
-            formdata=new FormData()
-            const id=document.getElementById('editGradeId').value
+            formdata = new FormData();
+            const id = document.getElementById('editGradeId').value;
             const grade = document.getElementById('editGrade').value.replace('Grade','');
             const totalFee = parseFloat(document.getElementById('editTotalFee').value);
             const admissionFee = parseFloat(document.getElementById('editAdmissionFee').value);
-            const monthlyfee=document.getElementById('editMonthlyFee').value
+            const monthlyFee = parseFloat(document.getElementById('editMonthlyFee').value);
+            const notes = document.getElementById('editNotes').value;
             const modal = bootstrap.Modal.getInstance(document.getElementById('editFeeStructureModal'));
+            
+            if (isNaN(totalFee) || totalFee <= 0) {
+                showErrorAlert("Please enter a valid total fee amount");
+                return;
+            }
+            
+            if (isNaN(admissionFee) || admissionFee < 0) {
+                showErrorAlert("Please enter a valid admission fee amount");
+                return;
+            }
+            formdata.append('Grade', grade);
+            formdata.append('total_fee', totalFee);
+            formdata.append('admission_fee', admissionFee);
+            formdata.append('monthly_fee', monthlyFee);
             modal.hide();
             showSuccessAlert(`Fee structure for Grade ${grade} has been updated successfully.`);
-            formdata.append('Grade',grade)
-            formdata.append('total_fee',totalFee)
-            formdata.append('admission_fee',admissionFee)
-            formdata.append('monthly_fee',monthlyfee)
             domain=`http://127.0.0.1:8000/update/fee_setup/${id}`
-            
             fetch(domain,{
                 method:'UPDATE',
                 headers:{

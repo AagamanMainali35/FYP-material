@@ -1,7 +1,8 @@
-{%extends 'Include and Base Pages/base.html' %}
+{% extends 'Include and Base Pages/base.html' %}
 {% include 'Include and Base/rolerestriction.html'%}
-{% block title%}Notification{%endblock%}
-{%block content%}
+{% block title %}Notification{% endblock %}
+{% block content %}
+<script src="sweetalert2.all.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -15,8 +16,6 @@
       background-color: #f9fafb;
       color: #1f2937;
     }
-    
- 
     
     .page-title {
       font-size: 1.5rem;
@@ -51,7 +50,6 @@
     /* Main content styles */
     .container2 {
       max-width: 96rem;
-
       padding: 2rem;
     }
     
@@ -85,6 +83,7 @@
       background-color: #fff;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
     
     .notification-card:hover {
@@ -174,13 +173,13 @@
       gap:5px
     }
 
-.readnotif{
-  margin-top: 8px;
-  height: 10px;
-  width: 10px;
-  background-color: green;
-  border-radius: 15px;
-}
+    .readnotif{
+      margin-top: 8px;
+      height: 10px;
+      width: 10px;
+      background-color: green;
+      border-radius: 15px;
+    }
     .badge {
       display: inline-flex;
       align-items: center;
@@ -250,149 +249,534 @@
       }
     }
     .notif{
-    position: relative;
-    color: white;
-    background-color: red;
-    height: 26px;
-    display: inline-flex;
-    width: 29px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 30px;
-    margin: 4px;
+      position: relative;
+      color: white;
+      background-color: red;
+      height: 26px;
+      display: inline-flex;
+      width: 29px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 30px;
+      margin: 4px;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-container {
+      background-color: white;
+      width: 90%;
+      max-width: 600px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-container {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      position: relative;
+    }
+
+    .modal-header::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 4px;
+      width: 100%;
+      background: linear-gradient(to right, #3b82f6, #8b5cf6);
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close:hover {
+      color: #ef4444;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-info {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .modal-icon.fees {
+      background-color: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-icon.holiday {
+      background-color: #d1fae5;
+      color: #10b981;
+    }
+
+    .modal-icon.exam {
+      background-color: #fef3c7;
+      color: #f59e0b;
+    }
+
+    .modal-icon.government {
+      background-color: #dbeafe;
+      color: #3b82f6;
+    }
+
+    .modal-meta {
+      flex: 1;
+    }
+
+    .modal-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-date i {
+      color: #9ca3af;
+    }
+
+    .modal-category {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .modal-category.fees {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .modal-category.holiday {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .modal-category.exam {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .modal-category.government {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+
+    .modal-content {
+      background-color: #f9fafb;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .modal-message {
+      font-size: 1rem;
+      color: #4b5563;
+      white-space: pre-line;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+    }
+
+    .modal-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-btn-primary {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+    }
+
+    .modal-btn-primary:hover {
+      background-color: #2563eb;
+    }
+
+    .modal-btn-secondary {
+      background-color: white;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
+    }
+
+    .modal-btn-secondary:hover {
+      background-color: #f3f4f6;
+    }
+
+    @media (max-width: 640px) {
+      .modal-container {
+        width: 95%;
+      }
+      
+      .modal-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      
+      .modal-footer {
+        flex-direction: column;
+      }
+      
+      .modal-btn {
+        width: 100%;
+      }
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <body>
+  <input type="text" hidden  id="csrf" value="{{csrf_token}}">
   <main class="container2">
     {% if objects|length > 0 %}
-  <div class="page-header">
-    <p class="header-subtitle">
-      You have <span class="notif">{{ objects|length }}</span> unread notification{{ objects|length|pluralize }}
-    </p>
-  </div>
-  {% else%}
-  <style>
-    .notification-empty-state {
-      width: 100%;
-      max-width: 100%;
-      margin: 2rem auto;
-      padding: 2rem 1.5rem;
-      background: #f2f2f2;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      text-align: center;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-  
-    .notification-empty-state .icon-container {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f8f9fa;
-      border-radius: 50%;
-    }
-  
-    .notification-empty-state svg {
-      width: 40px;
-      height: 40px;
-      fill: #6c757d;
-    }
-  
-    .notification-empty-state h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #343a40;
-      margin-bottom: 0.5rem;
-    }
-  
-    .notification-empty-state p {
-      font-size: 0.9375rem;
-      color: #6c757d;
-      line-height: 1.5;
-      margin: 0;
-    }
-  
-    .notification-empty-state .action-text {
-      margin-top: 1.25rem;
-      font-size: 0.875rem;
-      color: #0d6efd;
-      cursor: pointer;
-    }
-  </style>
-  
-  <div class="notification-empty-state">
-    <div class="icon-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-      </svg>
+    <div class="page-header">
+      <p class="header-subtitle">
+        You have <span class="notif">{{ count }}</span> unread notification{{ objects|length|pluralize }}
+      </p>
     </div>
-    <h3>No New Notifications</h3>
-    <p>You're all caught up! We'll notify you when there's something new.</p>
-  </div>
-{% endif %}
+    {% else%}
+    <style>
+      .notification-empty-state {
+        width: 100%;
+        max-width: 100%;
+        margin: 2rem auto;
+        padding: 2rem 1.5rem;
+        background: #f2f2f2;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+    
+      .notification-empty-state .icon-container {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        border-radius: 50%;
+      }
+    
+      .notification-empty-state svg {
+        width: 40px;
+        height: 40px;
+        fill: #6c757d;
+      }
+    
+      .notification-empty-state h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+      }
+    
+      .notification-empty-state p {
+        font-size: 0.9375rem;
+        color: #6c757d;
+        line-height: 1.5;
+        margin: 0;
+      }
+    
+      .notification-empty-state .action-text {
+        margin-top: 1.25rem;
+        font-size: 0.875rem;
+        color: #0d6efd;
+        cursor: pointer;
+      }
+    </style>
 
+    <div class="notification-empty-state">
+      <div class="icon-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+      </div>
+      <h3>No New Notifications</h3>
+      <p>You're all caught up! We'll notify you when there's something new.</p>
+    </div>
+    {% endif %}
 
     <div class="notifications-list">
       {% for i in objects %}
-  <div class="notification-card unread">
-    <div class="notification-content">
-      <div class="notification-icon-wrapper">
-        {% if i.tag == 'Fees' %}
-        <i class="fas fa-file-invoice-dollar notification-icon fees"></i>
-        {% elif i.tag == 'General' %}
-          <i class="fas fa-calendar notification-icon holiday"></i>
-        {% elif i.tag == 'Exam' %}
-          <i class="fas fa-file-alt notification-icon exam"></i>
-        {% elif i.tag == 'Government' %}
-          <i class="fas fa-bell notification-icon general"></i>
-        {% endif %}
+      <div class="notification-card {% if i.is_read == False %}unread{% endif %}" data-notification-id="{{ i.id }}" data-notification-tag="{{ i.tag }}" data-notification-date="{{ i.created_at }}" data-notification-message="{{ i.NotificationMsg }}" data-notification-read="{{ i.is_read }}">
+        <div class="notification-content">
+          <div class="notification-icon-wrapper">
+            {% if i.tag == 'Fees' %}
+            <i class="fas fa-file-invoice-dollar notification-icon fees"></i>
+            {% elif i.tag == 'General' %}
+              <i class="fas fa-calendar notification-icon holiday"></i>
+            {% elif i.tag == 'Exam' %}
+              <i class="fas fa-file-alt notification-icon exam"></i>
+            {% elif i.tag == 'Government' %}
+              <i class="fas fa-bell notification-icon general"></i>
+            {% endif %}
+          </div>
+
+          <div class="notification-details">
+            <div class="notification-header">
+              {% if i.tag == 'Fees' %}
+                <h3 class="notification-title {% if i.is_read == False %}unread{% endif %}">Your Fee Details Have Been Updated</h3>
+              {% elif i.tag == 'General' %}
+                <h3 class="notification-title {% if i.is_read == False %}unread{% endif %}">General Announcement</h3>
+              {% elif i.tag == 'Exam' %}
+                <h3 class="notification-title {% if i.is_read == False %}unread{% endif %}">Exam Schedule & Updates</h3>
+              {% elif i.tag == 'Government' %}
+                <h3 class="notification-title {% if i.is_read == False %}unread{% endif %}">Government Notice</h3>
+              {% else %}
+                <h3 class="notification-title {% if i.is_read == False %}unread{% endif %}">Notification</h3>
+              {% endif %}
+              <span class="notification-date">{{ i.created_at }}</span>
+            </div>
+
+            <p class="notification-message">{{ i.NotificationMsg }}</p>
+
+            <div class="notification-badges">
+              <div class="left">
+                <span class="badge badge-category fees">{{ i.tag }}</span>
+              {% if not i.is_read %}
+                <span class="badge badge-new">New</span>
+              {% endif %}
+              </div>
+              {% if i.is_read == False %}
+              <div class="right" style="display: flex;">
+                  <div class="readnotif"></div>
+                  unread
+              </div>
+              {% endif%}
+            </div>
+          </div>
+        </div>
       </div>
+      {% endfor %}
+    </div>
+  </main>
 
-      <div class="notification-details">
-        <div class="notification-header">
-          {% if i.tag == 'Fees' %}
-            <h3 class="notification-title unread">Your Fee Details Have Been Updated</h3>
-          {% elif i.tag == 'General' %}
-            <h3 class="notification-title unread">General Announcement</h3>
-          {% elif i.tag == 'Exam' %}
-            <h3 class="notification-title unread">Exam Schedule & Updates</h3>
-          {% elif i.tag == 'Government' %}
-            <h3 class="notification-title unread">Government Notice</h3>
-          {% else %}
-            <h3 class="notification-title unread">Notification</h3>
-          {% endif %}
-          <span class="notification-date">{{ i.created_at }}</span>
-        </div>
-
-        <p class="notification-message">{{ i.NotificationMsg }}</p>
-
-        <div class="notification-badges">
-          <div class="left">
-            <span class="badge badge-category fees">{{ i.tag }}</span>
-          {% if not i.is_read %}
-            <span class="badge badge-new">New</span>
-          {% endif %}
+  <div class="modal-overlay" id="notificationModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">Notification Details</h3>
+        <button class="modal-close" id="closeModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info">
+          <div class="modal-icon" id="modalIcon">
+            <i class="fas fa-bell"></i>
           </div>
-          {% if i.is_read == False %}
-          <div class="right" style="display: flex;">
-              <div class="readnotif"></div>
-              unread
+          <div class="modal-meta">
+            <div class="modal-date">
+              <i class="far fa-clock"></i>
+              <span id="modalDate">January 1, 2023</span>
+            </div>
+            <span class="modal-category" id="modalCategory">Category</span>
           </div>
-          {% endif%}
         </div>
+        <div class="modal-content">
+          <p class="modal-message" id="modalMessage">
+            Notification message will appear here.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="closeModalBtn">Close</button>
+        <button class="modal-btn modal-btn-primary" id="markAsReadBtn">Mark as Read</button>
       </div>
     </div>
   </div>
-{% endfor %}
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function(e) {
+      e.preventDefault();
+      const modal = document.getElementById('notificationModal');
+      const closeModal = document.getElementById('closeModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const markAsReadBtn = document.getElementById('markAsReadBtn');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalDate = document.getElementById('modalDate');
+      const modalCategory = document.getElementById('modalCategory');
+      const modalMessage = document.getElementById('modalMessage');
+      const notificationCards = document.querySelectorAll('.notification-card');
+      
+      // Function to open modal
+      function openModal(notificationData) {
+        modalDate.textContent = notificationData.date;
+        modalCategory.textContent = notificationData.tag;
+        modalMessage.textContent = notificationData.message;
+        // Set appropriate icon and styles based on notification type
+        modalIcon.className = 'modal-icon';
+        modalCategory.className = 'modal-category';
+        
+        if (notificationData.tag === 'Fees') {
+          modalIcon.classList.add('fees');
+          modalIcon.innerHTML = '<i class="fas fa-file-invoice-dollar"></i>';
+          modalCategory.classList.add('fees');
+        } else if (notificationData.tag === 'General') {
+          modalIcon.classList.add('holiday');
+          modalIcon.innerHTML = '<i class="fas fa-calendar"></i>';
+          modalCategory.classList.add('holiday');
+        } else if (notificationData.tag === 'Exam') {
+          modalIcon.classList.add('exam');
+          modalIcon.innerHTML = '<i class="fas fa-file-alt"></i>';
+          modalCategory.classList.add('exam');
+        } else if (notificationData.tag === 'Government') {
+          modalIcon.classList.add('government');
+          modalIcon.innerHTML = '<i class="fas fa-bell"></i>';
+          modalCategory.classList.add('government');
+        }
+        
+        // Show or hide "Mark as Read" button based on read status
+        if (notificationData.read === 'False') {
+          markAsReadBtn.style.display = 'block';
+        } else {
+          markAsReadBtn.style.display = 'none';
+        }
+        modal.classList.add('active');
+        document.addEventListener('keydown', handleEscKey);
 
-    </div>
-  </main>
+         // Mark as read functionality
+      markAsReadBtn.addEventListener('click', function() {
+        data=new FormData()
+        for (let key in notificationData) {
+          data.append(key,notificationData[key])
+        }
+        fetch('http://127.0.0.1:8000/marks/',{
+          method:'POST',
+          headers:{
+          'x-csrftoken':document.getElementById('csrf').value
+        },
+        body:data
+      })
+      .then(response=>{
+        return response.json()
+      })
+      .then(   data=>{
+        console.log(data.status)
+        markAsReadBtn.style.display = 'none';
+        modal.classList.remove('active');
+        setTimeout(()=>{
+          window.location.reload()
+        },1) 
+      })
+      });
+      }
+      
+      // Function to close modal
+      function closeModalFunc() {
+        modal.classList.remove('active');
+        document.removeEventListener('keydown', handleEscKey);
+      }
+      
+      // Function to handle escape key press
+      function handleEscKey(e) {
+        if (e.key === 'Escape') {
+          closeModalFunc();
+        }
+      }
+      
+      notificationCards.forEach(card => {
+        card.addEventListener('click', function() {
+          const notificationData = {
+            id: this.getAttribute('data-notification-id'),
+            tag: this.getAttribute('data-notification-tag'),
+            date: this.getAttribute('data-notification-date'),
+            message: this.getAttribute('data-notification-message'),
+            read: this.getAttribute('data-notification-read')
+          };
+          
+          openModal(notificationData);
+        });
+      });
+      
+      closeModal.addEventListener('click', closeModalFunc);
+      closeModalBtn.addEventListener('click', closeModalFunc);
+      
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModalFunc();
+        }
+      });
+      
+     
+    });
+  </script>
+
   {% include 'Include and Base Pages/Footer.html'%}
 </body>
 {% endblock %}
-
