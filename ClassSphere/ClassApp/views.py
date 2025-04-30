@@ -3,7 +3,7 @@ import random
 import uuid
 import requests
 import json
-from django.http import  JsonResponse
+from django.http import  HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -44,52 +44,55 @@ def generate_random_id():
     return f"{prefix}{random_number}"
 
 def RegisterPage(request):
-    gradeoptions=Grade.objects.all()
-    context={'grade':gradeoptions}
+    gradeoptions = Grade.objects.all()
+    context = {'grades': gradeoptions}
+    
     if request.user.is_authenticated:
         return redirect('homepage')
-    else:
-        if request.method == 'POST':
-            if 'signup' in request.POST:
-                roleuser= request.POST.get('role')
-                grade_id= request.POST.get('Grade')
-                grade=Grade.objects.get(id=grade_id)
-                email = request.POST.get('remail')
-                password2 = request.POST.get('rpassword2')
-                password = request.POST.get('rpassword')
-                paymentstructure = PaymentStructure.objects.get(grade=grade)
-                char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
-                if len(password) < 10:
-                    messages.error(request, "Use a stronger password")
+    
+    if request.method == 'POST':
+        if 'signup' in request.POST:
+            roleuser = request.POST.get('role')
+            grade_id = request.POST.get('Grade')
+            grade = Grade.objects.get(id=grade_id)
+            email = request.POST.get('remail')
+            password2 = request.POST.get('rpassword2')
+            password = request.POST.get('rpassword')
+            paymentstructure = PaymentStructure.objects.get(grade=grade)
+            char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
+
+            if len(password) < 10:
+                messages.error(request, "Password must be at least 10 characters long.")
+            elif not any(i in char for i in password):
+                messages.error(request, "Password must contain at least one special character.")
+            elif password != password2:
+                messages.error(request, "Passwords do not match.")
+            else:
+                if User.objects.filter(email=email).exists():
+                    messages.error(request, "Email already exists, use a different one.")
                 else:
-                    contains = False
-                    for i in password:
-                        if i in char:
-                            contains = True
-                            break
-                    if not contains:
-                        messages.error(request, "Use a stronger password")
-                    elif password == password2:
-                        emailcheck = User.objects.filter(email=email).exists()
-                        if emailcheck:
-                            messages.error(request, "Email already exists, use a different one.")
-                        else:
-                            if "@" in email:
-                                username = email.split("@")[0]
-                            newuser = User.objects.create_user(username=username, email=email, password=password)
-                            instance=profile.objects.all()
-                            data=generate_random_id()  #CSP2033
-                            for i in instance: #all userobject
-                                if i.student_id==data:
-                                    data=generate_random_id()
-                            user_profile = profile.objects.create(newprofile=newuser,role=roleuser,grade=grade,payment_structure=paymentstructure,student_id=data)
-                            user_profile.save()
-                            return redirect('login')
-                    else:
-                        messages.error(request, "Passwords do not match.")
-            elif 'back' in request.POST:
-                return redirect('login')
-    return render(request, 'UserPages/Register.html',context)
+                    username = email.split("@")[0] if "@" in email else email
+                    newuser = User.objects.create_user(username=username, email=email, password=password)
+                    instance = profile.objects.all()
+                    data = generate_random_id()
+                    for i in instance:
+                        if i.student_id == data:
+                            data = generate_random_id()
+                    
+                    user_profile = profile.objects.create(
+                        newprofile=newuser,
+                        role=roleuser,
+                        grade=grade,
+                        payment_structure=paymentstructure,
+                        student_id=data
+                    )
+                    user_profile.save()
+                    return redirect('login')
+
+        elif 'back' in request.POST:
+            return redirect('login')
+
+    return render(request, 'UserPages/Register.html', context)
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -143,6 +146,7 @@ def ottp(request):
                 entered_otp = request.POST.get('ottp').strip()
                 email = request.session.get('email')  
                 stored_otp = request.session.get('ottp') 
+                print(stored_otp)
                 if stored_otp is None or email is None:
                     messages.error(request, "Session has expired. Please log in again.")
                     return redirect('login') 
@@ -166,32 +170,40 @@ def ottp(request):
                 return redirect('forgetpass')
     return render(request, 'UserPages/otp.html')
 
-@login_required(login_url='login/')
+@login_required(login_url='login')
 def logouted(request):
     logout(request)
     return redirect('login')
 
+
 def forgetpass(request):
-        if request.method=='POST':
-            email=request.POST.get('forgotemail')
-            request.session['workflow']='Forgetpassword'
+    if request.method == 'POST':
+        email = request.POST.get('forgotemail')
+        try:
+            user = User.objects.get(email=email)  
+            request.session['workflow'] = 'Forgetpassword'
             otp = random.randint(100000, 999999)
-            request.session['ottp'] = otp  
-            request.session['email'] = email 
-            request.session['isloggedin?']=True
+            request.session['ottp'] = otp
+            request.session['email'] = email
+            request.session['isloggedin?'] = True
+            print(otp)
             subject = "OTP for your ClassSphere Login"
-            message = f"Dear User, {otp} is your OTP for ClassSphere password Reset . For security reasons, do not share it with others. Best regards, ClassSphere."
+            message = f"Dear User, {otp} is your OTP for ClassSphere password Reset. For security reasons, do not share it with others. Best regards, ClassSphere."
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [email]
+            
             try:
-                    send_mail(subject, message, from_email, recipient_list)
-                    messages.success(request, "OTP has been sent to your email!")
-                    return redirect('ottp') 
+                send_mail(subject, message, from_email, recipient_list)
+                messages.success(request, "OTP has been sent to your email!")
+                return redirect('ottp')
             except Exception as e:
-                    print(f"Error sending email: {e}")
-                    messages.error(request, "Error sending OTP. Please try again.")
-            return redirect('ottp')
-        return render(request,'UserPages/ForgotPassword.html')
+                print(f"Error sending email: {e}")
+                messages.error(request, "Error sending OTP. Please try again.")
+                return render(request, 'UserPages/ForgotPassword.html')
+                
+        except User.DoesNotExist:
+            messages.error(request, "Invalid Email. Please Try again.")
+    return render(request, 'UserPages/ForgotPassword.html')
 
 def reset(request):
     if not request.session.get('isloggedin?',False):
@@ -200,9 +212,13 @@ def reset(request):
         if request.method == 'POST':  
             password2 = request.POST.get('rpassword2')
             password = request.POST.get('rpassword')
+            if password != password2:
+                messages.error(request, "Passwords do not match.")
+                return render(request, 'UserPages/passwordreset.html')
+
             if password is None or password2 is None:
                 messages.error(request, "Please enter both password fields.")
-                return render(request, 'passwordreset.html')
+                return render(request, 'UserPages/passwordreset.html')
             char = "!@#$%^&*()-_=+[]{};:'\",.<>?/\\|`~"
             if len(password) < 10:
                 messages.error(request, "Use a stronger password.")
@@ -229,13 +245,16 @@ def reset(request):
                         messages.error(request, "Session has expired. Please log in again.")
         return render(request, 'UserPages/passwordreset.html')
 
-
 def event(request):
     return render(request,'UserPages/event.html')
 
 @api_view(['POST'])
 def contact(request):
     postdata = request.data
+    required_fields = ['email', 'subject', 'message']
+    for field in required_fields:
+        if field not in postdata:
+            return Response({"status": "Missing required fields"}, status=400)
     if postdata:
         file=request.FILES.get('file')
         message = f"<b>From:</b> {postdata['email']} <br><b>Message:</b> <br>{postdata.get('message')}"
@@ -253,7 +272,7 @@ def contact(request):
             response_data = {
                 "status": "mail not sent"
             }
-        return JsonResponse(response_data, status=200)
+        return Response(response_data, status=200)
 
 @api_view(['GET'])
 def getevents(request):
@@ -263,14 +282,16 @@ def getevents(request):
 
 @api_view(['POST'])
 def create_event(request):
+    if not request.data:
+        return Response({" Error ":"No data passed "})
     serializer=Eventserializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     else:
         return Response({" Status ":serializer.errors})
-
-@role_required('Admin')  
+    
+@role_required('Admin')
 @api_view(['PATCH'])
 def update_events(request,id):
     try:
@@ -278,14 +299,14 @@ def update_events(request,id):
     except Event.DoesNotExist:
         return Response({'Error': f'Event with id {id} not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer= Eventserializer(instance,data=request.data)
+    serializer= Eventserializer(instance,data=request.data,partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     else:
         return Response({'Error': f' Error code : {status.HTTP_400_BAD_REQUEST} , Invalid Payload '})
-    
-@role_required('Admin')
+
+@role_required('Admin')   
 @api_view(['DELETE'])
 def delete(request,id):
     event=get_object_or_404(Event,pk=id)
@@ -303,6 +324,14 @@ def geteventbyid(request,id):
 
 @api_view(['POST'])
 def filterevents(request):
+    filtertags = {'title', 'paidstatus', 'time_filter', 'category'}
+    invalid_tags = [i for i in request.POST if i not in filtertags]
+
+    if invalid_tags:
+        return Response(
+            {'error': f'Invalid filter tag: {", ".join(invalid_tags)}'},
+            status=400
+        )
     title = request.data.get('title', None)
     paidstatus = request.data.get('paidstatus', None)
     time_filter = request.data.get('timeFilter', None)
@@ -387,13 +416,19 @@ def make_payment(request):
         context['total_fee_left'] = context['total_fee']
     return render(request, 'UserPages/Payment.html',context)
 
+@api_view(['POST'])
 @login_required
 def process_payment(request):
     url = "https://dev.khalti.com/api/v2/epayment/initiate/"
     return_url=request.POST.get('return_url')
     order_id=request.POST.get('order_id')
     Total_amount=request.POST.get('amount')
-    amount=int(Total_amount)*100
+    try:
+        Total_amount = request.data.get('amount')
+        amount = int(Total_amount)*100
+
+    except ValueError:
+        return Response({'status': 'Invalid Amount'}, status=status.HTTP_400_BAD_REQUEST)
     user=request.user
     payload = json.dumps({
         "return_url": return_url,
@@ -407,30 +442,42 @@ def process_payment(request):
         }
     })
     headers = {
-        'Authorization': 'key fe6413e5c26a4a13986749a8308403c0',
+        'Authorization': f'key {settings.KHALTI_API_KEY}',
         'Content-Type': 'application/json',
     }
     
     response = requests.request("POST", url, headers=headers, data=payload)
-    res=json.loads(response.text)
-    return redirect(res['payment_url'])
+    if response.text:
+        res = json.loads(response.text)
+    else:
+        return Response({'error': 'Empty response from server'}, status=400)
+    return redirect(res['payment_url'],amount)
 
 @login_required
 def verifytransaction(request,amount):
     print(amount)
-    print('view has been hit')
+    try:
+        amount = int(amount)
+    except ValueError:
+        return Response({'status':'Invalid Amount'},status=status.HTTP_400_BAD_REQUEST)
     pidx=request.GET.get('pidx')
     url = "https://dev.khalti.com/api/v2/epayment/lookup/"
     headers = {
-        'Authorization': 'key fe6413e5c26a4a13986749a8308403c0',
+        'Authorization': f'key {settings.KHALTI_API_KEY}',
         'Content-Type': 'application/json',
     }
     payload=json.dumps({'pidx':pidx})
     response = requests.request("POST", url, headers=headers, data=payload)
     new_res=json.loads(response.text)
-    if new_res['status']=='Completed':
-        userprofile=request.user.profile
-        FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now(),grade=userprofile.grade)
+    print(new_res)
+    if new_res.get('status') == 'Completed':
+        print('hit vayo')
+        try:
+            userprofile=request.user.profile
+            FeePayment.objects.create(student=userprofile,amount_paid=amount,payment_date=datetime.datetime.now(),grade=userprofile.grade)
+        except Exception as  e:
+            return Response({'Error':f"{str(e)}"})
+
     return redirect('pay')
 
 @role_required('admin')
@@ -714,7 +761,6 @@ def handlecreate(request):
                     Choice.objects.create(choice_name=value,question_id=question_instance)
     except Exception as e:
         print('Somenthing went wonrg:',e)
-    
     return Response({'status':data})   
 
 @role_required('Teacher')
@@ -818,7 +864,7 @@ def attendance_view(request):
     attendance_records = attendance.objects.all().select_related('user')
     total_students = profile.objects.filter(role='Student').count()
     present= attendance.objects.filter(Attendance_Status='Present',date=datetime.date.today()).count()
-    absent= attendance.objects.filter(Attendance_Status='absent',date=datetime.date.today()).count()
+    absent= attendance.objects.filter(Attendance_Status='Absent',date=datetime.date.today()).count()
     percent = 0
     if total_students > 0:
         percent = round((present / total_students) * 100)
@@ -839,7 +885,7 @@ def attendance_view(request):
 @login_required(login_url='login/')
 def get_attendance_data(request):
     if 'file' not in request.FILES:
-        return Response({'Status': 'No file received'}, status=400)
+        return Response({'UserError': 'No file received'}, status=400)
     uploaded_file = request.FILES['file']
     if not uploaded_file.name.endswith('.xlsx'):
                 return Response({'error': 'Only .xlsx files are allowed'}, status=400)
@@ -853,13 +899,25 @@ def get_attendance_data(request):
                 print(f'{i} is not found in the excel sheet')   
                 return Response({'ColumnError': f'No Column named {i} not  Found .Please check the File Format  '})
         for i in records:
-            if not User.objects.filter(email=i['Email']).exists():
-                return Response({"UserError": f"No user {i['Name']} exists in the system"})
-            else:
-                user_instance=User.objects.get(email=i['Email'])
-                data=attendance.objects.filter(user=user_instance,date=i['Date'])
-                if not  data:
-                    attendance.objects.create(user=user_instance,Grade=user_instance.profile.grade,date=i['Date'],Attendance_Status=i['Attendance Status'])
+            try:
+                user_instance = User.objects.get(email=i['Email'])
+                
+                if user_instance.profile.role in ['admin', 'teacher']:
+                    return Response({"UserError": f"User {i['Name']} is an Admin or Teacher, not allowed."})
+                
+                attendance_data = attendance.objects.filter(user=user_instance, date=i['Date'])
+                
+                if not attendance_data.exists():
+                    attendance.objects.create(
+                        user=user_instance,
+                        Grade=user_instance.profile.grade,
+                        date=i['Date'],
+                        Attendance_Status=i['Attendance Status'].capitalize()
+                    )
+
+            except User.DoesNotExist:
+                return Response({"UserError": f"No user {i['Email']} exists in the system"})
+
     return Response({'Status': f'{uploaded_file.name} file received successfully'})
 
 @api_view(['POST'])
@@ -1045,7 +1103,6 @@ def erropage(request):
 def get_FilterData(request, id):
     instance = Exam.objects.get(id=id)
     queryset = StudentLeaderBoard.objects.filter(exam_id=instance).order_by('-exam_id__Exam_Date')
-
     Data = []
     for obj in queryset:
         exam = obj.exam_id  
@@ -1065,7 +1122,6 @@ def get_FilterData(request, id):
             'Answered': obj.Answered,
             'Total_Question': obj.Total_Question,
         })
-
     return Response({'Data': Data})
 
 @role_required('Admin')
@@ -1075,11 +1131,11 @@ def user_management(request):
     now = datetime.datetime.now()
     user_data = [] 
 
-    for student in users:  # Iterate over the queryset of users
+    for student in users:  
         try:
-            userprofile = student.profile  # Accessing the profile
+            userprofile = student.profile 
         except profile.DoesNotExist:
-            continue  # Skip users without profiles
+            continue  
 
         has_paid = FeePayment.objects.filter(
             student=userprofile,
@@ -1104,18 +1160,20 @@ def user_management(request):
 def update_user(request):
     username = request.POST.get('username')
     newrole = request.POST.get('newrole')
+    print(newrole)
     reason = request.POST.get('reason')
-    grade_value = request.POST.get('grade')  # Only used for Teacher/Student
+    grade_value = request.POST.get('grade')
 
     try:
-
         user = User.objects.get(username=username)
         user_profile = profile.objects.get(newprofile=user)
-
         if newrole == 'Admin':
             user_profile.grade = None
             user_profile.payment_structure = None
             data=FeePayment.objects.filter(student=user_profile)
+            examrecords=StudentLeaderBoard.objects.filter(student_id=user)
+            for i in examrecords:
+                i.delete()
             for obj in data:
                 obj.delete()
         elif newrole == 'Teacher':
@@ -1123,16 +1181,18 @@ def update_user(request):
             user_profile.grade = grade_obj
             user_profile.payment_structure = None
             data=FeePayment.objects.filter(student=user_profile)
+            for i in examrecords:
+                i.delete()
             for obj in data:
                 obj.delete()
+        elif newrole=='Student':
             grade_obj = Grade.objects.get(classname=grade_value)
+            print(grade_obj)
             payment_structure = PaymentStructure.objects.get(grade=grade_obj)
             user_profile.grade = grade_obj
             user_profile.payment_structure = payment_structure
-
         user_profile.role = newrole
         user_profile.save()
-
         send_mail(
             subject='Your Role Has Been Updated',
             message=f'Hello {user.username},\n\nYour role has been updated to "{newrole}".\nReason: {reason}\n\nThank you.',
@@ -1147,9 +1207,8 @@ def update_user(request):
         print("Error occurred:", str(e))
         return Response({'error': str(e)}, status=500)
 
-
     except Exception as e:
-        print("Error occurred:", str(e))  # This will show up in your server logs
+        print("Error occurred:", str(e))  
         return Response({'error': str(e)}, status=500)
 
 

@@ -5,9 +5,7 @@ class Eventserializer(serializers.ModelSerializer):
     class Meta:
         model=Event
         fields='__all__'
-        extra_kwargs = {
-    'eventbanner': {'required': False, 'allow_null': True}
-}
+       
 
 
 

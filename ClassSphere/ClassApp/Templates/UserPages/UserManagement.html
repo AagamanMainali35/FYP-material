@@ -937,7 +937,6 @@
         const gradeGroup = document.getElementById('grade-group');
         const userGradeSelect = document.getElementById('user-grade');
         const confirmRoleChangeBtn = document.getElementById('confirm-role-change');
-
         // Tab functionality
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -949,7 +948,6 @@
                 document.getElementById(tabId).classList.add('active');
             });
         });
-
         // Modal functions
         function openChangeRoleModal(userId) {
             const userRow = document.querySelector(`[data-user-id="${userId}"]`).closest('tr');
@@ -1068,6 +1066,14 @@
                 formData.append('grade', grade);
             }
             closeModals();
+            Swal.fire({
+                title: 'Please wait',
+                text: 'Updating role…',
+                allowOutsideClick: false,
+                didOpen: () => {
+                  Swal.showLoading()
+                }
+              });
             fetch('http://127.0.0.1:8000/user/manage/update/role/', {
                 method: 'POST',
                 headers: {
@@ -1080,6 +1086,8 @@
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
+
+
             })
             .then(data => {
                 closeModals();

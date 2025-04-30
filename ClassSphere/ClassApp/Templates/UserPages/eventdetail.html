@@ -23,9 +23,9 @@
     <header class="header__container">
     {% if obj%}
       <div class="header__content">
-        <h1>LET'S GO!<br />THE <span>Experience</span> IS WAITING FOR YOU</h1>
+        <h1>LET'S GO! <span> Get Experience</span> </h1>
         <p>
-          {{obj.description}}
+          {{obj.description|truncatewords:50}}
         </p>
         <form action="/">
           <div class="input__row">

@@ -297,6 +297,39 @@
         align-items: center;
         gap: 0.75rem;
     }
+    .no-holidays-container {
+        background-color: rgba(255, 255, 255, 0);
+        border-radius: var(--border-radius);
+        padding: 0rem 2rem;
+        text-align: center;
+        margin-bottom: 90px;
+    }
+    
+    .no-data-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .no-data-content i {
+        font-size: 3.5rem;
+        color: var(--gray);
+        margin-bottom: 0.5rem;
+    }
+    
+    .no-data-content h3 {
+        color: var(--dark);
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .no-data-content p {
+        color: var(--gray);
+        font-size: 1.1rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
 
     .note-icon {
         color: var(--warning);
@@ -358,11 +391,11 @@
 <body>
     <div class="Pagecontainer">
         <div class="page-title-section">
-            <h1 class="page-title"> Holiday Schedule</h1>
-            <p class="page-subtitle">Plan your year with our comprehensive school holiday calendar. Find all upcoming
+            <h1 class="page-title" id="title"> Holiday Schedule</h1>
+            <p class="page-subtitle" id="sub">Plan your year with our comprehensive school holiday calendar. Find all upcoming
                 holidays and school resumption dates in one place.</p>
         </div>
-
+        {% if holiday %}
         <div class="holiday-table-section">
             <div class="holiday-table-header">
                 <h2 class="section-title">Upcoming Holidays</h2>
@@ -380,7 +413,6 @@
                             <th>End Date</th>
                             <th>School Resumes</th>
                             <th>Duration</th>
-                            <th>Type</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -392,13 +424,25 @@
                             <td>{{ holiday.School_ResumeDate|date:"d/m/y" }}</td>
 
                             <td>{{holiday.Duration}}</td>
-                            <td><span class="holiday-badge badge-{{holiday.Type}}">{{holiday.Type}}</span></td>
                         </tr>
                         {%endfor%}
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>  
+        {%else%}
+        <script>
+            document.getElementById('sub').textContent=''
+            document.getElementById('title').textContent=''
+        </script>
+            <div class="no-holidays-container">
+                <div class="no-data-content">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>No Holidays Added Yet</h3>
+                    <p>The school holiday schedule will be updated soon.</p>
+                </div>
+            </div>    
+        {% endif %}
 
         <div class="important-note">
             <h3 class="note-title">

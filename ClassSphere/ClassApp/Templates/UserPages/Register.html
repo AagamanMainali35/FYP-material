@@ -51,7 +51,7 @@
                         </select>
                         <select class="input" required name="Grade">
                             <option value="" hidden selected>Grade</option>
-                            {% for grade in grade %}
+                            {% for grade in grades %}
                             <option value="{{grade.id}}">{{ forloop.counter }}</option>
                             {% endfor %}
                         </select>

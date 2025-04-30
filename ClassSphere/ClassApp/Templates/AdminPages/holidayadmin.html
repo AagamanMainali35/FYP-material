@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holiday Management Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
@@ -38,7 +40,8 @@
             background-color: #f3f4f8;
             overflow: auto;
         }
-        body::-webkit-scrollbar{
+
+        body::-webkit-scrollbar {
             display: none;
         }
 
@@ -136,7 +139,7 @@
             margin-left: 18rem;
             background-color: white;
             border-radius: var(--border-radius);
-            padding: 18px 2rem 0  2rem;
+            padding: 18px 2rem 0 2rem;
             box-shadow: var(--box-shadow);
         }
 
@@ -435,7 +438,7 @@
         .empty-state {
             padding: 3rem 2rem;
             text-align: center;
-            display: none;
+            display: block;
         }
 
         .empty-icon {
@@ -475,6 +478,7 @@
             border-left: 4px solid var(--success);
             color: var(--success);
         }
+
         .alert-danger {
             display: none;
             background-color: rgba(255, 82, 82, 0.1);
@@ -538,19 +542,19 @@
                 <span class="alert-icon"><i class="fas fa-check-circle"></i></span>
                 <span class="alert-message" id="msg"></span>
             </div>
-            
+
             <div class="alert alert-danger" style="display: none;">
                 <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
                 <span class="alert-message" id="msg-error"></span>
             </div>
-            
+
             <input type="text" name="csrf" id="csrf" hidden value="{{csrf_token}}">
             <div class="page-title-section">
                 <div>
                     <h1 class="page-title">Holiday Management</h1>
                     <p class="page-subtitle">Add, edit, and manage all school holidays</p>
                 </div>
-                <button class="btn btn-primary" onclick="openAddModal()">
+                <button class="btn btn-primary" id='addd' onclick="openAddModal()">
                     <i class="fas fa-plus"></i>
                     Add New Holiday
                 </button>
@@ -568,38 +572,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for i in holiday%}
-                        <tr>
-                            <td id="name-{{i.id}}">{{i.Holiday_Name|truncatewords:1}}</td>
-                            <td id="FullName-{{i.id}}" style="display: none;">{{i.Holiday_Name}}</td>
-                            <td id="FullName-{{i.id}}" style="display: none;">{{i.Holiday_Name}}</td>
-                            <td id="Holidaydate-{{i.id}}">{{ i.Holiday_Date|date:"Y/m/d" }}</td>
-                            <td id="Resumedate-{{i.id}}">{{ i.School_ResumeDate|date:"Y/m/d" }}</td>
-                            <td ><span class="duration-badge">{{i.Duration}}</span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="action-btn delete-btn" onclick="openDeleteModal('{{i.id}}')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                        {% if holiday %}
+                            {% for i in holiday %}
+                            <tr>
+                                <td id="name-{{i.id}}">{{i.Holiday_Name|truncatewords:1}}</td>
+                                <td id="FullName-{{i.id}}" style="display: none;">{{i.Holiday_Name}}</td>
+                                <td id="FullName-{{i.id}}" style="display: none;">{{i.Holiday_Name}}</td>
+                                <td id="Holidaydate-{{i.id}}">{{ i.Holiday_Date|date:"Y/m/d" }}</td>
+                                <td id="Resumedate-{{i.id}}">{{ i.School_ResumeDate|date:"Y/m/d" }}</td>
+                                <td><span class="duration-badge">{{i.Duration}}</span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-btn delete-btn" onclick="openDeleteModal('{{i.id}}')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <script>
+                            document.getElementById('addd').style.display = "none"
+                        </script>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-calendar-alt"></i>
                                 </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                                <h3 class="empty-title">No Holidays Found</h3>
+                                <p class="empty-message">There are no holidays in the system yet. Add your first holiday
+                                    to get started.</p>
+                                <button class="btn btn-primary" onclick="openAddModal()">
+                                    <i class="fas fa-plus"></i>
+                                    Add New Holiday
+                                </button>
+                            </div>
+                        </td>
+                        {% endif %}
                     </tbody>
                 </table>
 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h3 class="empty-title">No Holidays Found</h3>
-                    <p class="empty-message">There are no holidays in the system yet. Add your first holiday to get
-                        started.</p>
-                    <button class="btn btn-primary" onclick="openAddModal()">
-                        <i class="fas fa-plus"></i>
-                        Add New Holiday
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -661,7 +674,7 @@
     <script>
 
         function openAddModal() {
-            document.getElementById('OperationName').value='Create'
+            document.getElementById('OperationName').value = 'Create'
             document.getElementById('holidayForm').reset();
             document.getElementById('holidayModal').style.display = 'block';
         }
@@ -674,40 +687,40 @@
                 for (let i = 0; i < alerts.length; i++) {
                     alerts[i].style.display = 'none';
                 }
-            }, 2000);
+            }, 800);
         }
 
         function openDeleteModal(holidayId) {
-            holidayId=parseInt(holidayId)
-            console.log(typeof(holidayId))
+            holidayId = parseInt(holidayId)
+            console.log(typeof (holidayId))
             document.getElementById('deleteModal').style.display = 'block';
             const domain = `http://127.0.0.1:8000/deleteHoliday/${holidayId}/`;
             console.log(domain)
             document.getElementById('DeleteConfirm').addEventListener('click', () => {
-                fetch(domain , {
+                fetch(domain, {
                     method: 'DELETE',
                     headers: {
                         'X-CSRFToken': document.getElementById('csrf').value
                     }
                 })
-                .then(response => {
-                    return response.json();
-                })
-                .then(data => {
-                    document.getElementById('deleteModal').style.display = 'none';
-                    if (data.Status) {
-                        document.getElementById('msg').textContent = data.Status;
-                        document.querySelector('.alert-success').style.display = 'flex';
-                        setTimeout(function() {
-                            document.querySelector('.alert-success').style.display = 'none';
-                            location.reload()
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('deleteModal').style.display = 'none';
+                        if (data.Status) {
+                            document.getElementById('msg').textContent = data.Status;
+                            document.querySelector('.alert-success').style.display = 'flex';
+                            setTimeout(function () {
+                                document.querySelector('.alert-success').style.display = 'none';
+                                location.reload()
 
-                        }, 2000);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                            }, 800);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             });
         }
 
@@ -723,7 +736,7 @@
                 }
             }
         }
-        
+
 
         document.getElementById('addHoliday').addEventListener('click', function () {
             console.log("Button clicked");
@@ -737,52 +750,62 @@
             formdata.append('holiday', Holiday_Name);
             formdata.append('start_date', Holiday_Date);
             formdata.append('resume_date', School_ResumeDate);
+            if (Holiday_Name.trim() != "" ||Holiday_Name.trim() != "" ||Holiday_Date.trim() != '' ){
+                fetch(domain, {
+                    method: 'POST',
+                    headers: {
+                        "X-CSRFToken": CSRF
+                    },
+                    body: formdata
+                })
+                    .then(response => {
+                        // Store the status before parsing JSON
+                        const status = response.status;
+                        return response.json().then(data => {
+                            // Return both the data and status
+                            return { data, status };
+                        });
+                    })
+                    .then(({ data, status }) => {
+                        if (status === 400) {
+                            // This is an error - use the error alert
+                            document.getElementById('msg-error').textContent = data.Status;
+                            document.querySelector('.alert-danger').style.display = 'flex';
+                            setTimeout(function () {
+                                document.querySelector('.alert-danger').style.display = 'none';
+                            }, 2000); // Changed to 4 seconds for consistency
+                        } else {
+                            // This is a success - use the success alert
+                            document.getElementById('msg').textContent = data.Status;
+                            document.querySelector('.alert-success').style.display = 'flex';
+                            setTimeout(function () {
+                                document.querySelector('.alert-success').style.display = 'none';
+                            }, 1000); // Changed to 4 seconds for consistency
+                            form.reset();
+                        }
+                        closeModal('holidayModal');
+                        setInterval(() => {
+                            location.reload()
+                        }, 1000)
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('msg-error').textContent = 'Something went wrong. Please try again.';
+                        document.querySelector('.alert-danger').style.display = 'flex';
+                        setTimeout(function () {
+                            document.querySelector('.alert-danger').style.display = 'none';
+                        }, 3000);
+                    });
+            }
+            else{
+                Swal.fire({
+                    title: "Validation Error",
+                    text: "Please Fill all the required Fields",
+                    icon: "error"
+                  });
+            }
 
-            fetch(domain, {
-                method: 'POST',
-                headers: {
-                    "X-CSRFToken": CSRF
-                },
-                body: formdata
-            })
-            .then(response => {
-                // Store the status before parsing JSON
-                const status = response.status;
-                return response.json().then(data => {
-                    // Return both the data and status
-                    return { data, status };
-                });
-            })
-            .then(({ data, status }) => {
-                if (status === 400) {
-                    // This is an error - use the error alert
-                    document.getElementById('msg-error').textContent = data.Status;
-                    document.querySelector('.alert-danger').style.display = 'flex';
-                    setTimeout(function () {
-                        document.querySelector('.alert-danger').style.display = 'none';
-                    }, 4000); // Changed to 4 seconds for consistency
-                } else {
-                    // This is a success - use the success alert
-                    document.getElementById('msg').textContent = data.Status;
-                    document.querySelector('.alert-success').style.display = 'flex';
-                    setTimeout(function () {
-                        document.querySelector('.alert-success').style.display = 'none';
-                    }, 4000); // Changed to 4 seconds for consistency
-                    form.reset();
-                }
-                closeModal('holidayModal');
-                setInterval(()=>{
-                    location.reload()
-                },2000)
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('msg-error').textContent = 'Something went wrong. Please try again.';
-                document.querySelector('.alert-danger').style.display = 'flex';
-                setTimeout(function () {
-                    document.querySelector('.alert-danger').style.display = 'none';
-                }, 3000);
-            });
+          
         });
     </script>
 </body>

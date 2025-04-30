@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industry Leaderboard</title>
+
+{% extends "Include and Base Pages/Base.html" %}
+{% block title %}
+  My Results
+{% endblock title %}
+{% block content %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -91,77 +91,6 @@
             margin: 0 auto;
         }
 
-        /* Stats Summary Section */
-        .stats-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-            animation: fadeIn 0.8s ease-out 0.2s backwards;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
-        }
-
-        .stat-card:nth-child(2) {
-            border-left-color: var(--success);
-        }
-
-        .stat-card:nth-child(3) {
-            border-left-color: var(--warning);
-        }
-
-        .stat-card:nth-child(4) {
-            border-left-color: var(--accent);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .stat-title {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.75rem;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card:nth-child(1) .stat-value {
-            color: var(--primary);
-        }
-
-        .stat-card:nth-child(2) .stat-value {
-            color: var(--success);
-        }
-
-        .stat-card:nth-child(3) .stat-value {
-            color: var(--warning);
-        }
-
-        .stat-card:nth-child(4) .stat-value {
-            color: var(--accent);
-        }
-
-        .stat-description {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-        }
 
         /* Filter Bar */
         .filter-bar {
@@ -534,34 +463,6 @@
             padding: 0 1rem;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 2rem 0;
-            color: var(--gray-500);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--gray-200);
-            animation: fadeIn 0.8s ease-out 0.7s backwards;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .footer-link {
-            color: var(--primary);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--secondary);
-            text-decoration: underline;
-        }
 
         /* Responsive Design */
         @media (max-width: 1024px) {
@@ -675,39 +576,8 @@
             }
         }
     </style>
-</head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Industry Leaderboard</h1>
-            <p class="subtitle">See how you stack up against your peers</p>
-        </header>
-
-        <!-- Stats Summary Section -->
-        <div class="stats-summary">
-            <div class="stat-card">
-                <div class="stat-title">Total Participants</div>
-                <div class="stat-value">1,248</div>
-                <div class="stat-description">+12% from last month</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">Average Score</div>
-                <div class="stat-value">76.4%</div>
-                <div class="stat-description">+3.2% from last month</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">Completion Rate</div>
-                <div class="stat-value">92%</div>
-                <div class="stat-description">-1.5% from last month</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-title">Avg. Completion Time</div>
-                <div class="stat-value">42 min</div>
-                <div class="stat-description">-5 min from last month</div>
-            </div>
-        </div>
-
-        <!-- Filter Bar -->
+    <div class="container" style="max-width:1500px;">
         <div class="filter-bar">
             <div class="search-container">
                 <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -782,28 +652,7 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination">
-            <button class="page-button prev disabled">Previous</button>
-            <button class="page-button active">1</button>
-            <button class="page-button">2</button>
-            <button class="page-button">3</button>
-            <span>...</span>
-            <button class="page-button">10</button>
-            <button class="page-button next">Next</button>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>© 2023 Industry Leaderboard. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#" class="footer-link">About</a>
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact  class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </div>
     </div>
+    {% include 'Include and Base Pages/Footer.html'%}
 </body>
-</html>
+{% endblock content %}

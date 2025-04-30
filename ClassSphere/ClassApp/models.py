@@ -116,11 +116,11 @@ class Event(models.Model):
 ]
     title = models.CharField(max_length=100)
     is_paid = models.BooleanField(default=False)
-    eventbanner = models.ImageField(upload_to='EventBanners')
+    eventbanner = models.ImageField(upload_to='EventBanners',null=False,blank=False)
     description = models.TextField()
     date = models.DateTimeField()
     location = models.CharField(max_length=100)
-    form = models.URLField(blank=True,null=True)
+    form = models.URLField()
     tag=models.CharField(choices=tagchoices,null=True,blank=True)
     def __str__(self):
         return self.title
@@ -167,7 +167,7 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_name[:20]
 
-    
+ 
 class StudentLeaderBoard(models.Model):
     exam_id=models.ForeignKey(Exam,on_delete=models.CASCADE)
     student_id=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -188,7 +188,6 @@ class attendance(models.Model):
     def __str__(self):
         return f'Attendance of {self.user.username} on date  {self.date}'
     
-
 class Holiday(models.Model):
     Holiday_Name=models.CharField(max_length=300)
     Holiday_Date=models.DateField()

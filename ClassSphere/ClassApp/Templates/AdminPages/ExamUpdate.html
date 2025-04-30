@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examination Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary-color: #6366F1;
@@ -1228,30 +1229,81 @@
             closeModal("deleteModal");
         }
         
-        // Function to save the exam
         function saveExam() {
+            // Get form elements
             const examForm = document.getElementById("examForm");
             const examId = examForm.dataset.examId;
             const examIndex = examForm.dataset.examIndex;
-            const title = document.getElementById("title").value;
-            const totalMarks = document.getElementById("totalMarks").value;
-            const grade = document.getElementById("grade").value;
-            const date = document.getElementById("date").value;
+            const title = document.getElementById("title").value.trim();
+            const totalMarks = document.getElementById("totalMarks").value.trim();
+            const grade = document.getElementById("grade").value.trim();
+            const date = document.getElementById("date").value.trim();
         
+            // Validate basic exam info
+            if (!title || !totalMarks || !grade || !date) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing Information',
+                    text: 'Please fill in all exam details (Title, Total Marks, Grade, and Date)',
+                    confirmButtonColor: '#4263eb'
+                });
+                return;
+            }
+        
+            // Validate questions
             const questionItems = document.querySelectorAll(".question-item");
+            if (questionItems.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Questions',
+                    text: 'Please add at least one question to the exam',
+                    confirmButtonColor: '#4263eb'
+                });
+                return;
+            }
+        
             const questions = [];
+            let hasErrors = false;
+            let errorMessage = "";
         
             questionItems.forEach((item, index) => {
-                const questionText = item.querySelector(".question-text").value;
-                const questionMarks = parseInt(item.querySelector(".question-marks").value) || 1;
-                const questionDbId = item.dataset.questionDbId; // Get Question_Id if it exists
+                const questionText = item.querySelector(".question-text").value.trim();
+                const questionMarks = parseInt(item.querySelector(".question-marks").value) || 0;
+                const questionDbId = item.dataset.questionDbId;
                 const choiceItems = item.querySelectorAll(".choice-item");
                 const choices = [];
                 let correctAnswer = "";
+                let hasCorrectAnswer = false;
+        
+                // Validate question text and marks
+                if (!questionText) {
+                    hasErrors = true;
+                    errorMessage = `Question ${index + 1} is missing text`;
+                    return;
+                }
+        
+                if (isNaN(questionMarks)) {
+                    hasErrors = true;
+                    errorMessage = `Question ${index + 1} has invalid marks`;
+                    return;
+                }
+        
+                // Validate choices
+                if (choiceItems.length < 2) {
+                    hasErrors = true;
+                    errorMessage = `Question ${index + 1} must have at least 2 choices`;
+                    return;
+                }
         
                 choiceItems.forEach((choiceItem, choiceIndex) => {
-                    const choiceText = choiceItem.querySelector(".choice-text").value;
+                    const choiceText = choiceItem.querySelector(".choice-text").value.trim();
                     const isCorrect = choiceItem.querySelector(".choice-radio").checked;
+        
+                    if (!choiceText) {
+                        hasErrors = true;
+                        errorMessage = `Question ${index + 1}, Choice ${choiceIndex + 1} is empty`;
+                        return;
+                    }
         
                     choices.push({
                         id: choiceIndex + 1,
@@ -1260,8 +1312,17 @@
         
                     if (isCorrect) {
                         correctAnswer = choiceText;
+                        hasCorrectAnswer = true;
                     }
                 });
+        
+                if (!hasCorrectAnswer) {
+                    hasErrors = true;
+                    errorMessage = `Question ${index + 1} has no correct answer selected`;
+                    return;
+                }
+        
+                if (hasErrors) return;
         
                 const questionData = {
                     Question_Name: questionText,
@@ -1270,13 +1331,22 @@
                     Correct_Answer: correctAnswer
                 };
                 
-                // Add Question_Id if it exists
                 if (questionDbId) {
                     questionData.Question_Id = parseInt(questionDbId);
                 }
                 
                 questions.push(questionData);
             });
+        
+            if (hasErrors) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: errorMessage,
+                    confirmButtonColor: '#4263eb'
+                });
+                return;
+            }
         
             const updateData = {
                 Exam_ID: examId,
@@ -1287,7 +1357,17 @@
                 Questions: questions
             };
         
-            console.log("Sending data to server:", JSON.stringify(updateData)); // Log the data being sent
+            console.log("Sending data to server:", JSON.stringify(updateData));
+        
+            // Show loading indicator
+            Swal.fire({
+                title: 'Saving Exam',
+                html: 'Please wait while we save your exam',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
         
             fetch('http://127.0.0.1:8000/exam/update/', {
                 method: 'PATCH',
@@ -1298,25 +1378,32 @@
                 body: JSON.stringify(updateData)
             })
             .then(response => {
-                console.log(response.status);
-                if (response.status === 200) {
-                    examData[examIndex] = updateData;
-                    renderExamTable();
-                    closeModal("examModal");
-                    showToast("Success", "Examination updated successfully", "success");
-                    return response.json();
-                } else {
-                    return response.json().then(data => {
-                        throw new Error(data.message || "Failed to update examination");
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || "Server returned an error");
                     });
                 }
+                return response.json();
             })
             .then(data => {
-                console.log("Response Data:", data);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Examination updated successfully',
+                    confirmButtonColor: '#4263eb'
+                });
+                examData[examIndex] = updateData;
+                renderExamTable();
+                closeModal("examModal");
             })
             .catch(error => {
                 console.error('Error updating exam:', error);
-                showToast("Error", error.message || "Failed to update examination", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || "Failed to update examination",
+                    confirmButtonColor: '#4263eb'
+                });
             });
         }
         
